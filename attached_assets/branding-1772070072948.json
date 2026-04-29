@@ -1,0 +1,145 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Montserrat",
+      "role": "body"
+    }
+  ],
+  "colors": {
+    "primary": "#0A506E",
+    "accent": "#17CE30",
+    "background": "#F5F7F8",
+    "textPrimary": "#17CE30",
+    "link": "#17CE30"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Montserrat",
+      "heading": "Montserrat"
+    },
+    "fontStacks": {
+      "heading": [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "Segoe UI",
+        "Roboto",
+        "Helvetica Neue",
+        "Arial",
+        "Noto Sans",
+        "sans-serif",
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji"
+      ],
+      "body": [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "Segoe UI",
+        "Roboto",
+        "Helvetica Neue",
+        "Arial",
+        "Noto Sans",
+        "sans-serif",
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji"
+      ],
+      "paragraph": [
+        "Montserrat",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "16px",
+      "h2": "52px",
+      "body": "17px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "3px"
+  },
+  "components": {
+    "buttonPrimary": {
+      "background": "#17CE30",
+      "textColor": "#FFFFFF",
+      "borderRadius": "14px",
+      "borderRadiusCorners": {
+        "topLeft": "14px",
+        "topRight": "14px",
+        "bottomRight": "14px",
+        "bottomLeft": "14px"
+      },
+      "shadow": "none"
+    },
+    "buttonSecondary": {
+      "background": "#0A506E",
+      "textColor": "#FFFFFF",
+      "borderRadius": "14px",
+      "borderRadiusCorners": {
+        "topLeft": "14px",
+        "topRight": "14px",
+        "bottomRight": "14px",
+        "bottomLeft": "14px"
+      },
+      "shadow": "none"
+    }
+  },
+  "images": {
+    "logo": "https://www.dralaryssaruas.com.br/wp-content/uploads/2023/04/logo-laryssa-1024x659.png",
+    "favicon": null,
+    "ogImage": null
+  },
+  "__llm_logo_reasoning": {
+    "selectedIndex": 0,
+    "reasoning": "Selected #0 because it is visible, has a reasonable size, and matches the brand 'Dra. Laryssa Ruas'.",
+    "confidence": 0.85,
+    "source": "llm"
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 2,
+      "text": "Agende uma consulta",
+      "reasoning": "Button #2 has vibrant green color (#17CE30) and action-oriented text 'Agende uma consulta', making it a strong primary CTA."
+    },
+    "secondary": {
+      "index": 1,
+      "text": "Mais casos no nosso Instagram",
+      "reasoning": "Button #1 has a different color group (blue #0A506E) and serves as a secondary action with 'Mais casos no nosso Instagram'."
+    },
+    "confidence": 0.95
+  },
+  "personality": {
+    "tone": "professional",
+    "energy": "medium",
+    "targetAudience": "Individuals seeking laser treatments"
+  },
+  "designSystem": {
+    "framework": "custom",
+    "componentLibrary": ""
+  },
+  "confidence": {
+    "buttons": 0.95,
+    "colors": 0.9,
+    "overall": 0.925
+  },
+  "__llm_metadata": {
+    "logoSelection": {
+      "llmCalled": true,
+      "llmSucceeded": true,
+      "finalSource": "llm",
+      "rawLogoSelection": {
+        "selectedLogoIndex": 0,
+        "selectedLogoReasoning": "Selected #0 because it is visible, has a reasonable size, and matches the brand 'Dra. Laryssa Ruas'.",
+        "confidence": 0.85
+      }
+    },
+    "buttonClassification": {
+      "llmCalled": true,
+      "llmSucceeded": true
+    }
+  }
+}

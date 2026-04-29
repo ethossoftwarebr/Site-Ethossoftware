@@ -1,0 +1,22 @@
+# Ethos Software
+
+> Software house em Goiânia especializada em sites, sistemas web, apps mobile, automações com IA e dashboards. Mais de 40 projetos entregues, 100% de satisfação.
+
+## Conteúdo do Site
+
+- [Conteúdo completo em texto](/api/sitecontent): Descrição detalhada de todos os serviços, tecnologias, diferenciais e informações de contato da Ethos Software.
+
+## Sobre a Ethos Software
+
+A Ethos Software é uma software house localizada em Goiânia, Goiás, Brasil. Fundada em 2022, a empresa é especializada em transformar ideias em software de alto impacto para negócios de todos os tamanhos.
+
+**Contato:** +55 62 9466-7304 (WhatsApp) | ethosdesenvolvimentosoftware@gmail.com
+
+## Serviços
+
+- Sites e Landing Pages de alta conversão
+- Sistemas Web sob medida (CRM, ERP, SaaS, Dashboards)
+- Automações com Inteligência Artificial
+- Aplicativos Mobile (iOS e Android)
+- E-commerce
+- APIs e Integrações

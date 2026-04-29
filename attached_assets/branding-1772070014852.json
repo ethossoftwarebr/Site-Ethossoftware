@@ -1,0 +1,150 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Poppins",
+      "role": "body"
+    },
+    {
+      "family": "Roboto",
+      "role": "body"
+    }
+  ],
+  "colors": {
+    "primary": "#BFBA71",
+    "accent": "#25D366",
+    "background": "#FFFFFF",
+    "textPrimary": "#CC3366",
+    "link": "#CC3366"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Poppins",
+      "heading": "Poppins"
+    },
+    "fontStacks": {
+      "heading": [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "Segoe UI",
+        "Roboto",
+        "Helvetica Neue",
+        "Arial",
+        "Noto Sans",
+        "sans-serif",
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji"
+      ],
+      "body": [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "Segoe UI",
+        "Roboto",
+        "Helvetica Neue",
+        "Arial",
+        "Noto Sans",
+        "sans-serif",
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji"
+      ],
+      "paragraph": [
+        "Poppins",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "16px",
+      "h2": "14.4px",
+      "body": "17.6px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "4px"
+  },
+  "components": {
+    "buttonPrimary": {
+      "background": "#BFBA71",
+      "textColor": "#FFFFFF",
+      "borderRadius": "3px",
+      "borderRadiusCorners": {
+        "topLeft": "3px",
+        "topRight": "3px",
+        "bottomRight": "3px",
+        "bottomLeft": "3px"
+      },
+      "shadow": "none"
+    },
+    "buttonSecondary": {
+      "background": "#25D366",
+      "textColor": "#333333",
+      "borderRadius": "0px",
+      "borderRadiusCorners": {
+        "topLeft": "0px",
+        "topRight": "0px",
+        "bottomRight": "0px",
+        "bottomLeft": "0px"
+      },
+      "shadow": "rgba(7, 94, 84, 0.24) 1px 6px 24px 0px"
+    }
+  },
+  "images": {
+    "logo": "https://danielassuncao.adv.br/wp-content/uploads/2024/06/logo_danielassuncao-1.png",
+    "favicon": "https://danielassuncao.adv.br/wp-content/uploads/2022/12/cropped-JPG-01-scaled-1-32x32.jpg",
+    "ogImage": null,
+    "logoHref": "https://danielassuncao.adv.br/"
+  },
+  "__llm_logo_reasoning": {
+    "selectedIndex": 0,
+    "reasoning": "Selected #0 because it is visible, medium-sized, and links to the homepage, matching the brand 'Daniel Assunção Advogados'.",
+    "confidence": 0.85,
+    "source": "llm"
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 0,
+      "text": "Fale Conosco",
+      "reasoning": "Button #0 ('Fale Conosco') uses the brand's primary color (#BFBA71) and is a direct call-to-action to contact the firm, making it the most prominent CTA."
+    },
+    "secondary": {
+      "index": 2,
+      "text": "Precisa de ajuda? Fale conosco.",
+      "reasoning": "Button #2 ('Precisa de ajuda? Fale conosco.') uses a different vibrant color (#25D366) and serves as a secondary contact option, making it suitable as a secondary CTA."
+    },
+    "confidence": 0.95
+  },
+  "personality": {
+    "tone": "professional",
+    "energy": "medium",
+    "targetAudience": "legal clients, public servants, military personnel"
+  },
+  "designSystem": {
+    "framework": "custom",
+    "componentLibrary": ""
+  },
+  "confidence": {
+    "buttons": 0.95,
+    "colors": 0.9,
+    "overall": 0.925
+  },
+  "__llm_metadata": {
+    "logoSelection": {
+      "llmCalled": true,
+      "llmSucceeded": true,
+      "finalSource": "llm",
+      "rawLogoSelection": {
+        "selectedLogoIndex": 0,
+        "selectedLogoReasoning": "Selected #0 because it is visible, medium-sized, and links to the homepage, matching the brand 'Daniel Assunção Advogados'.",
+        "confidence": 0.85
+      }
+    },
+    "buttonClassification": {
+      "llmCalled": true,
+      "llmSucceeded": true
+    }
+  }
+}
