@@ -4,3 +4,13 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+package-lock.json
+
+# Mustard — local pipeline state (transient, not part of repo)
+.claude/.harness/
+.claude/.pipeline-states/
+.claude/.agent-state/
+.claude/.agent-memory/
+.claude/.metrics/
+.claude/.detect-cache.json
+

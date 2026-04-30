@@ -1,6 +1,5 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
 
 const SYSTEM_PROMPT = `Você é a Ethos.IA, assistente virtual da Ethos Software, uma software house localizada em Goiânia especializada em criar sites, sistemas, automações com IA, apps mobile e dashboards.
 
