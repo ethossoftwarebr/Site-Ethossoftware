@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, X, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import { projects } from "@/data/projects";
 import { ShinyButton } from "@/components/ui/shiny-button";
+import { LazyImage } from "@/components/ui/lazy-image";
 
 const WA_BASE = "https://wa.me/556294667304?text=Olá! Vi o projeto ";
 
@@ -114,10 +115,12 @@ export default function Portfolio() {
             >
               {/* Image */}
               <div className="relative overflow-hidden aspect-[4/3] bg-[#A229F2]/5">
-                <img
+                <LazyImage
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover object-top"
+                  sizes="(max-width: 768px) 280px, 320px"
+                  className="w-full h-full"
+                  imgClassName="w-full h-full object-cover object-top"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#531B8C]/80 via-[#531B8C]/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
                   <span className="flex items-center gap-2 text-white text-sm font-semibold">
@@ -196,10 +199,13 @@ export default function Portfolio() {
               {/* Image panel */}
               <div className="md:w-5/12 flex-shrink-0 overflow-hidden bg-[#A229F2]/5">
                 <div className="relative h-52 md:h-full">
-                  <img
+                  <LazyImage
                     src={selected.image}
                     alt={selected.title}
-                    className="w-full h-full object-cover object-top"
+                    priority
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    className="w-full h-full"
+                    imgClassName="w-full h-full object-cover object-top"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#531B8C]/70 to-transparent" />
                   <span className="absolute bottom-4 left-4 text-white font-bold text-xs tracking-wider uppercase bg-[#A229F2] px-3 py-1.5 rounded-full">

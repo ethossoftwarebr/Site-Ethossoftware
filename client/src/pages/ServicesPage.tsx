@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
+import { usePageMeta } from "@/hooks/use-page-meta";
 import {
   Globe, Settings, Cpu, Smartphone, ShoppingBag, Plug,
   CheckCircle2, ChevronRight, ArrowRight, MessageCircle,
@@ -145,6 +146,13 @@ const processSteps = [
 export default function ServicesPage() {
   const [activeService, setActiveService] = useState(0);
 
+  usePageMeta({
+    title: "Serviços - Sites, Sistemas, Apps e Automações com IA | Ethos Software",
+    description:
+      "Conheça os serviços da Ethos Software: criação de sites, landing pages, sistemas web (CRM, ERP, SaaS), aplicativos mobile, automações com IA, e-commerce e integrações via API.",
+    canonical: "https://ethossoftware.com.br/servicos",
+  });
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
@@ -198,7 +206,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Tabs */}
-      <section className="py-4 relative z-10 border-t border-[#A229F2]/10 bg-background/80 dark:bg-background/90 backdrop-blur-sm sticky top-[64px] md:top-[80px] z-40">
+      <section className="py-4 relative border-t border-[#A229F2]/10 bg-background/80 dark:bg-background/90 backdrop-blur-sm sticky top-[64px] md:top-[80px] z-40">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="flex gap-1 overflow-x-auto scrollbar-hide pb-1">
             {services.map((s, i) => {

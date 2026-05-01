@@ -1,53 +1,54 @@
-import type { Plugin } from 'vite';
-import fs from 'fs';
-import path from 'path';
+import type { Plugin } from "vite";
+import fs from "fs";
+import path from "path";
 
 /**
- * Vite plugin that updates og:image and twitter:image meta tags
- * to point to the app's opengraph image with the correct Replit domain.
+ * Vite plugin that updates `og:image` and `twitter:image` meta tags so they
+ * point to absolute URLs (required by Open Graph + Twitter cards).
+ *
+ * Base URL precedence:
+ *   1. `process.env.SITE_URL` (override for staging / preview deploys)
+ *   2. Hardcoded production URL `https://ethossoftware.com.br`
+ *
+ * Image format detection: looks for `client/public/opengraph.{png,jpg,jpeg}`
+ * and uses whichever exists first.
  */
+const PRODUCTION_BASE_URL = "https://ethossoftware.com.br";
+
 export function metaImagesPlugin(): Plugin {
   return {
-    name: 'vite-plugin-meta-images',
+    name: "vite-plugin-meta-images",
     transformIndexHtml(html) {
-      const baseUrl = getDeploymentUrl();
-      if (!baseUrl) {
-        log('[meta-images] no Replit deployment domain found, skipping meta tag updates');
+      const baseUrl = process.env.SITE_URL || PRODUCTION_BASE_URL;
+
+      const publicDir = path.resolve(process.cwd(), "client", "public");
+      const candidates = [
+        { file: "opengraph.png", ext: "png" },
+        { file: "opengraph.jpg", ext: "jpg" },
+        { file: "opengraph.jpeg", ext: "jpeg" },
+      ];
+
+      const found = candidates.find((c) =>
+        fs.existsSync(path.join(publicDir, c.file)),
+      );
+
+      if (!found) {
+        log("[meta-images] OpenGraph image not found in client/public/, skipping meta tag updates");
         return html;
       }
 
-      // Check if opengraph image exists in public directory
-      const publicDir = path.resolve(process.cwd(), 'client', 'public');
-      const opengraphPngPath = path.join(publicDir, 'opengraph.png');
-      const opengraphJpgPath = path.join(publicDir, 'opengraph.jpg');
-      const opengraphJpegPath = path.join(publicDir, 'opengraph.jpeg');
+      const imageUrl = `${baseUrl}/opengraph.${found.ext}`;
 
-      let imageExt: string | null = null;
-      if (fs.existsSync(opengraphPngPath)) {
-        imageExt = 'png';
-      } else if (fs.existsSync(opengraphJpgPath)) {
-        imageExt = 'jpg';
-      } else if (fs.existsSync(opengraphJpegPath)) {
-        imageExt = 'jpeg';
-      }
-
-      if (!imageExt) {
-        log('[meta-images] OpenGraph image not found, skipping meta tag updates');
-        return html;
-      }
-
-      const imageUrl = `${baseUrl}/opengraph.${imageExt}`;
-
-      log('[meta-images] updating meta image tags to:', imageUrl);
+      log("[meta-images] updating meta image tags to:", imageUrl);
 
       html = html.replace(
-        /<meta\s+property="og:image"\s+content="[^"]*"\s*\/>/g,
-        `<meta property="og:image" content="${imageUrl}" />`
+        /<meta\s+(?:property="og:image"\s+content="[^"]*"|content="[^"]*"\s+property="og:image")\s*\/>/g,
+        `<meta property="og:image" content="${imageUrl}" />`,
       );
 
       html = html.replace(
-        /<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/>/g,
-        `<meta name="twitter:image" content="${imageUrl}" />`
+        /<meta\s+(?:name="twitter:image"\s+content="[^"]*"|content="[^"]*"\s+name="twitter:image")\s*\/>/g,
+        `<meta name="twitter:image" content="${imageUrl}" />`,
       );
 
       return html;
@@ -55,24 +56,8 @@ export function metaImagesPlugin(): Plugin {
   };
 }
 
-function getDeploymentUrl(): string | null {
-  if (process.env.REPLIT_INTERNAL_APP_DOMAIN) {
-    const url = `https://${process.env.REPLIT_INTERNAL_APP_DOMAIN}`;
-    log('[meta-images] using internal app domain:', url);
-    return url;
-  }
-
-  if (process.env.REPLIT_DEV_DOMAIN) {
-    const url = `https://${process.env.REPLIT_DEV_DOMAIN}`;
-    log('[meta-images] using dev domain:', url);
-    return url;
-  }
-
-  return null;
-}
-
-function log(...args: any[]): void {
-  if (process.env.NODE_ENV === 'production') {
+function log(...args: unknown[]): void {
+  if (process.env.NODE_ENV === "production") {
     console.log(...args);
   }
 }

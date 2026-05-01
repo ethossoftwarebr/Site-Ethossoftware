@@ -1,9 +1,16 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 export default function NotFound() {
+  usePageMeta({
+    title: "Página não encontrada | Ethos Software",
+    description: "A página que você procura não existe ou foi movida. Volte para a página inicial da Ethos Software.",
+    noindex: true,
+  });
+
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-white">
+    <div className="min-h-screen w-full flex items-center justify-center bg-background">
       <Card className="w-full max-w-md mx-4">
         <CardContent className="pt-6">
           <div className="flex mb-4 gap-2">

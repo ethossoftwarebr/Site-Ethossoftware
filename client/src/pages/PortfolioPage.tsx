@@ -2,14 +2,23 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, ArrowLeft, Filter } from "lucide-react";
 import { Link } from "wouter";
+import { usePageMeta } from "@/hooks/use-page-meta";
 import { projects, categories } from "@/data/projects";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import EthosIA from "@/components/EthosIA";
+import { LazyImage } from "@/components/ui/lazy-image";
 
 export default function PortfolioPage() {
   const [activeCategory, setActiveCategory] = useState("Todos");
+
+  usePageMeta({
+    title: "Portfólio - Cases de Sucesso em Software | Ethos Software",
+    description:
+      "Conheça os projetos da Ethos Software: sites institucionais, sistemas de gestão, dashboards SaaS, automações com IA e apps mobile entregues para clientes em todo o Brasil.",
+    canonical: "https://ethossoftware.com.br/portfolio",
+  });
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -154,13 +163,19 @@ export default function PortfolioPage() {
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#A229F2]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                 <div className="relative overflow-hidden aspect-[4/3] bg-[#A229F2]/5">
-                  <motion.img
+                  <motion.div
                     whileHover={{ scale: 1.12 }}
                     transition={{ duration: 0.7, ease: "easeOut" }}
-                    src={project.image}
-                    alt={`Screenshot do projeto ${project.title}`}
-                    className="object-cover object-top w-full h-full transform origin-top"
-                  />
+                    className="w-full h-full transform origin-top"
+                  >
+                    <LazyImage
+                      src={project.image}
+                      alt={`Screenshot do projeto ${project.title}`}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                      className="w-full h-full"
+                      imgClassName="object-cover object-top w-full h-full"
+                    />
+                  </motion.div>
                   <div className="absolute inset-0 bg-gradient-to-t from-[#531B8C]/90 via-[#531B8C]/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
                     <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                       <span className="inline-flex items-center gap-2 text-white font-medium bg-[#A229F2] px-5 py-2.5 rounded-full text-sm shadow-lg">

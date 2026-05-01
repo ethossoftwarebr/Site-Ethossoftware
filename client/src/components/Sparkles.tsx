@@ -89,13 +89,41 @@ export function Sparkles({
       }
       rafRef.current = requestAnimationFrame(draw);
     };
-    draw();
+
+    const startLoop = () => {
+      if (rafRef.current) return; // already running
+      rafRef.current = requestAnimationFrame(draw);
+    };
+
+    const stopLoop = () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = 0;
+      }
+    };
+
+    startLoop();
+
+    // Pause RAF loop when canvas is offscreen — avoids burning a full
+    // animation frame on a section the user can't see. Particle state is
+    // preserved across pause/resume so there's no flicker on re-entry.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) startLoop();
+          else stopLoop();
+        }
+      },
+      { threshold: 0 },
+    );
+    io.observe(canvas);
 
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
     return () => {
-      cancelAnimationFrame(rafRef.current);
+      stopLoop();
+      io.disconnect();
       ro.disconnect();
     };
   }, [color, density, speed, maxSize, maxOpacity]);

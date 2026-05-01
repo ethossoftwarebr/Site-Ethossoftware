@@ -1,0 +1,1 @@
+- [TS ambient query-string declarations](feedback_ts_ambient_query_strings.md) — vite-env.d.ts must stay a script file; inline types instead of `import type`

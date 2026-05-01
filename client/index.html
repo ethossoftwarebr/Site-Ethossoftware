@@ -10,17 +10,27 @@
     <meta name="author" content="Ethos Software" />
     <meta name="robots" content="index, follow" />
 
+    <!-- Theme color (browser chrome / status bar) -->
+    <meta name="theme-color" content="#A229F2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a0a2e" media="(prefers-color-scheme: dark)" />
+
+    <!-- Canonical (default; per-route hooks override) -->
+    <link rel="canonical" href="https://ethossoftware.com.br" />
+
     <!-- Open Graph -->
     <meta property="og:title" content="Ethos Software - Desenvolvimento de Software em Goiânia" />
     <meta property="og:description" content="Software house em Goiânia especializada em sites de alta conversão, sistemas sob medida, apps mobile, automações com IA e dashboards. Mais de 40 projetos entregues." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content="Ethos Software" />
+    <meta property="og:url" content="https://ethossoftware.com.br" />
+    <meta property="og:image" content="https://ethossoftware.com.br/opengraph.jpg" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Ethos Software - Desenvolvimento de Software em Goiânia" />
     <meta name="twitter:description" content="Software house em Goiânia: sites, sistemas, apps mobile, automações com IA. Mais de 40 projetos entregues com 100% de satisfação." />
+    <meta name="twitter:image" content="https://ethossoftware.com.br/opengraph.jpg" />
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
@@ -191,7 +201,12 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Non-blocking font load: preload as style, then swap to stylesheet via media trick. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" />
+    </noscript>
   </head>
   <body>
     <!-- Static content for crawlers and AI tools that don't execute JavaScript -->

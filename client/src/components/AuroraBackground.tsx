@@ -132,11 +132,41 @@ export function AuroraBackground({ className = "" }: AuroraBackgroundProps) {
         let last = performance.now();
         const animate = (now: number) => {
           animId = requestAnimationFrame(animate);
-          material.uniforms.iTime.value += Math.min((now - last) / 1000, 0.05);
+          // Reset `last` after a long gap so the iTime delta is always small.
+          // Otherwise resuming after an offscreen pause would jump the shader.
+          const dt = Math.min((now - last) / 1000, 0.05);
+          material.uniforms.iTime.value += dt;
           last = now;
           renderer!.render(scene, camera);
         };
-        animId = requestAnimationFrame(animate);
+
+        const startLoop = () => {
+          if (animId) return;
+          last = performance.now();
+          animId = requestAnimationFrame(animate);
+        };
+
+        const stopLoop = () => {
+          if (animId) {
+            cancelAnimationFrame(animId);
+            animId = 0;
+          }
+        };
+
+        startLoop();
+
+        // Pause shader RAF when the hero scrolls offscreen — saves GPU work
+        // when the WebGL canvas isn't visible.
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) startLoop();
+              else stopLoop();
+            }
+          },
+          { threshold: 0 },
+        );
+        io.observe(el);
 
         const onResize = () => {
           if (!el || !renderer) return;
@@ -146,7 +176,8 @@ export function AuroraBackground({ className = "" }: AuroraBackgroundProps) {
         window.addEventListener("resize", onResize);
 
         return () => {
-          cancelAnimationFrame(animId);
+          stopLoop();
+          io.disconnect();
           window.removeEventListener("resize", onResize);
           if (renderer && el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
           renderer?.dispose();

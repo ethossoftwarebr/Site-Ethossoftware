@@ -1,21 +1,22 @@
 import { motion } from "framer-motion";
 import { Sparkles } from "@/components/Sparkles";
-import construMais from "@/assets/clients/image_1772062082099.png";
-import advLeite from "@/assets/clients/image_1772062142489.png";
-import elyudFreitas from "@/assets/clients/image_1772062172289.png";
-import silvaGomes from "@/assets/clients/logotipo-advogado-gomes_1772062181314.png";
-import contacnet from "@/assets/clients/Logo-Contac-Colorida_(1)_1772062181315.png";
-import promedico from "@/assets/clients/image_1772062204753.png";
-import redeConstrucao from "@/assets/clients/image_1772062247508.png";
-import hosOdonto from "@/assets/clients/image_1772062271614.png";
-import allVida from "@/assets/clients/image_1772062287989.png";
-import villaCarioca from "@/assets/clients/image_1772062338214.png";
-import franciscoCamargo from "@/assets/clients/image_1772062706525.png";
-import agius from "@/assets/clients/image_1772062730210.png";
-import avante from "@/assets/clients/image_1772062747520.png";
-import ileva from "@/assets/clients/image_1772062796029.png";
-import bbt from "@/assets/clients/image_1772062813471.png";
-import caristeo from "@/assets/clients/image_1772062833578.png";
+import { LazyImage } from "@/components/ui/lazy-image";
+import construMais from "@/assets/clients/image_1772062082099.png?w=200;400&format=avif;webp;png&as=picture";
+import advLeite from "@/assets/clients/image_1772062142489.png?w=200;400&format=avif;webp;png&as=picture";
+import elyudFreitas from "@/assets/clients/image_1772062172289.png?w=200;400&format=avif;webp;png&as=picture";
+import silvaGomes from "@/assets/clients/logotipo-advogado-gomes_1772062181314.png?w=200;400&format=avif;webp;png&as=picture";
+import contacnet from "@/assets/clients/Logo-Contac-Colorida_(1)_1772062181315.png?w=200;400&format=avif;webp;png&as=picture";
+import promedico from "@/assets/clients/image_1772062204753.png?w=200;400&format=avif;webp;png&as=picture";
+import redeConstrucao from "@/assets/clients/image_1772062247508.png?w=200;400&format=avif;webp;png&as=picture";
+import hosOdonto from "@/assets/clients/image_1772062271614.png?w=200;400&format=avif;webp;png&as=picture";
+import allVida from "@/assets/clients/image_1772062287989.png?w=200;400&format=avif;webp;png&as=picture";
+import villaCarioca from "@/assets/clients/image_1772062338214.png?w=200;400&format=avif;webp;png&as=picture";
+import franciscoCamargo from "@/assets/clients/image_1772062706525.png?w=200;400&format=avif;webp;png&as=picture";
+import agius from "@/assets/clients/image_1772062730210.png?w=200;400&format=avif;webp;png&as=picture";
+import avante from "@/assets/clients/image_1772062747520.png?w=200;400&format=avif;webp;png&as=picture";
+import ileva from "@/assets/clients/image_1772062796029.png?w=200;400&format=avif;webp;png&as=picture";
+import bbt from "@/assets/clients/image_1772062813471.png?w=200;400&format=avif;webp;png&as=picture";
+import caristeo from "@/assets/clients/image_1772062833578.png?w=200;400&format=avif;webp;png&as=picture";
 
 const clients = [
   { name: "ConstruMais", logo: construMais },
@@ -78,14 +79,16 @@ export default function ClientCarousel() {
           >
             {/* Duplicamos os itens para criar o efeito infinito */}
             {[...clients, ...clients].map((client, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="flex-shrink-0 hover:scale-105 transition-all duration-300 w-20 sm:w-28 md:w-48 h-12 md:h-20 flex items-center justify-center bg-background"
               >
-                <img 
-                  src={client.logo} 
-                  alt={`Logo ${client.name}`} 
-                  className="max-w-full max-h-full object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-80 dark:brightness-150 dark:contrast-75"
+                <LazyImage
+                  src={client.logo}
+                  alt={`Logo ${client.name}`}
+                  sizes="(max-width: 768px) 80px, 192px"
+                  className="max-w-full max-h-full"
+                  imgClassName="max-w-full max-h-full object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-80 dark:brightness-150 dark:contrast-75"
                 />
               </div>
             ))}

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { usePageMeta } from "@/hooks/use-page-meta";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ClientCarousel from "@/components/ClientCarousel";
@@ -16,6 +17,13 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import EthosIA from "@/components/EthosIA";
 
 export default function Home() {
+  usePageMeta({
+    title: "Ethos Software - Software House em Goiânia | Sites, Sistemas e Apps",
+    description:
+      "Software house em Goiânia especializada em sites de alta conversão, sistemas web sob medida, apps mobile, automações com IA e dashboards. Mais de 40 projetos entregues com 100% de satisfação.",
+    canonical: "https://ethossoftware.com.br",
+  });
+
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (!hash) return;

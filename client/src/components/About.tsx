@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
-import softwareHouseImg from "@/assets/brand/image_1772683408265.png";
+import { LazyImage } from "@/components/ui/lazy-image";
+import softwareHouseImg from "@/assets/brand/image_1772683408265.png?w=600;1200&format=avif;webp;png&as=picture";
 
 export default function About() {
   return (
@@ -68,10 +69,12 @@ export default function About() {
               className="absolute inset-0 bg-gradient-to-tr from-[#A229F2]/20 to-[#531B8C]/20 rounded-full blur-3xl"
             />
             
-            <img 
-              src={softwareHouseImg} 
-              alt="Ilustração 3D de Software House" 
-              className="relative z-10 w-full h-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+            <LazyImage
+              src={softwareHouseImg}
+              alt="Ilustração 3D de Software House"
+              sizes="(max-width: 1024px) 100vw, 600px"
+              className="relative z-10 w-full h-full"
+              imgClassName="w-full h-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
             />
             
             {/* Floating elements around illustration */}
