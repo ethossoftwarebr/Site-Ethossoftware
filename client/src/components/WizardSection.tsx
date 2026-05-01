@@ -429,7 +429,7 @@ export default function WizardSection() {
                   <p className="text-muted-foreground text-sm mb-5">Isso nos ajuda a entender a escala da solução ideal.</p>
                   <div className="flex flex-col gap-2">
                     {(data.profile === "empresa" ? companySizes.map(c => ({ label: c.label, value: c.value })) : businessStages).map((s) => {
-                      const val = "value" in s ? s.value : s.label;
+                      const val = s.value;
                       const sel = data.stage === val;
                       return (
                         <button

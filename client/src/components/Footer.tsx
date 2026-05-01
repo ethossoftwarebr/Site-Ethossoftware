@@ -1,11 +1,11 @@
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import logoEthos from "@assets/Captura_de_tela_2026-02-26_010155-removebg-preview_1772078653004.png";
 import { Mail, Phone, MapPin, Instagram, Linkedin, ChevronRight } from "lucide-react";
 
 export default function Footer() {
   const anoAtual = new Date().getFullYear();
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -16,7 +16,7 @@ export default function Footer() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,

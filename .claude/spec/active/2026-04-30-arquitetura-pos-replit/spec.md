@@ -1,9 +1,9 @@
 # Spec — Arquitetura pós-Replit (server enxuto + assets convencionais + scripts consolidados + fixes TS)
 
-### Status: approved
-### Phase: PLAN
+### Status: implementing
+### Phase: EXECUTE
 ### Scope: full
-### Checkpoint: 2026-04-30T21:30:00.000Z
+### Checkpoint: 2026-04-30T21:33:50.000Z
 ### Pipeline: /mustard:feature (Full scope)
 ### Model: opus (12+ files, 4 blocos paralelos, alguns padrões novos — assets migration)
 
@@ -62,22 +62,22 @@ N/A — `entity-registry.json` vazio (projeto não tem entidades de domínio; s�
 
 ### server-impl Agent (Wave 1)
 
-- [ ] Reescrever `server/index.ts` na forma alvo (~30 linhas inline, sem IIFE wrapping desnecessário se possível)
-- [ ] Remover `declare module "http" { rawBody: unknown }` + `verify` callback do `express.json`
-- [ ] Remover `app.use(express.urlencoded(...))` (POST /api/chat é JSON)
-- [ ] Remover função `log()` custom + middleware que captura `res.json` body (substituir por `console.log` simples no error handler + listen callback)
-- [ ] Tornar `host` conditional: prod=`0.0.0.0`, dev=`127.0.0.1`, override via `HOST` env var
-- [ ] Auditar `server/static.ts` e `server/vite.ts` — remover dependência do `httpServer` separado se Express 5 `app.listen` cobrir
-- [ ] Atualizar `server/CLAUDE.md` Stack + guards refletindo o servidor enxuto
-- [ ] Validar: `pnpm dev` sobe + `curl -sI http://localhost:5000` → 200 + `/api/sitecontent` 200 + `/api/chat` retorna fallback
+- [x] Reescrever `server/index.ts` na forma alvo (96 → 35 linhas; IIFE preservado para CJS-safety)
+- [x] Remover `declare module "http" { rawBody: unknown }` + `verify` callback do `express.json`
+- [x] Remover `app.use(express.urlencoded(...))` (POST /api/chat é JSON)
+- [x] Remover função `log()` custom + middleware que captura `res.json` body
+- [x] Tornar `host` conditional: prod=`0.0.0.0`, dev=`127.0.0.1`, override via `HOST` env var (também removeu `reusePort:true` — Windows não suporta)
+- [x] Auditar `server/static.ts` e `server/vite.ts` — mantido `http.createServer + httpServer.listen` porque `setupVite` precisa do `http.Server` para HMR upgrade events
+- [x] Atualizar `server/CLAUDE.md` Stack + guards refletindo o servidor enxuto
+- [x] Validar: `pnpm dev` sobe + `curl -sI` → 200 + `/api/sitecontent` 200 + `/api/chat` fallback (testado em :5050; :5000 tinha processo stale)
 
 ### client-impl Agent (Wave 1) (parallel-safe — não consome nada do server)
 
-- [ ] Fix `ClientCarousel.tsx:45` — auditar interface `Sparkles`; ajustar props ou interface
-- [ ] Fix `Footer.tsx:49,94,108,126` (4×) — `ease: [n,n,n,n] as const` ou named easing (`"easeInOut"`)
-- [ ] Fix `OrbitingSkills.tsx:17` — `import type { JSX } from "react"` no topo
-- [ ] Fix `WizardSection.tsx:432` — generic explícito no `useState<{label:string, ...}[]>([])`
-- [ ] Validar: `pnpm check` → zero erros (delta de 7 → 0)
+- [x] Fix `ClientCarousel.tsx:45` — `SparklesProps` estendido com 7 aliases opcionais em `Sparkles.tsx` (preserva visual; props ignoradas em runtime)
+- [x] Fix `Footer.tsx:49,94,108,126` (4×) — anotação `Variants` permite framer-motion v12 narrowar Bezier tuple sem `as const`
+- [x] Fix `OrbitingSkills.tsx:17` — `import type { JSX } from "react"` adicionado
+- [x] Fix `WizardSection.tsx:432` — removido `"value" in s ?` morto (ambos branches já tinham `value`)
+- [x] Validar: `pnpm check` → 7 erros → 0
 
 ### client-impl Agent (Wave 2)
 
@@ -103,6 +103,10 @@ N/A — `entity-registry.json` vazio (projeto não tem entidades de domínio; s�
 
 - [ ] Executar AC-1..AC-7
 - [ ] Apresentar checklist manual ao usuário (nav + chat + wizard + visual diff)
+
+## Concerns
+
+<!-- CONCERN: server-impl (Wave 1) — Skill files em `server/.claude/skills/` (server-bootstrap, server-request-logger, server-session-setup, server-drizzle-storage) ainda referenciam código pré-Spec 1 (Drizzle, Passport, MemStorage, rawBody, etc.). Out-of-scope desta spec. Endereçar via `/scan` regen futuro ou nova spec dedicada. -->
 
 ## Acceptance Criteria
 

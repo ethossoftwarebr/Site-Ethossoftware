@@ -1,4 +1,5 @@
 import { useEffect, useState, memo } from "react";
+import type { JSX } from "react";
 
 type GlowColor = "purple" | "violet";
 

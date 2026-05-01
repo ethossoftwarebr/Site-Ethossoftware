@@ -17,6 +17,14 @@ interface SparklesProps {
   speed?: number;
   maxSize?: number;
   maxOpacity?: number;
+  // Compat aliases — accepted for callsite ergonomics; currently unused by the canvas implementation.
+  background?: string;
+  size?: number;
+  minSize?: number;
+  minSpeed?: number;
+  opacity?: number;
+  minOpacity?: number;
+  opacitySpeed?: number;
 }
 
 export function Sparkles({
