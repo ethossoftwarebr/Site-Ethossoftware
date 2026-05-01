@@ -1,9 +1,10 @@
 # Spec — Lighthouse Performance 82 → 90+ (LCP, TBT, FCP attack plan)
 
-### Status: pending-approval
-### Phase: PLAN
+### Status: approved
+### Phase: EXECUTE
 ### Scope: full
-### Checkpoint: 2026-05-01T03:45:00.000Z
+### Checkpoint: 2026-05-01T04:00:00.000Z
+### Approved: 2026-05-01T04:00:00.000Z (verbal — usuário autorizou aprovação inline na sessão prévia para iniciar EXECUTE em sessão fresca via /mustard:resume)
 ### Pipeline: /mustard:feature (Full scope — 6 blocos, ~16 arquivos, novos patterns: prerender + self-hosted fonts + critical CSS)
 ### Model: opus (decisões arquiteturais críticas — prerender approach, font hosting, defer mount strategy)
 
