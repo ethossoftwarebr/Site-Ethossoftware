@@ -49,7 +49,7 @@
 
 ```bash
 npm run dev:client          # Vite dev server, port 5000
-npm run build               # tsx script/build.ts (bundles client + server)
+npm run build               # tsx scripts/build.ts (bundles client + server)
 npm run check               # tsc --noEmit
 ```
 

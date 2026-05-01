@@ -8,7 +8,7 @@
 - **Runtime:** Node.js >= 18, TypeScript 5.6, ESM project (`"type": "module"`)
 - **Framework:** Express `^5.0.1` on `http.createServer`
 - **Dev runner:** `tsx` (`pnpm dev` → `cross-env NODE_ENV=development tsx watch server/index.ts`)
-- **Prod build:** `esbuild` bundles `server/index.ts` → `dist/index.cjs` (CJS, minified) — see `script/build.ts`
+- **Prod build:** `esbuild` bundles `server/index.ts` → `dist/index.cjs` (CJS, minified) — see `scripts/build.ts`
 - **External APIs:** Anthropic Messages API (`claude-3-5-haiku-20241022`) for `POST /api/chat`
 
 ## Commands
@@ -35,7 +35,7 @@ pnpm start
 | `server/routes.ts` | `registerRoutes()` — declares all `/api` endpoints (`/api/sitecontent`, `/api/chat`) |
 | `server/static.ts` | Production static serving from `dist/public/` |
 | `server/vite.ts` | Dev-only Vite middleware (HMR on `/vite-hmr`) |
-| `script/build.ts` | esbuild + Vite production build orchestrator |
+| `scripts/build.ts` | esbuild + Vite production build orchestrator |
 
 ## Guards
 
@@ -44,10 +44,10 @@ pnpm start
 - Port MUST come from `process.env.PORT` with `5000` fallback (`server/index.ts:29`).
 - Host is conditional: prod = `0.0.0.0`, dev = `127.0.0.1`; override via `HOST` env var (`server/index.ts:30`).
 - Use Express 5 catch-all syntax `"/{*path}"` (`server/static.ts:16`, `server/vite.ts:34`).
-- NEVER use top-level `await` in `server/index.ts` — bundled to CJS (`script/build.ts:33`); use the IIFE pattern at `server/index.ts:11`.
+- NEVER use top-level `await` in `server/index.ts` — bundled to CJS (`scripts/build.ts:33`); use the IIFE pattern at `server/index.ts:11`.
 - NEVER import `vite` at the top of `server/index.ts`; dynamic-import inside the dev branch (`server/index.ts:25`).
 - NEVER log secrets, raw request bodies, password hashes, or API keys.
-- Bundling new deps into `dist/index.cjs` requires adding them to the `allowlist` in `script/build.ts:7-13`; otherwise they stay external.
+- Bundling new deps into `dist/index.cjs` requires adding them to the `allowlist` in `scripts/build.ts:7-13`; otherwise they stay external.
 - `POST /api/chat` is JSON-only (`express.json()` is the sole body parser registered).
 
 ## Scan References

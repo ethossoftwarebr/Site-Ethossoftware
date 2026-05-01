@@ -13,7 +13,7 @@
 | Language | TypeScript `5.6.3` | `tsx` for dev, `esbuild` for prod bundle |
 | Dev runner | `tsx` `^4.20.5` | `npm run dev` → `tsx server/index.ts` |
 | Prod runner | `node dist/index.cjs` | Bundled CJS via esbuild |
-| Build tool | `esbuild` `^0.25.0` | `script/build.ts:49` bundles server to CJS |
+| Build tool | `esbuild` `^0.25.0` | `scripts/build.ts:49` bundles server to CJS |
 | Client dev middleware | `vite` `^7.1.9` | `server/vite.ts:18` `createViteServer({ middlewareMode: true })` |
 
 ## Data layer
@@ -32,11 +32,11 @@
 
 ## Realtime
 
-`ws ^8.18.0` is a dependency (esbuild allowlisted at `script/build.ts:29`); no WebSocket handler is currently registered in `server/routes.ts`.
+`ws ^8.18.0` is a dependency (esbuild allowlisted at `scripts/build.ts:29`); no WebSocket handler is currently registered in `server/routes.ts`.
 
 ## Build chain
 
-1. `npm run build` → `tsx script/build.ts`
+1. `npm run build` → `tsx scripts/build.ts`
 2. `viteBuild()` emits the client to `dist/public/`
 3. `esbuild` bundles `server/index.ts` → `dist/index.cjs` (CJS, minified, `NODE_ENV` defined as `"production"`, deps in `allowlist` bundled, others kept external).
 4. `npm start` runs `NODE_ENV=production node dist/index.cjs`.

@@ -98,6 +98,6 @@ Use `POST /api/chat` (`server/routes.ts:124-172`) as the template:
 ## R6 — Make a new npm package available in the production bundle
 
 By default esbuild keeps deps external. To bundle a dep into `dist/index.cjs`:
-1. Open `script/build.ts:7-33`.
+1. Open `scripts/build.ts:7-33`.
 2. Add the package name to `allowlist`.
 3. Re-run `npm run build`.

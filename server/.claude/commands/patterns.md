@@ -40,7 +40,7 @@ Standard Express 4-arg signature; reads `err.status || err.statusCode || 500`, n
 The whole post-middleware setup runs inside `(async () => { ... })()` so we can `await` route registration and the dynamic Vite import.
 
 - Location: `server/index.ts:62-103`
-- Top-level `await` is intentionally NOT used because the file is bundled to CJS by esbuild (`script/build.ts:51`).
+- Top-level `await` is intentionally NOT used because the file is bundled to CJS by esbuild (`scripts/build.ts:51`).
 
 ## P6 — Storage seam (`IStorage` interface + class implementation + singleton)
 

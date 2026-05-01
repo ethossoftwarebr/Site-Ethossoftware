@@ -88,16 +88,17 @@ N/A — `entity-registry.json` vazio (projeto não tem entidades de domínio; s�
 - [x] Atualizar imports nos componentes (`@assets/X` → `@/assets/<categoria>/X` em 5 arquivos: projects.ts, ClientCarousel, Footer, Navbar, About)
 - [x] Validar estática: zero `@assets|attached_assets` consumers em `client/src/`. Build/check gates BLOQUEADOS por env Windows pnpm corrompido (independente desta migração) — endereçado fora do agent.
 
-### orchestrator Agent (Wave 2) (paralelo ao client-impl Wave 2 — paths disjuntos)
+### orchestrator Agent (Wave 2) (sequencial após client-impl Wave 2 — vite.config.ts + attached_assets dependiam de zero consumers)
 
-- [ ] Mover `script/build.ts` → `scripts/build.ts`
-- [ ] Mover `scripts/post-merge.sh` → `.claude/scripts/post-merge.sh`
-- [ ] Atualizar `package.json` script `build` para `tsx scripts/build.ts`
-- [ ] Atualizar caller de `post-merge.sh` em `.claude/settings.json` (se houver)
-- [ ] Remover alias `@assets` de `vite.config.ts` (após Wave 2 client-impl confirmar zero consumers)
-- [ ] Apagar `attached_assets/` (deve estar vazia)
-- [ ] Apagar `script/` (deve estar vazia)
-- [ ] Validar: `pnpm build` gera `dist/index.cjs` + `dist/public/`
+- [x] Mover `script/build.ts` → `scripts/build.ts` (via git mv)
+- [x] Mover `scripts/post-merge.sh` → `.claude/scripts/post-merge.sh` (via git mv)
+- [x] Atualizar `package.json` script `build` para `tsx scripts/build.ts`
+- [x] Verificar caller em `.claude/settings.json`: não havia (post-merge.sh é apenas hook git em `.git/hooks/`); skip
+- [x] Remover alias `@assets` de `vite.config.ts`
+- [x] Apagar `attached_assets/` inteiro (51 arquivos órfãos: Pasted-*.txt, branding-*.json, logos duplicados — todos lixo Replit pós-Wave 2a)
+- [x] Apagar `script/` (vazio após git mv)
+- [x] Atualizar referências obsoletas a `script/build.ts` em docs: server/CLAUDE.md, client/CLAUDE.md, server/.claude/commands/{guards,stack,patterns,recipes}.md, client/.claude/commands/stack.md (NÃO em server/.claude/skills/* — out-of-scope flag)
+- [x] Validar: `pnpm check` 0 erros + `pnpm build` OK (`dist/index.cjs` 796.5kb, `dist/public/` populado em 6.36s)
 
 ### qa-run Agent (Wave 3)
 
@@ -107,6 +108,10 @@ N/A — `entity-registry.json` vazio (projeto não tem entidades de domínio; s�
 ## Concerns
 
 <!-- CONCERN: server-impl (Wave 1) — Skill files em `server/.claude/skills/` (server-bootstrap, server-request-logger, server-session-setup, server-drizzle-storage) ainda referenciam código pré-Spec 1 (Drizzle, Passport, MemStorage, rawBody, etc.). Out-of-scope desta spec. Endereçar via `/scan` regen futuro ou nova spec dedicada. -->
+
+<!-- CONCERN: review (Wave 2 close) — `server/.claude/commands/{guards,patterns,recipes,stack}.md` têm múltiplos stale line refs apontando para `server/index.ts:NN` do arquivo antigo de 96 linhas (atualmente 35 linhas). Os documentos ainda descrevem comportamento corretamente, só os refs de linha estão errados. Wave 1 atualizou `server/CLAUDE.md` mas não os subdocs. Endereçar via `/scan` regen futuro junto com a CONCERN dos skills, ou em PR de polish dedicado. -->
+
+<!-- CONCERN: review (Wave 2 close) — Pre-existing client violations não introduzidas por Spec 2 mas detectadas pelo reviewer: (a) `client/src/data/projects.ts:7` import relativo `../assets/images/chatbot-ui.png` viola guard `client/CLAUDE.md` "Never relative-import past one level"; (b) `client/src/components/Navbar.tsx:158-167,249-254` concat className com `+` (deveria usar `cn()`); (c) `client/src/components/WizardSection.tsx:238` var `effectiveStep` declarada e nunca lida (dead code). Endereçar em PR de polish ou abrir bugfix dedicado. -->
 
 ## Acceptance Criteria
 

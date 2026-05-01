@@ -17,7 +17,7 @@
 ```bash
 pnpm dev                # Express + Vite middleware (SPA + API on :5000, hot-reload via tsx watch)
 pnpm check              # tsc --noEmit (full repo)
-pnpm build              # tsx script/build.ts (bundles client + server)
+pnpm build              # tsx scripts/build.ts (bundles client + server)
 ```
 
 ## Key Paths
