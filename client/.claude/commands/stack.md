@@ -42,7 +42,6 @@
 | Alias | Target |
 |-------|--------|
 | `@/*` | `client/src/*` |
-| `@shared/*` | `shared/*` |
 | `@assets/*` | `attached_assets/*` |
 
 ## Build & Tooling

@@ -7,7 +7,6 @@
 
 - DO use the `@/` alias for anything inside `client/src/` (`@/components/...`, `@/lib/utils`, `@/hooks/...`).
 - DO use `@assets/*` for files in `attached_assets/` (Replit uploads).
-- DO use `@shared/*` for cross-package types in `shared/`.
 - DON'T use deep relative paths like `../../components/ui/button` — the alias is mandatory.
 - DON'T introduce a new alias without updating BOTH `vite.config.ts:26` AND `tsconfig.json:18`.
 

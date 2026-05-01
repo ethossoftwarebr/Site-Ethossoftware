@@ -17,14 +17,14 @@ memory: project
 
 ## Boundary
 - Scope: `server/` only — never edit `client/`.
-- May READ + IMPORT from `shared/` (Drizzle/Zod entities).
+- No `shared/` subproject currently — `server/` is self-contained.
 - All API routes MUST be prefixed `/api`.
 - Routes registered via `registerRoutes(httpServer, app)` in `server/routes.ts` — error handler MUST stay LAST in `server/index.ts`.
-- New deps require an entry in `script/build.ts` allowlist (bundled vs external).
+- New deps require an entry in `scripts/build.ts` allowlist (bundled vs external).
 
 ## Validation
 ```bash
-npm run check
+pnpm check
 ```
 
 ## Return Format

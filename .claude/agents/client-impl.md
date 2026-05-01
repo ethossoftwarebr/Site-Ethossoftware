@@ -16,8 +16,7 @@ memory: project
 3. `client/.claude/commands/notes.md` — project-specific notes
 
 ## Boundary
-- Scope: `client/` only — never edit `server/` or `shared/`.
-- May READ `shared/schema.ts` to align with shared types.
+- Scope: `client/` only — never edit `server/`.
 - Use `@/` alias for `client/src/*` imports.
 - New components belong under `client/src/components/`; new pages under `client/src/pages/` and registered in `client/src/App.tsx`.
 - Prefer `client/.claude/skills/` for guidance over re-reading source.

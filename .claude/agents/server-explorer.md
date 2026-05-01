@@ -22,7 +22,7 @@ memory: project
 
 ## Boundary
 - **Read-only** — NEVER write, edit, or execute commands
-- Scope: `server/` directory only (may also read `shared/schema.ts`)
+- Scope: `server/` directory only
 - Ignore: `node_modules/`, `dist/`
 - **Budget: ≤20 tool uses total, ≤3 full file reads** — prefer Grep over Read
 - Return findings as soon as pattern/root-cause is clear

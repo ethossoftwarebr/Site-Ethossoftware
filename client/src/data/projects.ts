@@ -4,7 +4,7 @@ import projI9Contabilidade from "@/assets/screenshots/screenshot-1772126106981.p
 import projMariaLaura from "@/assets/screenshots/screenshot-1772123490789.png";
 import projOfficeChagas from "@/assets/screenshots/WhatsApp_Image_2026-03-04_at_23.56.18_1772679540241.jpeg";
 import projEspetoShow from "@/assets/screenshots/image_1772679778021.png";
-import projAutomacaoChatbot from "../assets/images/chatbot-ui.png";
+import projAutomacaoChatbot from "@/assets/images/chatbot-ui.png";
 
 export interface Project {
   title: string;

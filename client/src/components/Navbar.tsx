@@ -6,6 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetFooter } from "@/components/ui/sheet";
 import { MenuToggle } from "@/components/ui/menu-toggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { cn } from "@/lib/utils";
 import logoEthos from "@/assets/brand/Captura_de_tela_2026-02-26_010155-removebg-preview_1772078653004.png";
 
 const WA_URL =
@@ -154,17 +155,17 @@ export default function Navbar() {
                   key={link.label}
                   href={getHref(link.anchor, link.page)}
                   data-testid={`link-nav-${link.page ?? link.anchor}`}
-                  className={
-                    buttonVariants({ variant: "ghost" }) +
-                    " relative font-medium text-[15px] transition-colors duration-300 " +
-                    (isTransparent
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "relative font-medium text-[15px] transition-colors duration-300",
+                    isTransparent
                       ? active
                         ? "text-white hover:text-white hover:bg-white/10"
                         : "text-white/80 hover:text-white hover:bg-white/10"
                       : active
                         ? "text-[#A229F2] dark:text-primary"
-                        : "text-[#531B8C] dark:text-foreground/80 dark:hover:text-foreground")
-                  }
+                        : "text-[#531B8C] dark:text-foreground/80 dark:hover:text-foreground"
+                  )}
                 >
                   {link.label}
                   {active && (
@@ -246,13 +247,13 @@ export default function Navbar() {
                   href={getHref(link.anchor, link.page)}
                   onClick={() => setOpen(false)}
                   data-testid={`link-mobile-nav-${link.page ?? link.anchor}`}
-                  className={
-                    buttonVariants({ variant: "ghost" }) +
-                    " justify-start text-[15px] font-semibold " +
-                    (active
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "justify-start text-[15px] font-semibold",
+                    active
                       ? "text-[#A229F2] dark:text-primary bg-[#A229F2]/8 dark:bg-primary/10"
-                      : "text-[#531B8C] dark:text-foreground/80")
-                  }
+                      : "text-[#531B8C] dark:text-foreground/80"
+                  )}
                 >
                   {link.label}
                 </a>

@@ -235,7 +235,6 @@ export default function WizardSection() {
     }));
   };
 
-  const effectiveStep = step <= 3 && !showStageStep && step === 3 ? 2 : step;
   const displayedSteps = showStageStep ? steps : steps.filter(s => s.id !== 3);
 
   if (!started) {

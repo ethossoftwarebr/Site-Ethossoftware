@@ -1,6 +1,6 @@
 # Real error handler from server/index.ts
 
-## Implementation (server/index.ts:65-76)
+## Implementation (server/index.ts:14-20)
 
 ```ts
 app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +17,7 @@ app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
 });
 ```
 
-## Surrounding bootstrap order (server/index.ts:62-86)
+## Surrounding bootstrap order (server/index.ts:11-27)
 
 ```ts
 (async () => {

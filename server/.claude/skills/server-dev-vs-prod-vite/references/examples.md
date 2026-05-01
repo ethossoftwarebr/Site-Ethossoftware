@@ -97,7 +97,7 @@ export async function setupVite(server: Server, app: Express) {
 }
 ```
 
-## Build (script/build.ts:38-61)
+## Build (scripts/build.ts:15-41)
 
 ```ts
 console.log("building client...");

@@ -6,7 +6,7 @@ source: scan
 <!-- mustard:generated -->
 # Server Error Handler
 
-> The global error handler lives at `server/index.ts:65-76`. It MUST stay registered AFTER `registerRoutes(...)` and BEFORE the dev/prod catch-all (`setupVite` / `serveStatic`).
+> The global error handler lives at `server/index.ts:14-20`. It MUST stay registered AFTER `registerRoutes(...)` and BEFORE the dev/prod catch-all (`setupVite` / `serveStatic`).
 
 ## When to use
 
@@ -36,20 +36,19 @@ app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
 
 In `server/index.ts`:
 
-1. parsers (`:15-23`)
-2. request logger (`:36-60`)
-3. `await registerRoutes(...)` (`:63`)
-4. **error handler** (`:65-76`) ← this one
-5. `setupVite` OR `serveStatic` (`:81-86`)
-6. `httpServer.listen(...)` (`:93`)
+1. `express.json()` parser (`:9`)
+2. `await registerRoutes(...)` (`:12`)
+3. **error handler** (`:14-20`) ← this one
+4. `setupVite` OR `serveStatic` (`:22-27`)
+5. `httpServer.listen(...)` (`:31-33`)
 
-If you flip 4 and 5 the catch-all at `server/static.ts:16` / `server/vite.ts:34` will swallow the request before the error handler ever sees it.
+If you flip 3 and 4 the catch-all at `server/static.ts:16` / `server/vite.ts:34` will swallow the request before the error handler ever sees it.
 
 ## Rules
 
-1. **Always check `res.headersSent`** before sending. The handler currently does this at `server/index.ts:71-73`. If true, delegate to `next(err)` so Express closes the connection.
+1. **Always check `res.headersSent`** before sending. The handler currently does this at `server/index.ts:18`. If true, delegate to `next(err)` so Express closes the connection.
 2. **Always pass 4 args** (`err, req, res, next`) — Express identifies error-handling middleware by arity.
-3. **Use `console.error`** with the prefix `"Internal Server Error:"` so logs are greppable. The request logger doesn't capture this output.
+3. **Use `console.error`** with the prefix `"Internal Server Error:"` so logs are greppable.
 4. **Don't leak `err.stack` to clients.** Only `{ message }` is exposed. Stack stays in server logs.
 5. **Read status from `err.status || err.statusCode || 500`** (not just `err.status`). Some libs use `statusCode`.
 6. **For known error types** (`ZodError`, custom `HttpError`), normalize BEFORE this handler — either inside the route via `try/catch` + `next(new HttpError(400, msg))`, or via a dedicated error-mapping middleware registered between routes and this one.
@@ -67,11 +66,11 @@ app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
   next(err); // delegate to the existing global handler
 });
 ```
-Insert ABOVE the global handler (between `registerRoutes` and `:65`).
+Insert ABOVE the global handler (between `registerRoutes` and `:14`).
 
 ## References
 
-- Implementation: `server/index.ts:65-76`
-- Patterns: `server/.claude/commands/patterns.md` §P3
+- Implementation: `server/index.ts:14-20`
+- Patterns: `server/.claude/commands/patterns.md` §P2
 - Guards: `server/.claude/commands/guards.md`
 - Examples: `references/examples.md`

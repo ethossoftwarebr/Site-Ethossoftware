@@ -66,6 +66,6 @@ File: `server/routes.ts:124-172`
 ## Caller (do not duplicate)
 
 ```ts
-// server/index.ts:63
+// server/index.ts:12
 await registerRoutes(httpServer, app);
 ```
