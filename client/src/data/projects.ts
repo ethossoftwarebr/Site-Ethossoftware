@@ -1,9 +1,9 @@
-import projContacnet from "@assets/screenshot-1772062900110.png";
-import projDaniel from "@assets/screenshot-1772070012436.png";
-import projI9Contabilidade from "@assets/screenshot-1772126106981.png";
-import projMariaLaura from "@assets/screenshot-1772123490789.png";
-import projOfficeChagas from "@assets/WhatsApp_Image_2026-03-04_at_23.56.18_1772679540241.jpeg";
-import projEspetoShow from "@assets/image_1772679778021.png";
+import projContacnet from "@/assets/screenshots/screenshot-1772062900110.png";
+import projDaniel from "@/assets/screenshots/screenshot-1772070012436.png";
+import projI9Contabilidade from "@/assets/screenshots/screenshot-1772126106981.png";
+import projMariaLaura from "@/assets/screenshots/screenshot-1772123490789.png";
+import projOfficeChagas from "@/assets/screenshots/WhatsApp_Image_2026-03-04_at_23.56.18_1772679540241.jpeg";
+import projEspetoShow from "@/assets/screenshots/image_1772679778021.png";
 import projAutomacaoChatbot from "../assets/images/chatbot-ui.png";
 
 export interface Project {

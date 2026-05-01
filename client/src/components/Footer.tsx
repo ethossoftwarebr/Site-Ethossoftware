@@ -1,5 +1,5 @@
 import { motion, type Variants } from "framer-motion";
-import logoEthos from "@assets/Captura_de_tela_2026-02-26_010155-removebg-preview_1772078653004.png";
+import logoEthos from "@/assets/brand/Captura_de_tela_2026-02-26_010155-removebg-preview_1772078653004.png";
 import { Mail, Phone, MapPin, Instagram, Linkedin, ChevronRight } from "lucide-react";
 
 export default function Footer() {

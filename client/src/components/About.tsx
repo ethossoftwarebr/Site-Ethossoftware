@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
-import softwareHouseImg from "@assets/image_1772683408265.png";
+import softwareHouseImg from "@/assets/brand/image_1772683408265.png";
 
 export default function About() {
   return (

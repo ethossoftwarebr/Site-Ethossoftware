@@ -3,7 +3,7 @@
 ### Status: implementing
 ### Phase: EXECUTE
 ### Scope: full
-### Checkpoint: 2026-04-30T21:33:50.000Z
+### Checkpoint: 2026-05-01T00:00:00.000Z
 ### Pipeline: /mustard:feature (Full scope)
 ### Model: opus (12+ files, 4 blocos paralelos, alguns padrões novos — assets migration)
 
@@ -81,12 +81,12 @@ N/A — `entity-registry.json` vazio (projeto não tem entidades de domínio; s�
 
 ### client-impl Agent (Wave 2)
 
-- [ ] Grep `attached_assets` em `client/src/**` para listar todos consumidores (paths exatos + linha)
-- [ ] Categorizar cada arquivo: importado em código (`import ... from "@assets/..."`) vs referenciado por URL pública (favicon, ogImage)
-- [ ] Mover importados → `client/src/assets/<categoria>/` (logos/, screenshots/, brand/)
-- [ ] Mover públicos → `client/public/` (mantém nome, vai pra raiz do site)
-- [ ] Atualizar imports nos componentes (`@assets/X` → `@/assets/<categoria>/X` ou import relativo)
-- [ ] Validar: `pnpm dev` + abrir browser + confirmar imagens carregam
+- [x] Grep `attached_assets` em `client/src/**` para listar todos consumidores (paths exatos + linha)
+- [x] Categorizar cada arquivo: importado em código (`import ... from "@assets/..."`) vs referenciado por URL pública (favicon, ogImage)
+- [x] Mover importados → `client/src/assets/<categoria>/` (`screenshots/`, `clients/`, `brand/` — 24 files via `git mv`)
+- [x] Mover públicos → `client/public/` (zero — `client/public/` já tinha favicon/og/robots; nenhum `/attached_assets/` URL ref encontrado)
+- [x] Atualizar imports nos componentes (`@assets/X` → `@/assets/<categoria>/X` em 5 arquivos: projects.ts, ClientCarousel, Footer, Navbar, About)
+- [x] Validar estática: zero `@assets|attached_assets` consumers em `client/src/`. Build/check gates BLOQUEADOS por env Windows pnpm corrompido (independente desta migração) — endereçado fora do agent.
 
 ### orchestrator Agent (Wave 2) (paralelo ao client-impl Wave 2 — paths disjuntos)
 

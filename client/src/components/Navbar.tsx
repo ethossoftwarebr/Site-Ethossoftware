@@ -6,7 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetFooter } from "@/components/ui/sheet";
 import { MenuToggle } from "@/components/ui/menu-toggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import logoEthos from "@assets/Captura_de_tela_2026-02-26_010155-removebg-preview_1772078653004.png";
+import logoEthos from "@/assets/brand/Captura_de_tela_2026-02-26_010155-removebg-preview_1772078653004.png";
 
 const WA_URL =
   "https://wa.me/556294667304?text=Olá! Vim pelo site da Ethos Software e quero conversar sobre um projeto.";

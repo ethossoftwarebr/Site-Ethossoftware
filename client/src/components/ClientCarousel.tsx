@@ -1,21 +1,21 @@
 import { motion } from "framer-motion";
 import { Sparkles } from "@/components/Sparkles";
-import construMais from "@assets/image_1772062082099.png";
-import advLeite from "@assets/image_1772062142489.png";
-import elyudFreitas from "@assets/image_1772062172289.png";
-import silvaGomes from "@assets/logotipo-advogado-gomes_1772062181314.png";
-import contacnet from "@assets/Logo-Contac-Colorida_(1)_1772062181315.png";
-import promedico from "@assets/image_1772062204753.png";
-import redeConstrucao from "@assets/image_1772062247508.png";
-import hosOdonto from "@assets/image_1772062271614.png";
-import allVida from "@assets/image_1772062287989.png";
-import villaCarioca from "@assets/image_1772062338214.png";
-import franciscoCamargo from "@assets/image_1772062706525.png";
-import agius from "@assets/image_1772062730210.png";
-import avante from "@assets/image_1772062747520.png";
-import ileva from "@assets/image_1772062796029.png";
-import bbt from "@assets/image_1772062813471.png";
-import caristeo from "@assets/image_1772062833578.png";
+import construMais from "@/assets/clients/image_1772062082099.png";
+import advLeite from "@/assets/clients/image_1772062142489.png";
+import elyudFreitas from "@/assets/clients/image_1772062172289.png";
+import silvaGomes from "@/assets/clients/logotipo-advogado-gomes_1772062181314.png";
+import contacnet from "@/assets/clients/Logo-Contac-Colorida_(1)_1772062181315.png";
+import promedico from "@/assets/clients/image_1772062204753.png";
+import redeConstrucao from "@/assets/clients/image_1772062247508.png";
+import hosOdonto from "@/assets/clients/image_1772062271614.png";
+import allVida from "@/assets/clients/image_1772062287989.png";
+import villaCarioca from "@/assets/clients/image_1772062338214.png";
+import franciscoCamargo from "@/assets/clients/image_1772062706525.png";
+import agius from "@/assets/clients/image_1772062730210.png";
+import avante from "@/assets/clients/image_1772062747520.png";
+import ileva from "@/assets/clients/image_1772062796029.png";
+import bbt from "@/assets/clients/image_1772062813471.png";
+import caristeo from "@/assets/clients/image_1772062833578.png";
 
 const clients = [
   { name: "ConstruMais", logo: construMais },
