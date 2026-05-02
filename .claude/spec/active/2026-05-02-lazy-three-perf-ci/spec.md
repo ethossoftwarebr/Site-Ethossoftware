@@ -1,9 +1,10 @@
 # Spec — three.js lazy-on-interaction + Lighthouse CI + per-image quality
 
-### Status: pending-approval
+### Status: approved
 ### Phase: PLAN
 ### Scope: full
-### Checkpoint: 2026-05-02T00:30:00.000Z
+### Checkpoint: 2026-05-02T01:00:00.000Z
+### Approved: 2026-05-02T01:00:00.000Z (verbal — usuário autorizou aprovação inline para iniciar EXECUTE em sessão fresca via /mustard:resume)
 ### Pipeline: /mustard:feature (Full scope — 3 blocos, ~10 arquivos, novos patterns: scroll-triggered three.js, lighthouse CI workflow)
 ### Model: opus (Bloco 1 decisão de UX trigger + Bloco 2 setup CI; Sonnet em retries mecânicos)
 
