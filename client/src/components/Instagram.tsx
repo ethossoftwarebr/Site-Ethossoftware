@@ -4,13 +4,16 @@ import { Instagram as InstagramIcon } from "lucide-react";
 
 export default function Instagram() {
   useEffect(() => {
-    const existingScript = document.querySelector('script[src="https://w.behold.so/widget.js"]');
-    if (!existingScript) {
-      const script = document.createElement("script");
-      script.type = "module";
-      script.src = "https://w.behold.so/widget.js";
-      document.head.appendChild(script);
-    }
+    const existing = document.querySelector('script[src="https://w.behold.so/widget.js"]');
+    if (existing) return;
+    const script = document.createElement("script");
+    script.type = "module";
+    script.src = "https://w.behold.so/widget.js";
+    script.dataset.beholdInjected = "true";
+    document.head.appendChild(script);
+    return () => {
+      script.remove();
+    };
   }, []);
 
   return (

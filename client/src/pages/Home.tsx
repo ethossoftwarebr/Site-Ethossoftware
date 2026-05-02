@@ -15,6 +15,7 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import EthosIA from "@/components/EthosIA";
+import { DeferredSection } from "@/components/ui/deferred-section";
 
 export default function Home() {
   usePageMeta({
@@ -59,7 +60,9 @@ export default function Home() {
       
       <div className="flex flex-col gap-12 md:gap-20 pt-16 pb-0">
         <Hero />
-        <ClientCarousel />
+        <DeferredSection minHeight="200px">
+          <ClientCarousel />
+        </DeferredSection>
         <Services />
         <Benefits />
         <Portfolio />
@@ -67,7 +70,9 @@ export default function Home() {
         <About />
         <Mission />
         <Instagram />
-        <WizardSection />
+        <DeferredSection minHeight="400px">
+          <WizardSection />
+        </DeferredSection>
         <FAQ />
       </div>
 

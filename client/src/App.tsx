@@ -11,8 +11,6 @@ const ServicesPage = lazy(() => import("@/pages/ServicesPage"));
 const PortfolioPage = lazy(() => import("@/pages/PortfolioPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
-// Minimal route fallback: solid theme background, no spinner — prevents white flash
-// while route chunk is fetched. Mirrors body bg so transitions feel uniform.
 function RouteLoader() {
   return (
     <div

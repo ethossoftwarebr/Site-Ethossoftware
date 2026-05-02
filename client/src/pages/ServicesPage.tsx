@@ -14,6 +14,7 @@ import EthosIA from "@/components/EthosIA";
 import OrbitingSkills from "@/components/OrbitingSkills";
 import { AuroraBackground } from "@/components/AuroraBackground";
 import { Button } from "@/components/ui/button";
+import { DeferredSection } from "@/components/ui/deferred-section";
 
 const WA_URL = "https://wa.me/556294667304?text=Olá! Vim pela página de serviços da Ethos Software e quero fazer um orçamento.";
 
@@ -412,7 +413,9 @@ export default function ServicesPage() {
               transition={{ duration: 0.6 }}
               className="flex items-center justify-center"
             >
-              <OrbitingSkills />
+              <DeferredSection minHeight="420px">
+                <OrbitingSkills />
+              </DeferredSection>
             </motion.div>
           </div>
         </div>

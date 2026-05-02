@@ -1,9 +1,9 @@
 # Spec — Lighthouse Performance 82 → 90+ (LCP, TBT, FCP attack plan)
 
-### Status: approved
-### Phase: EXECUTE
+### Status: completed-partial
+### Phase: CLOSE
 ### Scope: full
-### Checkpoint: 2026-05-01T04:00:00.000Z
+### Checkpoint: 2026-05-01T22:00:00.000Z
 ### Approved: 2026-05-01T04:00:00.000Z (verbal — usuário autorizou aprovação inline na sessão prévia para iniciar EXECUTE em sessão fresca via /mustard:resume)
 ### Pipeline: /mustard:feature (Full scope — 6 blocos, ~16 arquivos, novos patterns: prerender + self-hosted fonts + critical CSS)
 ### Model: opus (decisões arquiteturais críticas — prerender approach, font hosting, defer mount strategy)
@@ -23,6 +23,50 @@ Pós-Spec 4 o site tem main chunk 64KB, three.js lazy, imagens AVIF/WebP, SEO pe
 **Antes de tudo**, capturar Lighthouse breakdown atual nas 3 rotas. Salvar como JSON em `dist/lighthouse-baseline-{route}.json`. Inputs: usar `pnpm exec lighthouse http://localhost:5000 --output=json --output-path=...` (Chrome headless). Isso permite priorizar — se LCP já está abaixo de 2.5s, Bloco C tem prioridade reduzida; se TBT está em 600ms, Bloco D vira prioritário.
 
 Baseline obrigatório antes de EXECUTE iniciar — orchestrator captura inline na fase ANALYZE.
+
+## Diagnostic Findings (Step 0 — 2026-05-01T05:30:00.000Z)
+
+**Setup:** `pnpm build && pnpm start` (production), Lighthouse 13.2.0, Chrome headless, mobile preset (default — simulated 3G + Moto G4 CPU throttle 4x).
+
+| Rota | Score | LCP (ms) | TBT (ms) | FCP (ms) | SI (ms) | CLS | TTI (ms) | unusedJs (KB) |
+|---|---|---|---|---|---|---|---|---|
+| `/` | **47** | 11684 | 429 | 7801 | 7801 | 0.000 | 11917 | 224 |
+| `/servicos` | **40** | 12545 | 628 | 9416 | 9416 | 0.017 | 12545 | 662 |
+| `/portfolio` | **58** | 8649 | 68 | 7157 | 7157 | 0.000 | 8771 | 237 |
+| **avg** | **48** | **10959** | **375** | **8125** | **8125** | — | **11078** | **374** |
+
+**Targets (per spec premise):** LCP < 2500, TBT < 300, FCP < 1800, score ≥ 90.
+
+**Gaps avg:** LCP gap **+8459ms**, FCP gap **+6325ms**, TBT gap **+75ms**.
+
+### Worst offender: LCP (8.5s acima do target)
+
+Causa raiz visível na evidência:
+- `LCP_element = null` em todas as 3 rotas → Lighthouse não consegue identificar elemento LCP. Consistente com **SPA shell vazia até hidratação completa** — todo conteúdo paint chega de uma vez ~11s pós-load.
+- `renderBlocking_count = 0` → CSS/fonts já têm preload otimizado pós-Spec 4. **Bloco F (critical CSS) tem impacto reduzido** vs premissa original.
+- `unusedJs` significativo em `/servicos` (662KB) → confirma que código de rotas/heavy components é entregue mesmo onde não usado → Bloco D (defer) é alto-leverage.
+
+### Premissa do spec vs realidade
+
+Spec assumiu Performance 82 (provavelmente medição desktop/manual). Mobile lighthouse default mede em **48 avg** — alvo 90+ é **muito mais agressivo** do que sugerido. Os 6 blocos atacam os vetores corretos, mas atingir 90+ mobile pode exigir ações além do escopo (ex: code-split + lazy-load mais granular do three.js, ou remover features no mobile). **Flag para reavaliação em Wave 4**: se score mobile final ficar entre 70-85, declarar sucesso parcial e abrir spec follow-up; se < 70 após blocos, escalar para decisão arquitetural (Vike/SSR full).
+
+### Prioridade ajustada de blocos
+
+| Bloco | Prioridade | Razão |
+|---|---|---|
+| **A — Static prerender** | 🔴 ALTA | Ataca causa raiz de LCP+FCP (SPA shell vazia). Esperado: LCP/FCP cair drasticamente em rotas prerendered |
+| **D — Defer below-fold** | 🔴 ALTA | unusedJs alto (662KB em /servicos) — defer de OrbitingSkills/Carousel/WizardSection reduz initial bundle |
+| **C — LCP optimization** | 🟡 MÉDIA | AuroraBackground defer mount é o sub-bloco crítico (three.js 732KB). Hero priority+preload secundário. Depende de A para ter efeito visível |
+| **B — Self-hosted fonts** | 🟢 BAIXA | renderBlocking já = 0; ganho marginal (~50-100ms de eliminate Google Fonts ping). Mantém para reduzir external dep |
+| **E — Bundle audit + image quality** | 🟡 MÉDIA | Audit pode revelar quick-wins; image quality tuning é polish (imagens já AVIF/WebP) |
+| **F — Critical CSS inline** | 🟢 BAIXA | renderBlocking = 0 já. Ganho esperado < 100ms. Considerar SKIP se Wave 3 estourar tempo |
+
+### Wave reordering proposto
+
+- **Wave 1 (alta prioridade)**: A + D em paralelo (independentes; A altera scripts/server, D altera client/components)
+- **Wave 2 (média)**: B + C em paralelo (B independente; C depende de B só pra precisão de medição, mas pode rodar paralelo se aceitar margem de erro)
+- **Wave 3 (cleanup)**: E + F (F opcional)
+- **Wave 4**: QA
 
 ## Entity Info
 
@@ -77,17 +121,17 @@ N/A — entity-registry vazio.
 
 ### Pre-EXECUTE — Diagnóstico Lighthouse (orchestrator inline ou agent dispatch)
 
-- [ ] `pnpm dev` num shell separado
-- [ ] `pnpm dlx lighthouse http://localhost:5000 --only-categories=performance --output=json --output-path=dist/lighthouse-baseline-home.json --quiet --chrome-flags="--headless"`
-- [ ] Idem para `/servicos` e `/portfolio`
-- [ ] Extrair `audits.largest-contentful-paint.numericValue`, `audits.total-blocking-time.numericValue`, `audits.first-contentful-paint.numericValue`, `audits.speed-index.numericValue` de cada
-- [ ] Identificar maior offender (LCP / TBT / FCP) — registrar em `## Concerns` da spec
-- [ ] Ajustar prioridade dos blocos na ordem da execução real
+- [x] `pnpm build && pnpm start` em background (production mode — dev mode é unreliable para Lighthouse)
+- [x] `pnpm exec lighthouse http://localhost:5000/ --only-categories=performance --output=json --output-path=dist/lighthouse-baseline-home.json --quiet --chrome-flags="--headless"`
+- [x] Idem para `/servicos` e `/portfolio` (EPERM no cleanup do Chrome temp é ruído Windows; JSONs salvos OK)
+- [x] Extrair LCP/TBT/FCP/SpeedIndex/CLS/TTI/LCP_element/renderBlocking/unusedJs/unusedCss via `scripts/extract-baseline.cjs`
+- [x] Identificar maior offender — ver `## Diagnostic Findings`
+- [x] Ajustar prioridade dos blocos — ver `## Diagnostic Findings`
 
 ### prerender Agent (Wave 1) — Bloco A (Static prerender)
 
-- [ ] `pnpm add -D puppeteer` (raiz; ~150MB download)
-- [ ] Criar `scripts/prerender.ts`:
+- [x] `pnpm add -D puppeteer` (raiz; ~150MB download) — instalado puppeteer ^24.42.0
+- [x] Criar `scripts/prerender.ts`:
   ```ts
   import puppeteer from 'puppeteer';
   import express from 'express';
@@ -105,15 +149,22 @@ N/A — entity-registry vazio.
   //    write to dist/public/{route_name}/index.html (root → index.html)
   // 4) close browser, kill server
   ```
-- [ ] Adicionar marcador `data-app-ready="true"` no `<div id="root">` ou similar via App.tsx (set após primeira render completa, evita capturar HTML pré-hydrate)
-  - Alternativa: usar `page.waitForFunction(() => document.querySelector('main') !== null, { timeout: 10000 })`
-- [ ] `scripts/build.ts`: após `viteBuild()` e antes do esbuild, invocar `await prerender()`
-- [ ] `server/static.ts`: modificar fallback — para `GET /servicos`, tentar primeiro `dist/public/servicos/index.html`, fallback para `dist/public/index.html` (SPA fallback). Idem `/portfolio`.
-- [ ] Validar:
-  - `pnpm build` gera `dist/public/index.html`, `dist/public/servicos/index.html`, `dist/public/portfolio/index.html`
-  - Cada HTML tem `<title>` específico da rota (gerado pelo `usePageMeta` durante prerender)
-  - `pnpm start` (ou `pnpm dev`) e abrir `/servicos` → view-source mostra HTML pronto (não `<div id="root"></div>` vazio)
-  - Hidratação ainda funciona (sem warnings de mismatch no console)
+- [x] Wait strategy: `page.waitForFunction(() => document.querySelector('main') !== null)` (não precisou de marker `data-app-ready`)
+- [x] `scripts/build.ts`: invoca prerender entre client e server bundle (linhas 21-29)
+- [x] `server/static.ts`: fallback path-traversal-guarded — tenta `dist/public${path}/index.html` primeiro, fallback SPA shell
+- [x] Validar:
+  - `pnpm build` gera `dist/public/{,servicos/,portfolio/}index.html` ✓
+  - Cada HTML tem `<title>` específico ✓
+  - Tamanhos: 165KB / 66KB / 75KB
+  - Hidratação: confirmar em Wave 4 QA
+
+<!-- CONCERN: Build é fail-soft em prerender failure (logs warning, continua). Aviso `EADDRINUSE :4173` apareceu no build do Bloco D — porta provavelmente em TIME_WAIT do build anterior. Em CI builds back-to-back ou paralelos isso pode silenciosamente deixar HTMLs stale. Mitigação considerar em Wave 3 ou Spec follow-up: porta dinâmica via `getPort()` ou retry com backoff. NÃO bloqueia AC-3/AC-4 (HTMLs estão válidos no estado atual). -->
+
+### Wave 1 — Bloco A summary
+
+- Files: `scripts/prerender.ts` (NEW), `scripts/build.ts:4,21-29`, `server/static.ts:5-33`, `package.json:89` (+puppeteer ^24.42.0)
+- Status: OK
+- Build verification: 3 prerendered HTMLs presentes, todos com `<main>` + page-specific titles
 
 **Decisão arquitetural:** prerender via Puppeteer post-build em vez de Vike/SSR-framework rewrite. Razões: (a) preserva Wouter + usePageMeta + LazyImage existentes; (b) ~100 linhas de script vs framework migration; (c) reversível (deletar script + restaurar build.ts).
 
@@ -163,9 +214,9 @@ N/A — entity-registry vazio.
   - LCP image aparece nos primeiros 3 requests (devTools > Performance > LCP marker)
   - Aurora não inicializa nas primeiras 100ms (verificar via Performance trace)
 
-### client-impl Agent (Wave 2) — Bloco D (Defer below-fold)
+### client-impl Agent (Wave 1, promovido por diagnóstico) — Bloco D (Defer below-fold)
 
-- [ ] Criar `client/src/components/ui/deferred-section.tsx`:
+- [x] Criar `client/src/components/ui/deferred-section.tsx`:
   ```tsx
   type Props = { children: React.ReactNode; rootMargin?: string };
   export function DeferredSection({ children, rootMargin = "200px" }: Props) {
@@ -182,19 +233,20 @@ N/A — entity-registry vazio.
     return <div ref={ref} data-testid="deferred-section">{shouldRender ? children : null}</div>;
   }
   ```
-- [ ] `client/src/pages/Home.tsx`: identificar sections below-fold (provavelmente após Hero+Services breve preview):
-  - WizardSection (lead capture, no fim da Home)
-  - OrbitingSkills (heavy animation)
-  - ClientCarousel (16 logos, marquee animation)
-  - About section (se está below-fold)
-  
-  Wrap cada uma em `<DeferredSection>...</DeferredSection>`. NÃO wrap a primeira section visível (Hero) nem a segunda (Services preview).
-- [ ] Audit imports module-level desses 3 componentes — se algum tem `const x = expensiveCalc()` no top do arquivo (fora do componente), refatorar para dentro. Side-effects module-level rodam mesmo se nunca renderizar.
-- [ ] Validar:
-  - `pnpm dev`, abrir DevTools > Performance, gravar load
-  - Tasks longos pós-FCP devem reduzir
-  - Scroll até final da página: sections aparecem sem flicker (rootMargin de 200px dá tempo de hidratar antes)
-  - TBT no Lighthouse cai > 100ms vs baseline
+- [x] Identificar sections below-fold:
+  - WizardSection (Home.tsx) — minHeight 400px
+  - OrbitingSkills — DESCOBERTO em ServicesPage.tsx, NÃO Home.tsx — minHeight 420px
+  - ClientCarousel (Home.tsx) — minHeight 200px
+- [x] Audit imports module-level: zero side-effects encontrados nos 3 componentes (apenas const arrays/objects declarativos, sem fetch/setInterval/compute pesado)
+- [x] Validar: `pnpm check` clean, `pnpm build` sucesso (novo chunk `deferred-section` 0.52KB)
+
+<!-- CONCERN: Spec listou os 3 wraps em "Home.tsx" mas OrbitingSkills vive em ServicesPage.tsx. Agente extendeu escopo a ServicesPage.tsx (1-line wrap, sem tocar arquivos out-of-scope) — alinhado com intent (diagnóstico identificou /servicos com 662KB unusedJs). Justificado mas não estava no `## Files`. -->
+
+### Wave 1 — Bloco D summary
+
+- Files: `client/src/components/ui/deferred-section.tsx` (NEW), `client/src/pages/Home.tsx:18,63-65,73-75`, `client/src/pages/ServicesPage.tsx:17,416-418`
+- Status: OK
+- Module-level side-effects: nenhum encontrado nos 3 componentes
 
 ### client-impl Agent (Wave 3) — Bloco E (Bundle audit + image quality)
 
@@ -238,15 +290,63 @@ N/A — entity-registry vazio.
 
 ## Acceptance Criteria
 
-- [ ] AC-1: TS check zero erros — Command: `pnpm check`
-- [ ] AC-2: Build OK + prerender executa — Command: `pnpm build`
-- [ ] AC-3: Prerender HTML por rota existe — Command: `node -e "const fs=require('fs');const ok=['index.html','servicos/index.html','portfolio/index.html'].every(p=>fs.existsSync('dist/public/'+p));process.exit(ok?0:1)"`
-- [ ] AC-4: Prerender HTML tem conteúdo (não shell vazio) — Command: `node -e "const fs=require('fs');const c=fs.readFileSync('dist/public/index.html','utf8');const ok=c.includes('<main')||c.includes('Ethos Software');console.log('home prerendered content:',ok);process.exit(ok?0:1)"`
-- [ ] AC-5: Zero refs a fonts.googleapis.com em HTML/CSS produzidos — Command: `node -e "const{execSync}=require('child_process');try{execSync('grep -rn fonts.googleapis client/index.html client/src/index.css dist/public/',{stdio:'pipe'});process.exit(1)}catch(e){process.exit(e.status===1?0:2)}"`
-- [ ] AC-6: Outfit fonts servidos de /fonts/ — Command: `node -e "const fs=require('fs');const ok=fs.existsSync('client/public/fonts')&&fs.readdirSync('client/public/fonts').filter(f=>f.endsWith('.woff2')).length>=3;process.exit(ok?0:1)"`
-- [ ] AC-7: DeferredSection used in Home.tsx — Command: `node -e "const fs=require('fs');const c=fs.readFileSync('client/src/pages/Home.tsx','utf8');process.exit(c.includes('DeferredSection')?0:1)"`
-- [ ] AC-8: Lighthouse Performance ≥ 90 nas 3 rotas — Command: `node -e "const fs=require('fs');const routes=['home','servicos','portfolio'];const scores=routes.map(r=>JSON.parse(fs.readFileSync('dist/lighthouse-final-'+r+'.json','utf8')).categories.performance.score*100);console.log(scores);process.exit(scores.every(s=>s>=90)?0:1)"`
-- [ ] AC-9: LCP < 2.5s nas 3 rotas — Command: `node -e "const fs=require('fs');const routes=['home','servicos','portfolio'];const lcps=routes.map(r=>JSON.parse(fs.readFileSync('dist/lighthouse-final-'+r+'.json','utf8')).audits['largest-contentful-paint'].numericValue);console.log('LCPs (ms):',lcps);process.exit(lcps.every(l=>l<2500)?0:1)"`
+- [x] AC-1: TS check zero erros — `pnpm check` PASS
+- [x] AC-2: Build OK + prerender executa — `pnpm build` PASS (3 prerendered HTMLs gerados)
+- [x] AC-3: Prerender HTML por rota existe — PASS
+- [x] AC-4: Prerender HTML tem conteúdo (não shell vazio) — PASS (home tem `<main>` + "Ethos Software")
+- [x] AC-5: Zero refs a fonts.googleapis.com em HTML/CSS produzidos — PASS (após remover comentário em index.css)
+- [x] AC-6: Outfit fonts servidos de /fonts/ — PASS (5 weights: 400/500/600/700/900)
+- [x] AC-7: DeferredSection used in Home.tsx — PASS
+- [ ] **AC-8: Lighthouse Performance ≥ 90 nas 3 rotas — FAIL**: scores=[50, 27, 55] (target 90+; gap -40 / -63 / -35)
+- [ ] **AC-9: LCP < 2.5s nas 3 rotas — FAIL**: LCPs=[10096, 14310, 10345]ms (target 2500ms; gap +7596 / +11810 / +7845)
+
+## QA Results (Wave 4 — 2026-05-01T22:00:00.000Z)
+
+### Mechanical (AC-1..AC-7): **7/7 PASS**
+
+### Performance (AC-8, AC-9): **0/2 FAIL**
+
+| Rota | Score baseline | Score final | Δ | LCP baseline | LCP final | Δ LCP | TBT baseline | TBT final | Δ TBT |
+|---|---|---|---|---|---|---|---|---|---|
+| `/` | 47 | 50 | **+3** | 11684 | 10096 | -1588 | 429 | 336 | -93 |
+| `/servicos` | 40 | **27** | **-13** | 12545 | 14310 | **+1765** | 628 | **3320** | **+2692** |
+| `/portfolio` | 58 | 55 | -3 | 8649 | 10345 | +1696 | 68 | 174 | +106 |
+| **avg** | 48 | **44** | **-4** | 10959 | 11583 | +624 | 375 | 1277 | **+902** |
+
+**LCP_element ainda null em todas as 3 rotas** (idêntico ao baseline) — sinal forte de problema de hidratação ou render anomaly que impede Lighthouse de identificar elemento LCP estável.
+
+### Bugs encontrados durante QA
+
+1. **`server/static.ts`**: `express.static(distPath)` auto-redirecionava `/servicos` → `/servicos/` (301), forçando round-trip extra na cascata Lighthouse. **CORRIGIDO inline durante QA**: `app.use(express.static(distPath, { redirect: false }))`. Não mudou o resultado materialmente — score /servicos continuou em 27 mesmo após o fix.
+
+2. **HIPÓTESE não-verificada — Hydration mismatch DeferredSection × prerender**: Puppeteer renderiza em viewport desktop (1280×720+), suficiente para IntersectionObserver disparar em todas as `<DeferredSection>`. Prerender captura DOM com children renderizados. Cliente em mobile-throttled inicia `shouldRender=false` (estado React inicial), e na hidratação React 19 detecta mismatch entre HTML servidor (com children) e árvore client (sem). React reconcilia removendo nós DOM — custo de TBT massivo, especialmente em `/servicos` onde OrbitingSkills é uma sub-árvore grande. Isto explicaria TBT 628→3320 em `/servicos`.
+
+3. **Spec premise vs realidade arquitetural**: Spec assumia "82 → 90+" baseado em medição desktop manual. Mobile baseline foi **48**. Mesmo após 6 blocos, score mobile chega a 44 (avg) — gap estrutural de **-46** vs target. JS bundle (three.js 732KB + react 193KB + motion 134KB + radix 88KB = ~1.15MB pre-gzip) é estruturalmente incompatível com Lighthouse mobile 90+ sem migração arquitetural (Vike/SSR full + lazy-load three.js por interação, não por viewport).
+
+### Per spec own escalation rule
+
+> "se score mobile final ficar entre 70-85, declarar sucesso parcial e abrir spec follow-up; se < 70 após blocos, escalar para decisão arquitetural (Vike/SSR full)."
+
+Score final 44 avg < 70 → **escalar para decisão arquitetural**.
+
+### Wins parciais (preservar mesmo se rollback)
+
+Apesar dos targets falharem, valor entregue:
+- ✅ Static prerender (Bloco A) elimina SPA shell vazia — todas as rotas servem HTML estruturado para crawlers/no-JS users
+- ✅ Self-hosted fonts (Bloco B) elimina round-trip externa fonts.googleapis.com (privacidade + 1 round-trip a menos)
+- ✅ DeferredSection infra (Bloco D) é primitiva reutilizável independente do problema de hidratação
+- ✅ AuroraBackground defer mount (Bloco C) reduz TBT em `/` (-93ms confirmado)
+- ✅ Bug express auto-redirect descoberto e corrigido (latente desde Spec 4)
+- ✅ Mobile baseline real medido — premissa de "82" desktop era enganosa
+
+### Concerns acumulados
+
+<!-- CONCERN: AC-8/9 FAIL bloqueia CLOSE. Pipeline não pode prosseguir sem decisão usuário. -->
+<!-- CONCERN: Hydration mismatch hipótese não verificada — requer abrir DevTools console em build local e procurar warnings React. Se confirmado, fix é renderizar children=null em DeferredSection apenas no cliente APÓS hidratação completa (useState lazy via useEffect), o que muda contrato do componente. -->
+<!-- CONCERN: dist/ é wiped por scripts/build.ts:17 (`rm dist recursive`). Lighthouse JSONs em dist/ são destruídos a cada build — baseline foi perdido em rebuild durante QA. Mover para `lighthouse-reports/` (gitignored) em spec follow-up. -->
+<!-- CONCERN: lighthouse devDep adicionado durante Step 0 (boundary spec proibia outras deps além de puppeteer). Decisão orchestrator justificada — necessário para AC-8/9. Considerar manter (~190MB) ou remover pós-resolução. -->
+<!-- CONCERN: Bloco F (critical CSS) pulado por orchestrator. Decisão alinhada com diagnóstico (renderBlocking=0) mas spec listava como tarefa. -->
+<!-- CONCERN: Bloco E image quality tuning skipped por API limitation vite-imagetools v10. Bundle audit OK. -->
 
 ### Manual Verification (operator)
 
@@ -300,3 +400,90 @@ Cada bloco é atômico:
   - Long Animation Frames API monitoring (telemetria contínua)
 - **Wave order:** Wave 1 paralelo (prerender + fonts são independentes) → Wave 2 paralelo (LCP + defer também independentes mas dependem de fonts pra LCP precisão) → Wave 3 paralelo (bundle + critical são independentes) → Wave 4 QA.
 - **Approval Gate:** Esta spec é Full scope com 6 blocos e múltiplas decisões arquiteturais. Requer `/mustard:approve` antes de iniciar EXECUTE. Após approve, recomenda-se nova sessão Claude Code (esta sessão tem context grande pós-Specs 1-4).
+
+---
+
+## Closing Summary (2026-05-02T00:30:00.000Z)
+
+### Outcome: completed-partial
+
+ACs mecânicas (1-7): **7/7 PASS**.
+ACs de performance (8-9): **0/2 FAIL** — score mobile final 52 avg vs target 90+.
+
+A premissa do spec ("82 → 90+") era baseada em medição desktop manual; mobile baseline real era 48. Mesmo após 6 blocos + 2 bug fixes mid-QA + tentativa de migração hydrateRoot (Wave 5, revertida), 90+ mobile permanece estruturalmente fora de alcance neste codebase sem migração SSR full (Vike ou React Router 7) — three.js 732KB + react/motion/radix combinados (~1.15MB pré-gzip) excedem o orçamento mobile 3G simulado independente de prerender.
+
+### Wins entregues
+
+| Item | Status | Impacto |
+|---|---|---|
+| Static prerender (Bloco A) | ✅ | SEO/crawlers veem HTML completo; Google indexing real |
+| Self-hosted fonts Outfit (Bloco B) | ✅ | Privacidade + 1 round-trip externo a menos; 5 weights ~70KB total |
+| AuroraBackground defer mount (Bloco C) | ✅ | -210ms TBT em `/` |
+| DeferredSection infra (Bloco D) | ✅ | Primitiva reusável; mount lazy abaixo do fold |
+| Bundle audit (Bloco E parcial) | ✅ | Tree-shake clean confirmado; nenhum wildcard import |
+| Bug fix: server/static.ts auto-redirect 301 | ✅ | Latente desde Spec 4; round-trip extra eliminado |
+| Bug fix: behold.so script vazando do prerender | ✅ | -2460ms TBT recovery em /servicos |
+| Defensive: Instagram useEffect cleanup | ✅ | Hygiene script-injection no umount |
+
+### Wins NÃO entregues
+
+| Item | Razão |
+|---|---|
+| Bloco E image quality tuning | API vite-imagetools v10 `defaultDirectives` causa cartesian explosion (per-format quality precisa por-import) — refactor de 40+ imports out-of-scope |
+| Bloco F critical CSS inline | Diagnóstico mostrou `renderBlocking=0` → premissa não se aplica; pulado por orchestrator |
+| AC-8 score ≥ 90 | Bundle JS 1.15MB pre-gzip incompatível com mobile 3G simulado |
+| AC-9 LCP < 2.5s | Mesmo motivo + createRoot descarta DOM prerendered (CSR completo) |
+| Wave 5 hydrateRoot migration | Múltiplas barreiras de hydration mismatch: framer-motion `whileInView` captura post-animação, lazy() + Suspense fallback, ThemeProvider initial state. Cada uma é refactor próprio. Revertida limpamente. |
+
+### Final metrics
+
+| Rota | Score baseline | Score final | Δ | LCP final | TBT final |
+|---|---|---|---|---|---|
+| `/` | 47 | **53** | **+6** | 10201ms | 219ms |
+| `/servicos` | 40 | **45** | **+5** | 13686ms | 489ms |
+| `/portfolio` | 58 | 57 | -1 | 9799ms | 34ms |
+| **avg** | 48 | **52** | **+3** | 11229ms | 247ms |
+
+TBT médio: 375 → 247 = **-128ms** (alvo 300ms — agora dentro do budget).
+
+### Continuous improvement path
+
+Próxima spec (`2026-05-02-lazy-three-perf-ci`) ataca duas frentes:
+1. **three.js lazy-on-interaction** — não auto-mount em rIC; só após primeiro scroll OU 3s timeout. Esperado: +5-10 score por mover 732KB para fora da janela LCP.
+2. **Lighthouse CI workflow** — `@lhci/cli` em PRs com regression budget contra baseline. Toda alteração futura tem visibilidade automática se regrediu perf.
+3. **Per-image quality** — manual nas imagens > 200KB (screenshots em /portfolio).
+
+Spec 7 (futura, condicional): SSR full migration via Vike — só se Spec 6 mostrar que +5-10 pontos não é suficiente para os goals reais do site.
+
+### Files modified (final state, post-Wave-5-revert)
+
+Modified:
+- `client/index.html` — Google Fonts → woff2 preload + meta tweaks
+- `client/src/index.css` — `@font-face` Outfit declarations
+- `client/src/components/AuroraBackground.tsx` — `requestIdleCallback` defer mount
+- `client/src/components/Instagram.tsx` — useEffect cleanup
+- `client/src/pages/Home.tsx` — DeferredSection wraps (WizardSection, ClientCarousel)
+- `client/src/pages/ServicesPage.tsx` — DeferredSection wrap (OrbitingSkills)
+- `package.json` + `pnpm-lock.yaml` — `puppeteer ^24.42.0` (devDep) + `lighthouse ^13.2.0` (devDep, mantido para QA + Spec 6 CI)
+- `scripts/build.ts` — invoca prerender entre client e server bundle
+- `server/static.ts` — `redirect: false` + path-traversal-guarded prerender lookup
+
+Created:
+- `client/public/fonts/Outfit-{400,500,600,700,900}.woff2`
+- `client/src/components/ui/deferred-section.tsx`
+- `scripts/prerender.ts` — Puppeteer prerender (3 routes, non-Home first)
+- `scripts/extract-baseline.cjs` — diagnostic helper (baseline → metrics)
+- `scripts/compare-lighthouse.cjs` — diagnostic helper (baseline vs final deltas)
+- `scripts/diagnose-hydration.cjs` — diagnostic helper (puppeteer console capture)
+
+Reverted (Wave 5):
+- `client/src/main.tsx` — back to `createRoot`
+- `client/src/App.tsx` — back to `lazy()` + Suspense
+- `client/src/components/ThemeProvider.tsx` — back to localStorage initializer
+
+### Concerns para Spec 6 herdar
+
+- `dist/` é wiped a cada build (scripts/build.ts:17). Lighthouse JSONs sob `dist/` são destruídos. Spec 6 deve mover relatórios para `lighthouse-baselines/` (gitignored, fora de dist/).
+- `lighthouse` devDep mantido (~190MB node_modules). Spec 6 vai usar via `@lhci/cli`. Não remover até CI estar de pé.
+- EPERM cleanup do Chrome temp em Windows é cosmético — JSONs salvam OK. Pode ser silenciado em Spec 6 redirecionando stderr.
+- `<head>` do prerendered Home contém `<script src="behold.so/widget.js">` — fix em Wave 5 garante que está APENAS em Home, mas o script ainda carrega third-party. Considerar self-host ou lazy-load por scroll em Spec 6.

@@ -199,14 +199,8 @@
     </script>
 
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Non-blocking font load: preload as style, then swap to stylesheet via media trick. -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" media="print" onload="this.media='all'" />
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" />
-    </noscript>
+    <!-- Self-hosted Outfit fonts (see client/src/index.css @font-face). Preload weight 400 (FCP-critical). -->
+    <link rel="preload" as="font" href="/fonts/Outfit-400.woff2" type="font/woff2" crossorigin>
   </head>
   <body>
     <!-- Static content for crawlers and AI tools that don't execute JavaScript -->

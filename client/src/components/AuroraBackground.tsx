@@ -191,9 +191,43 @@ export function AuroraBackground({ className = "" }: AuroraBackgroundProps) {
     };
 
     let cleanup: (() => void) | undefined;
-    init().then((fn) => { cleanup = fn; });
+    let cancelled = false;
+
+    // Defer heavy three.js bootstrap (~732KB chunk + WebGL setup) until the
+    // browser is idle, so it doesn't compete with LCP / hydration. Falls
+    // back to setTimeout(100ms) on Safari (no requestIdleCallback support).
+    type IdleHandle = number;
+    type IdleCallback = (cb: () => void, opts?: { timeout?: number }) => IdleHandle;
+    const w = window as Window & {
+      requestIdleCallback?: IdleCallback;
+      cancelIdleCallback?: (handle: IdleHandle) => void;
+    };
+    const supportsIdle = typeof w.requestIdleCallback === "function";
+    const schedule: IdleCallback = supportsIdle
+      ? w.requestIdleCallback!.bind(w)
+      : (cb, _opts) => window.setTimeout(cb, 100) as unknown as IdleHandle;
+    const handle = schedule(
+      () => {
+        if (cancelled) return;
+        init().then((fn) => {
+          if (cancelled) {
+            // Effect already cleaned up — run any cleanup the init returned.
+            fn?.();
+            return;
+          }
+          cleanup = fn;
+        });
+      },
+      { timeout: 200 },
+    );
 
     return () => {
+      cancelled = true;
+      if (supportsIdle && typeof w.cancelIdleCallback === "function") {
+        w.cancelIdleCallback(handle);
+      } else {
+        window.clearTimeout(handle as unknown as number);
+      }
       cancelAnimationFrame(animId);
       cleanup?.();
     };

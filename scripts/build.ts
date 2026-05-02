@@ -1,6 +1,7 @@
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
 import { rm, readFile } from "fs/promises";
+import { prerender } from "./prerender.ts";
 
 // server deps to bundle to reduce openat(2) syscalls
 // which helps cold start times
@@ -17,6 +18,16 @@ async function buildAll() {
 
   console.log("building client...");
   await viteBuild();
+
+  console.log("prerendering routes...");
+  try {
+    await prerender();
+  } catch (err) {
+    console.warn(
+      "[build] prerender failed — continuing with SPA-only build. Error:",
+      err,
+    );
+  }
 
   console.log("building server...");
   const pkg = JSON.parse(await readFile("package.json", "utf-8"));
