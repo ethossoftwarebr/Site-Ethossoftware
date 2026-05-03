@@ -1,8 +1,8 @@
 // Lighthouse v13 programmatic — runs mobile preset on configured routes, writes median run to {LH_OUT_DIR}/{LH_OUT_PREFIX}-{route}.json.
 // Lighthouse v13 is ESM-only — must be dynamically imported from CJS.
-// Env vars (all optional — defaults preserve Spec 6 backward-compat):
-//   LH_PORT       — server port (default: 5000)
-//   LH_ROUTES     — comma-separated route names (default: "home,servicos,portfolio")
+// Env vars (all optional):
+//   LH_PORT       — server port (default: 4321, Astro preview)
+//   LH_ROUTES     — comma-separated route names (default: "home,servicos,portfolio,404")
 //   LH_OUT_DIR    — output directory (default: "dist")
 //   LH_OUT_PREFIX — output file prefix (default: "lighthouse-final")
 const fs = require('fs');
@@ -13,8 +13,8 @@ async function main() {
   const lighthouse = lighthouseModule.default;
   const chromeLauncher = await import('chrome-launcher');
 
-  const PORT = process.env.LH_PORT ?? '5000';
-  const ROUTE_NAMES = (process.env.LH_ROUTES ?? 'home,servicos,portfolio').split(',').map(r => r.trim()).filter(Boolean);
+  const PORT = process.env.LH_PORT ?? '4321';
+  const ROUTE_NAMES = (process.env.LH_ROUTES ?? 'home,servicos,portfolio,404').split(',').map(r => r.trim()).filter(Boolean);
   const OUT_DIR = process.env.LH_OUT_DIR ?? 'dist';
   const OUT_PREFIX = process.env.LH_OUT_PREFIX ?? 'lighthouse-final';
 

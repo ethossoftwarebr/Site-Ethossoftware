@@ -2,20 +2,44 @@
 
 > Framework rules: See [.claude/CLAUDE.md](./.claude/CLAUDE.md)
 
-## Project Structure
+## Stack
 
-| Subproject | Technology | Port | CLAUDE.md |
-|------------|------------|------|-----------|
-| client | React 19 + Vite 7 + Tailwind v4 + Wouter + shadcn/ui | 5000 (dev) | [client](./client/CLAUDE.md) |
-| server | Express 5 + TypeScript, no ORM (static site + AI chat proxy) | 5000 (prod, single port) | [server](./server/CLAUDE.md) |
+Astro 6.2.1 + React 19 Islands + Tailwind v4 + Radix UI + Three.js (Aurora) + framer-motion + vite-imagetools.
+Hybrid output: static pages + serverless API routes via `@astrojs/vercel@10.0.6`.
 
-**Note**: Single root `package.json` drives the whole monorepo. Server serves both API (`/api/*`) and the built client on the same port (`PORT` env, default 5000).
+## Layout
+
+| Path | Purpose |
+|------|---------|
+| `src/pages/` | Astro pages (.astro routes) |
+| `src/pages/api/` | Serverless API routes (chat, sitecontent) |
+| `src/components/` | React/Astro components |
+| `src/lib/` | Shared TS modules (chat-content, etc) |
+| `public/` | Static assets |
+
+## Deploy
+
+Vercel via `@astrojs/vercel` adapter. Build → `.vercel/output/` (static + functions).
+
+## Commands
+
+```bash
+pnpm dev          # local dev :4321
+pnpm build        # production build → .vercel/output/
+pnpm preview      # preview built site
+pnpm perf:lh      # Lighthouse mobile
+pnpm perf:compare:cross  # Compare LH vs baseline
+pnpm perf:baseline       # Snapshot LH baselines
+```
+
+## Env Vars
+
+- `ANTHROPIC_API_KEY` — required for `/api/chat` (Ethos.IA proxy). Sem var: chat retorna fallback WhatsApp message.
 
 ## Entity Registry
 
-**CRITICAL:** Before searching for ANY entity, read `.claude/entity-registry.json` first.
+`.claude/entity-registry.json` (auto-generated; consultado por mustard pipelines).
 
 ## Ignore Paths
 
-Never search in:
-- `node_modules/`, `dist/`, `.next/`, `attached_assets/` (binary brand assets)
+`node_modules/`, `dist/`, `.vercel/`, `.astro/`, `attached_assets/`, `site-ethos-astro/` (cutover leftover).

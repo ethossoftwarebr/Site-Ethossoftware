@@ -7,7 +7,7 @@ const puppeteer = require('puppeteer');
 (async () => {
   // AuroraBackground is mounted on /servicos, NOT /. Default to /servicos
   // so this script actually exercises the lazy-on-interaction logic.
-  const url = process.env.URL || 'http://localhost:5000/servicos';
+  const url = process.env.URL || 'http://localhost:4321/servicos';
   const browser = await puppeteer.launch({
     headless: 'new',
     args: [

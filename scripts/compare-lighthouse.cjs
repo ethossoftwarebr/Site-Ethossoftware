@@ -1,6 +1,7 @@
 // Compare final Lighthouse results against committed baselines.
 // Used by Lighthouse CI workflow + local `pnpm perf:check`.
-// Env vars (all optional — defaults preserve Spec 6 backward-compat):
+// Thresholds derivam de Spec 6 baseline; revisitar pós-Spec 10 com medições Astro definitivas.
+// Env vars (all optional):
 //   LH_BASELINE_DIR    — dir for baseline files (default: "lighthouse-baselines")
 //   LH_BASELINE_PREFIX — prefix for baseline files (default: "baseline")
 //   LH_FINAL_DIR       — dir for final/current files (default: "dist")
@@ -16,7 +17,7 @@ const BASELINE_DIR = process.env.LH_BASELINE_DIR ?? 'lighthouse-baselines';
 const BASELINE_PREFIX = process.env.LH_BASELINE_PREFIX ?? 'baseline';
 const FINAL_DIR = process.env.LH_FINAL_DIR ?? 'dist';
 const FINAL_PREFIX = process.env.LH_FINAL_PREFIX ?? 'lighthouse-final';
-const ROUTES = (process.env.LH_ROUTES ?? 'home,servicos,portfolio').split(',').map(r => r.trim()).filter(Boolean);
+const ROUTES = (process.env.LH_ROUTES ?? 'home,servicos,portfolio,404').split(',').map(r => r.trim()).filter(Boolean);
 
 console.log(`[compare-lighthouse] baselineDir=${BASELINE_DIR} baselinePrefix=${BASELINE_PREFIX} finalDir=${FINAL_DIR} finalPrefix=${FINAL_PREFIX} routes=${ROUTES.join(',')}`);
 

@@ -3,13 +3,13 @@
 // Env vars (all optional — defaults preserve Spec 6 backward-compat):
 //   LH_BASELINE_DIR    — dir for baseline files (default: "lighthouse-baselines")
 //   LH_BASELINE_PREFIX — prefix for baseline files (default: "baseline")
-//   LH_ROUTES          — comma-separated route names (default: "home,servicos,portfolio")
+//   LH_ROUTES          — comma-separated route names (default: "home,servicos,portfolio,404")
 const fs = require('fs');
 const path = require('path');
 
 const BASELINE_DIR = process.env.LH_BASELINE_DIR ?? 'lighthouse-baselines';
 const BASELINE_PREFIX = process.env.LH_BASELINE_PREFIX ?? 'baseline';
-const ROUTES = (process.env.LH_ROUTES ?? 'home,servicos,portfolio').split(',').map(r => r.trim()).filter(Boolean);
+const ROUTES = (process.env.LH_ROUTES ?? 'home,servicos,portfolio,404').split(',').map(r => r.trim()).filter(Boolean);
 const out = {};
 
 console.log(`[perf-baseline] baselineDir=${BASELINE_DIR} baselinePrefix=${BASELINE_PREFIX} routes=${ROUTES.join(',')}`);

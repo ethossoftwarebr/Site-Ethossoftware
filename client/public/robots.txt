@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Allow: /api/sitecontent
-Allow: /llms.txt
-
-Sitemap: https://ethossoftware.com.br/sitemap.xml

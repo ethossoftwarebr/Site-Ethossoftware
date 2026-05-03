@@ -1,0 +1,6 @@
+{
+  "buildCommand": "pnpm build",
+  "outputDirectory": ".vercel/output",
+  "framework": "astro",
+  "installCommand": "pnpm install --frozen-lockfile"
+}

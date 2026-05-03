@@ -1,13 +1,43 @@
-node_modules
-dist
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.*
+!.env.example
+.env.production
+
+# macOS-specific files
 .DS_Store
-server/public
+
+# jetbrains setting folder
+.idea/
+
+# Vercel
+.vercel/
+
+# vite config build artifacts
 vite.config.ts.*
 *.tar.gz
 package-lock.json
 
 # Lighthouse CI run artifacts (cache; baselines tracked in lighthouse-baselines/)
 .lighthouseci/
+
+# Leftover cutover directory (physical remnant after git mv; only node_modules/dist inside)
+site-ethos-astro/
 
 # Mustard — local pipeline state (transient, not part of repo)
 .claude/.harness/
@@ -16,4 +46,3 @@ package-lock.json
 .claude/.agent-memory/
 .claude/.metrics/
 .claude/.detect-cache.json
-
