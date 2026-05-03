@@ -1,0 +1,19 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ServicesPageContent from '@/components/ServicesPageContent';
+import ogImageAsset from '@/assets/brand/image_1772683408265.png';
+
+const title = 'Serviços - Sites, Sistemas, Apps e Automações com IA | Ethos Software';
+const description =
+  'Conheça os serviços da Ethos Software: criação de sites, landing pages, sistemas web (CRM, ERP, SaaS), aplicativos mobile, automações com IA, e-commerce e integrações via API.';
+const canonical = 'https://ethossoftware.com.br/servicos';
+---
+
+<Layout
+  title={title}
+  description={description}
+  ogImage={ogImageAsset.src}
+  canonical={canonical}
+>
+  <ServicesPageContent client:load />
+</Layout>

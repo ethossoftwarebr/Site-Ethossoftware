@@ -1,0 +1,19 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import PortfolioPageContent from '@/components/PortfolioPageContent';
+import ogImageAsset from '@/assets/brand/image_1772683408265.png';
+
+const title = 'Portfólio - Cases de Sucesso em Software | Ethos Software';
+const description =
+  'Conheça os projetos da Ethos Software: sites institucionais, sistemas de gestão, dashboards SaaS, automações com IA e apps mobile entregues para clientes em todo o Brasil.';
+const canonical = 'https://ethossoftware.com.br/portfolio';
+---
+
+<Layout
+  title={title}
+  description={description}
+  ogImage={ogImageAsset.src}
+  canonical={canonical}
+>
+  <PortfolioPageContent client:load />
+</Layout>

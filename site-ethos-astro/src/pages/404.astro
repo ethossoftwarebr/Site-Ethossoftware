@@ -1,0 +1,18 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import NotFoundContent from '@/components/NotFoundContent';
+import ogImageAsset from '@/assets/brand/image_1772683408265.png';
+
+const title = 'Página não encontrada | Ethos Software';
+const description =
+  'A página que você procura não existe ou foi movida. Volte para a página inicial da Ethos Software.';
+---
+
+<Layout
+  title={title}
+  description={description}
+  ogImage={ogImageAsset.src}
+>
+  <meta name="robots" content="noindex, nofollow" slot="head" />
+  <NotFoundContent client:load />
+</Layout>
