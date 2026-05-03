@@ -140,22 +140,20 @@ Movem inteiros de `client/src/components/*.tsx` → `site-ethos-astro/src/compon
 
 **Agente: general-purpose**
 
-- [ ] `pnpm create astro@latest site-ethos-astro --template minimal --typescript strict --no-install --no-git`
-- [ ] `cd site-ethos-astro && pnpm install`
-- [ ] `pnpm astro add react` (integration `@astrojs/react`)
-- [ ] `pnpm astro add tailwind` OU instalação manual de Tailwind v4 (`@tailwindcss/vite`) baseado em web validation
-- [ ] Configurar `astro.config.mjs`:
-  - `output: 'static'`
-  - `integrations: [react(), tailwind()]`
-  - `image: { service: { entrypoint: 'astro/assets/services/sharp' } }`
-  - `site` configurável (deixar comentado para o cutover Spec 10)
-- [ ] Configurar `tsconfig.json`: extends `astro/tsconfigs/strict`, paths `"@/*": ["./src/*"]`
-- [ ] Criar `src/layouts/Layout.astro`:
-  - `<html lang="pt-BR">` + `<head>` com meta charset/viewport + title slot via `Astro.props` + description
-  - Inline script anti-FOUC: lê `localStorage["ethos-theme"]`, aplica `class="dark"` em `<html>` antes de pintura
-  - `<body>` com `<slot />`
-  - Importa `@/styles/global.css`
-- [ ] Validar bootstrap: `pnpm dev` abre página em http://localhost:4321 sem erros (página vazia OK por enquanto)
+- [x] `pnpm create astro@latest site-ethos-astro --template minimal --typescript strict --no-install --no-git` → fallback para `npm create astro` (pnpm dlx bug Windows)
+- [x] `cd site-ethos-astro && pnpm install` → após `.npmrc` com `node-linker=hoisted` (resolve symlink Windows) + `ignore-workspace=true`
+- [x] `pnpm astro add react` (integration `@astrojs/react@5.0.4`)
+- [x] `pnpm astro add tailwind` → instalou `@tailwindcss/vite@4.2.4` + `tailwindcss@4.2.4` em deps
+- [x] Configurar `astro.config.mjs`: `output: 'static'`, `integrations: [react()]`, `vite: { plugins: [tailwindcss()] }`, `image: { service: { entrypoint: 'astro/assets/services/sharp' } }`, `site` comentado
+- [x] Configurar `tsconfig.json`: extends `astro/tsconfigs/strict`, `baseUrl: "."`, paths `"@/*": ["./src/*"]`
+- [x] Criar `src/layouts/Layout.astro`: `<html lang="pt-BR">` + meta charset/viewport/description + title via Astro.props + inline anti-FOUC script (`localStorage['ethos-theme'] === 'dark'` → `documentElement.classList.add('dark')`, com try/catch) + body slot + import `@/styles/global.css`
+- [x] Validar bootstrap → `pnpm --dir site-ethos-astro build` exit 0, `dist/index.html` gerado; `astro check` 0 erros (AC-3 dev server validation diferida para QA T5)
+
+<!-- CONCERN-1: Astro 6.2.1 instalado em vez de 5.x — release stable saiu entre web validation T0 e dispatch. Verificado via web search post-dispatch: breaking changes Astro 6 (Astro.glob, ViewTransitions deprecated component, legacy content collections, Cloudflare adapter changes) NÃO intersectam nosso uso (output static, sem content collections, sem Cloudflare adapter). @astrojs/react sem mudanças em v6. Risco baixo, prosseguir. -->
+<!-- CONCERN-2: TypeScript ^6.0.3 instalado pelo `astro add` (versão 6 também é major bump). Build + check passaram, mas tooling de scripts/* na raiz do monorepo continua em TS anterior. Isolamento via subprojeto evita conflito. -->
+<!-- CONCERN-3: Bootstrap usou `npm create astro` em vez de `pnpm create astro` por bug pnpm dlx Windows. `.npmrc` local com `node-linker=hoisted` + `ignore-workspace=true` resolve symlink/peer-dep issues. Reprodutibilidade documentada no .npmrc. -->
+<!-- CONCERN-4: Spec usa "git mv" em Bloco B (linha 50-61, 164-175) mas Notes diz "client/src/ intocado durante Specs 7-9" e rollback = "rm -rf site-ethos-astro/". RESOLUÇÃO: Bloco B usará COPY (cp/Copy-Item) em vez de git mv — preserva client/ funcional + rollback trivial. Cutover único em Spec 10 deleta client/. Trade-off: git rename detection não marca paths como renames (mas conteúdo idêntico preserva blame via similarity). -->
+
 
 ### Bloco B — Foundation files (Wave 2, paralelo a Bloco A.tail)
 
