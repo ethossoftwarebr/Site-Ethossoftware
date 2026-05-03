@@ -159,18 +159,17 @@ Movem inteiros de `client/src/components/*.tsx` → `site-ethos-astro/src/compon
 
 **Agente: general-purpose**
 
-- [ ] Mover `client/src/assets/**` → `site-ethos-astro/src/assets/**` via `git mv` (preserva histórico)
-- [ ] Mover `client/src/index.css` → `site-ethos-astro/src/styles/global.css` (preservar Tailwind v4 import, HSL tokens, brand palette `#A229F2/#531B8C/#BA66F2`, `.shiny-cta` keyframes)
-- [ ] Mover `client/src/lib/utils.ts` → `site-ethos-astro/src/lib/utils.ts`
-- [ ] Mover hooks: `use-mobile.tsx`, `use-toast.ts` → `site-ethos-astro/src/hooks/`
-- [ ] Avaliar `use-page-meta.ts`: comparar com Astro nativo (`<head>` per-page); decisão documentada (manter ou remover)
-- [ ] Mover `client/src/data/projects.ts` → `site-ethos-astro/src/data/projects.ts`
-- [ ] Mover `client/src/context/WizardContext.tsx` → `site-ethos-astro/src/context/`
-- [ ] Avaliar `client/src/lib/queryClient.ts` + `@tanstack/react-query` dep:
-  - Grep `useQuery|QueryClient|queryClient` em todos os 22 components que vão migrar
-  - Se zero matches: deletar `queryClient.ts` + remover `@tanstack/react-query` de package.json (não vai pra Astro deps)
-  - Se matches existem: mover queryClient.ts e adicionar `@tanstack/react-query` em deps Astro
-- [ ] Mover 60 arquivos `client/src/components/ui/**` → `site-ethos-astro/src/components/ui/**` em massa (sem edição — imports `@/lib/utils` etc continuam válidos via tsconfig path)
+- [x] **COPY** (não git mv per CONCERN-4) `client/src/assets/**` → `site-ethos-astro/src/assets/**` (36 arquivos: brand/2, clients/16, screenshots/6, images/12)
+- [x] COPY `client/src/index.css` → `site-ethos-astro/src/styles/global.css` (sobrescreveu stub Tailwind; preserva `@import "tailwindcss"` + `@theme inline` + HSL tokens + brand palette + `.shiny-cta` keyframes)
+- [x] COPY `client/src/lib/utils.ts` → `site-ethos-astro/src/lib/utils.ts`
+- [x] COPY hooks: `use-mobile.tsx`, `use-toast.ts` → `site-ethos-astro/src/hooks/`
+- [x] Avaliar `use-page-meta.ts` → **DROPPED** (uso APENAS em pages/, zero em components; Astro `Layout.astro` recebe title/description props server-side nativamente; Bloco D passa props direto)
+- [x] COPY `client/src/data/projects.ts` → `site-ethos-astro/src/data/projects.ts` (preserva `?quality=55` Spec 6; Bloco C refatora imports `?as=picture` para Astro/vite-imagetools)
+- [x] COPY `client/src/context/WizardContext.tsx` → `site-ethos-astro/src/context/`
+- [x] Avaliar `client/src/lib/queryClient.ts` + `@tanstack/react-query` → **DROPPED** (grep `useQuery|QueryClient|useMutation|@tanstack/react-query` em `client/src/components/**` e `client/src/hooks/**` retornou ZERO matches; provavelmente usado só em App.tsx/main.tsx providers que não migram)
+- [x] COPY 60 arquivos `client/src/components/ui/**` → `site-ethos-astro/src/components/ui/**` em massa
+- [x] Instalar 48 deps transitivas via `pnpm --dir site-ethos-astro add` (27 @radix-ui/react-*, framer-motion, embla-carousel-react, react-hook-form, lucide-react, zod, recharts, sonner, vaul, etc — versões ≥ client/package.json)
+- [x] Build validation: `pnpm --dir site-ethos-astro build` exit 0 (1 page); `astro check` 10 erros remanescentes (todos Bloco C: 8x projects.ts vite-imagetools, 1x sonner.tsx ThemeProvider missing, 2x verbatimModuleSyntax `import type`)
 
 ### Bloco C — Componentes feature (Home subset) + ThemeProvider SSR-safe (Wave 3)
 
