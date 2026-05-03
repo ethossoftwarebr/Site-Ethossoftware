@@ -328,7 +328,7 @@ Pré-condição: Bloco B completo (API routes funcionais em site-ethos-astro/ + 
 ### qa-run Agent (Wave QA — Bloco F)
 
 - [x] **F.1** Executar AC-1..AC-N (definidos abaixo) [DONE — 7/7 PASS após orchestrator fix em AC-2/AC-3 (semantic intent: git-tracked) + AC-6 threshold (1313792 bytes = 1282×1024 exato)]
-- [x] **F.2** Reportar concerns de Vercel deploy (não validável local sem `vercel deploy --prebuilt`) [Confirmed deferred — AC-9 + AC-10 → Spec 12 successor (first Vercel deploy validation)]
+- [x] **F.2** Reportar concerns de Vercel deploy (não validável local sem `vercel deploy --prebuilt`) [Confirmed deferred — AC-9 + AC-10 revisitados quando deploy for priorizado]
 
 ## Acceptance Criteria
 
@@ -352,9 +352,9 @@ Pré-condição: Bloco B completo (API routes funcionais em site-ethos-astro/ + 
 
 - **C-C.6 — site-ethos-astro/ physical cleanup (manual)**: Diretório `site-ethos-astro/` persiste em disco após cutover (gitignored, invisível ao git). Contém leftover `node_modules/`, `dist/`, cópias físicas de src/public que `git mv` não removeu (provável artefato Windows + pnpm symlinks + builds intermediários). Hook `bash-safety.js` bloqueia tanto `rm -rf` quanto `Remove-Item -Recurse -Force` por design. Não bloqueia Blocos D/E (git state correto). **Ação manual usuário pós-merge**: `Remove-Item site-ethos-astro -Recurse -Force` no PowerShell, ou apagar pelo Explorer. Tamanho estimado: ~500MB (node_modules dominante).
 - ~~**C-B.6 — Bundle size 4× baseline**~~ **RESOLVIDO em E.7**: hipótese de medição confirmada. Bloco B mediu `~5010 KB` que era contagem do diretório `site-ethos-astro/` inteiro (incluindo node_modules + dist + outros builds intermediários), não o JS bundle de cliente. Medição correta em E.7 confirma `.vercel/output/static/_astro/` JS total = **1281.8 KB** vs baseline 1282 KB (delta -0.2 KB, virtualmente idêntico). AC-6 path atualizado de `dist/_astro` para `.vercel/output/static/_astro` (necessário em Bloco F QA — spec.md AC-6 command).
-- **C-E.5 — Lighthouse local não medível**: `pnpm preview` rejeitado por `@astrojs/vercel` (by design — adapter SSR não suporta preview command). Astro dev mode produz scores inválidos (HMR + uncompressed). AC-10 era DEFERRED per spec (linha 331); confirmado deferred via E.5. Validação real só via Vercel deploy preview OR `vercel dev` local OR local static-server pointing at `.vercel/output/static/`. Successor: Spec 12 (first Vercel deploy validation). **Side effect:** `.github/workflows/lighthouse-ci.yml:40` usa `pnpm preview &` que vai falhar em CI — workflow inteiro requer rework em Spec 12 (sugestão: `npx -y serve .vercel/output/static -l 4321 &` ou setup `vercel dev` em CI com env vars).
-- **C-Review.W2 — chat.ts dual env lookup**: `import.meta.env.ANTHROPIC_API_KEY ?? process.env.ANTHROPIC_API_KEY` funciona mas mascara silenciosamente Vercel env misconfig (Vercel injeta em import.meta.env mas process.env nem sempre disponível em function context). Não bloqueia — pattern aceito na prática. Refactor opcional Spec 11/12: `typeof process !== 'undefined' && process.env?.ANTHROPIC_API_KEY` para tornar fallback intencional.
-- **C-Review.N3 — sharp not in deps**: `package.json` não declara `sharp` em dependencies (apenas em `pnpm.onlyBuiltDependencies`). Funcionando hoje via transitive de `@astrojs/vercel` ou Astro itself. Risk: version skew futuro. Fix opcional: adicionar `"sharp": "^0.33.0"` em deps (Spec 11 maintenance).
+- **C-E.5 — Lighthouse local não medível**: `pnpm preview` rejeitado por `@astrojs/vercel` (by design — adapter SSR não suporta preview command). Astro dev mode produz scores inválidos (HMR + uncompressed). AC-10 era DEFERRED per spec (linha 331); confirmado deferred via E.5. Validação real só via Vercel deploy preview OR `vercel dev` local OR local static-server pointing at `.vercel/output/static/`. **Side effect:** `.github/workflows/lighthouse-ci.yml:40` usa `pnpm preview &` que vai falhar em CI — workflow requer rework futuro (sugestão: `npx -y serve .vercel/output/static -l 4321 &` ou setup `vercel dev` em CI com env vars).
+- **C-Review.W2 — chat.ts dual env lookup**: `import.meta.env.ANTHROPIC_API_KEY ?? process.env.ANTHROPIC_API_KEY` funciona mas mascara silenciosamente Vercel env misconfig. Não bloqueia — pattern aceito na prática. Refactor opcional futuro: `typeof process !== 'undefined' && process.env?.ANTHROPIC_API_KEY` para tornar fallback intencional.
+- **C-Review.N3 — sharp not in deps**: `package.json` não declara `sharp` em dependencies (apenas em `pnpm.onlyBuiltDependencies`). Funcionando hoje via transitive de `@astrojs/vercel` ou Astro itself. Risk: version skew futuro. Fix opcional: adicionar `"sharp": "^0.33.0"` em deps.
 
 ## Risk register
 
@@ -402,7 +402,4 @@ Pré-condição: Bloco B completo (API routes funcionais em site-ethos-astro/ + 
 
 ## Successors
 
-Pós-Spec 10 (não fazem parte deste spec):
-
-- **Spec 11 (sugerido)**: Bundle reduction work — granular code-splitting per island, lazy three.js no Home Aurora (mover de `client:load` para `client:visible` ou `client:idle`), tree-shake radix unused, vite-imagetools quality tuning. Target: Astro avg ≥ 90 mobile (AC-4 aspiracional Spec 9).
-- **Spec 12 (sugerido)**: First Vercel deploy validation — AC-9 Spec 9 (CI workflow port-clean live PR) + Vercel ENV setup + first production smoke.
+Nenhum successor agendado. Performance/deploy validation revisitados quando o usuário decidir prioridade.
