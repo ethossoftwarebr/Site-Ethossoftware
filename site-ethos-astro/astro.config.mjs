@@ -5,6 +5,8 @@ import react from '@astrojs/react';
 
 import tailwindcss from '@tailwindcss/vite';
 
+import { imagetools } from 'vite-imagetools';
+
 // https://astro.build/config
 export default defineConfig({
   // site: 'https://ethossoftware.com.br', // será preenchido em Spec 10 (cutover)
@@ -17,6 +19,6 @@ export default defineConfig({
   },
 
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), imagetools()],
   },
 });

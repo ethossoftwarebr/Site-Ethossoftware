@@ -175,18 +175,25 @@ Movem inteiros de `client/src/components/*.tsx` → `site-ethos-astro/src/compon
 
 **Agente: client-impl**
 
-- [ ] Mover 16 componentes (Hero, Navbar, AuroraBackground, Stats, Services, Mission, Benefits, Portfolio, Testimonials, EthosIA, ClientCarousel, FAQ, WizardSection, WhatsAppWizard, Footer, WhatsAppButton) de `client/src/components/*.tsx` → `site-ethos-astro/src/components/*.tsx` via `git mv`
-- [ ] Adaptar `ThemeProvider.tsx` para SSR-safe:
-  - Provider continua, mas leitura inicial de `localStorage` precisa ser idempotente com inline script no Layout.astro
-  - Strategy: inline script aplica classe DOM antes da hidratação; ThemeProvider hidrata e SINCRONIZA estado interno sem re-render flash
-  - Adicionar guard: `if (typeof window === 'undefined') return defaultTheme` em qualquer leitura de localStorage
-- [ ] Adaptar componentes que usam Wouter (`Link`, `useLocation`):
-  - Grep `from "wouter"` em todos os 16 componentes
-  - Substituir `<Link href="/x">` por `<a href="/x">` nativo
-  - Substituir `useLocation` por `window.location.pathname` (com guard SSR) ou Astro built-in
-- [ ] AuroraBackground com `client:visible`: validar manualmente (durante Bloco D) que NÃO há double-init com lazy-on-interaction interno
-- [ ] WizardSection + WhatsAppWizard + WizardContext: confirmar que Provider local (dentro do island) provê contexto para WhatsAppWizard child; se sim, mantém arquitetura
-- [ ] `pnpm check` em `site-ethos-astro/` zero erros (componentes ainda não usados, mas compilam)
+- [x] **COPY** (não git mv per CONCERN-4) 16 componentes Home + ThemeProvider + ThemeToggle + **Sparkles** (transitivo: ClientCarousel importa Sparkles; era erro TS2307 não listado nos 10 herdados). 19 .tsx em `site-ethos-astro/src/components/`.
+- [x] Adaptar `ThemeProvider.tsx` SSR-safe: `useState` inicial = `'light'` (sem localStorage call); useEffect on mount sincroniza com `documentElement.classList.contains('dark')` (lê o que o inline script de Layout.astro aplicou); useEffect on theme-change persiste em localStorage + classList. Sem re-render flash.
+- [x] Adaptar componentes que usam Wouter:
+  - Navbar: removeu `import { Link, useLocation } from 'wouter'`; `<Link>` → `<a>`; `useLocation` → `useState("/") + useEffect window.location.pathname` (SSR-safe)
+  - Portfolio: removeu Wouter; `<Link>` → `<a>`
+  - Footer: ajuste `logoEthos.src` (ImageMetadata.src — pattern Astro 6 React JSX)
+  - Wouter NÃO foi adicionado em deps Astro
+- [x] AuroraBackground double-init guard: adicionado `initRef = useRef(false)` em useEffect; previne dupla execução do shader scene em re-mount. Lazy-on-interaction Spec 6 preservado verbatim. Validação manual de double-init real fica para Bloco D (com index.astro renderizando).
+- [x] WizardSection + WhatsAppWizard + WizardContext: arquitetura mantida; Provider local dentro do island `<WizardSection client:load>` provê contexto para WhatsAppWizard child. Validação funcional no Bloco D.
+- [x] `pnpm --dir site-ethos-astro exec astro check` → **0 errors, 0 warnings, 109 hints** (hints `ElementRef deprecated` em primitives shadcn — fora de escopo)
+- [x] **Endereçados 10 erros TS herdados de Bloco B**:
+  - 8x projects.ts vite-imagetools → instalado `vite-imagetools@^10` (devDep) + adicionado `imagetools()` em `astro.config.mjs` vite.plugins; +`env.d.ts` declara `*?as=picture` modules como `PictureSource` (lift-and-shift fiel; sem refactor de projects.ts)
+  - 1x sonner.tsx → resolvido pela copy de ThemeProvider em Phase 1
+  - 2x verbatimModuleSyntax (pagination.tsx + sidebar.tsx) → fix surgical `import { type X }` (syntax adaptation, não refactor)
+
+<!-- CONCERN-5: Sparkles.tsx foi copiado em Bloco C apesar de spec linha 88 listar como deferido p/ Spec 8 — ClientCarousel (na Home) importa @/components/Sparkles, então é runtime requirement do POC. Atualizar spec linha 88 em CLOSE para remover Sparkles da lista de deferidos. -->
+<!-- CONCERN-6: env.d.ts pattern para `?as=picture` (vite-imagetools) em vez de refactor para Astro <Image> — preserva "lift-and-shift fiel" (spec linha 116). Trade-off: depende de vite-imagetools como build-time plugin em vez de pipeline Astro nativo. Considerar migração para Astro <Image> + getImage() para passar srcsets a React islands em spec pós-cutover, se houver perf gain mensurável. -->
+<!-- CONCERN-7: ThemeProvider sync entre múltiplos islands (Navbar e Footer ambos têm ThemeToggle): cada island tem instância própria do Provider; em mount cada um lê classList atual; toggle em um NÃO atualiza state do outro até next mount. Visual (Tailwind dark variants) sempre consistente via <html class="dark">; só icone do toggle pode lag em UI cross-island. POC aceita; full sync via MutationObserver fica para polish pós-cutover se UX necessário. -->
+
 
 ### Bloco D — Home page (Wave 4)
 
