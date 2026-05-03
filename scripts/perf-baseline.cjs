@@ -1,4 +1,5 @@
-// Throwaway diagnostic — reads baseline JSONs and prints metrics + LCP element.
+// Perf baseline reader — reads committed baseline JSONs in lighthouse-baselines/ and prints metrics + LCP element.
+// Renamed from scripts/extract-baseline.cjs; output path moved from dist/ to lighthouse-baselines/.
 const fs = require('fs');
 const path = require('path');
 
@@ -6,25 +7,25 @@ const ROUTES = ['home', 'servicos', 'portfolio'];
 const out = {};
 
 for (const r of ROUTES) {
-  const file = path.join('dist', `lighthouse-baseline-${r}.json`);
+  const file = path.join('lighthouse-baselines', `baseline-${r}.json`);
   if (!fs.existsSync(file)) {
     console.error(`MISSING: ${file}`);
     process.exit(1);
   }
   const j = JSON.parse(fs.readFileSync(file, 'utf8'));
-  const a = j.audits;
+  const a = j.audits || {};
   const lcpEl = a['largest-contentful-paint-element']?.details?.items?.[0]?.node;
   const renderBlocking = a['render-blocking-resources']?.details?.items || [];
   const unusedCss = a['unused-css-rules']?.details?.items || [];
   const unusedJs = a['unused-javascript']?.details?.items || [];
 
   out[r] = {
-    score: Math.round((j.categories.performance.score || 0) * 100),
-    LCP_ms: Math.round(a['largest-contentful-paint'].numericValue),
-    TBT_ms: Math.round(a['total-blocking-time'].numericValue),
-    FCP_ms: Math.round(a['first-contentful-paint'].numericValue),
-    SI_ms: Math.round(a['speed-index'].numericValue),
-    CLS: a['cumulative-layout-shift'].numericValue.toFixed(3),
+    score: Math.round((j.categories?.performance?.score || 0) * 100),
+    LCP_ms: Math.round(a['largest-contentful-paint']?.numericValue || 0),
+    TBT_ms: Math.round(a['total-blocking-time']?.numericValue || 0),
+    FCP_ms: Math.round(a['first-contentful-paint']?.numericValue || 0),
+    SI_ms: Math.round(a['speed-index']?.numericValue || 0),
+    CLS: (a['cumulative-layout-shift']?.numericValue ?? 0).toFixed(3),
     TTI_ms: Math.round(a['interactive']?.numericValue || 0),
     LCP_element: lcpEl ? {
       selector: lcpEl.selector,

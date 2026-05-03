@@ -1,10 +1,10 @@
-import projContacnet from "@/assets/screenshots/screenshot-1772062900110.png?w=800;1600&format=avif;webp;png&as=picture";
-import projDaniel from "@/assets/screenshots/screenshot-1772070012436.png?w=800;1600&format=avif;webp;png&as=picture";
-import projI9Contabilidade from "@/assets/screenshots/screenshot-1772126106981.png?w=800;1600&format=avif;webp;png&as=picture";
-import projMariaLaura from "@/assets/screenshots/screenshot-1772123490789.png?w=800;1600&format=avif;webp;png&as=picture";
-import projOfficeChagas from "@/assets/screenshots/WhatsApp_Image_2026-03-04_at_23.56.18_1772679540241.jpeg?w=800;1600&format=avif;webp;jpg&as=picture";
-import projEspetoShow from "@/assets/screenshots/image_1772679778021.png?w=800;1600&format=avif;webp;png&as=picture";
-import projAutomacaoChatbot from "@/assets/images/chatbot-ui.png?w=800;1600&format=avif;webp;png&as=picture";
+import projContacnet from "@/assets/screenshots/screenshot-1772062900110.png?w=800;1600&quality=55&format=avif;webp;png&as=picture";
+import projDaniel from "@/assets/screenshots/screenshot-1772070012436.png?w=800;1600&quality=55&format=avif;webp;png&as=picture";
+import projI9Contabilidade from "@/assets/screenshots/screenshot-1772126106981.png?w=800;1600&quality=55&format=avif;webp;png&as=picture";
+import projMariaLaura from "@/assets/screenshots/screenshot-1772123490789.png?w=800;1600&quality=55&format=avif;webp;png&as=picture";
+import projOfficeChagas from "@/assets/screenshots/WhatsApp_Image_2026-03-04_at_23.56.18_1772679540241.jpeg?w=800;1600&quality=55&format=avif;webp;jpg&as=picture";
+import projEspetoShow from "@/assets/screenshots/image_1772679778021.png?w=800;1600&quality=55&format=avif;webp;png&as=picture";
+import projAutomacaoChatbot from "@/assets/images/chatbot-ui.png?w=800;1600&quality=70&format=avif;webp;png&as=picture";
 import type { PictureSource } from "@/components/ui/lazy-image";
 
 export interface Project {

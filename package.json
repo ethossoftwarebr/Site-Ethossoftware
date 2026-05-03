@@ -14,7 +14,8 @@
     "dev": "cross-env NODE_ENV=development tsx watch server/index.ts",
     "build": "tsx scripts/build.ts",
     "start": "cross-env NODE_ENV=production node dist/index.cjs",
-    "check": "tsc"
+    "check": "tsc",
+    "perf:check": "node scripts/perf-baseline.cjs && node scripts/compare-lighthouse.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -79,6 +80,7 @@
     "@types/node": "^20.19.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@lhci/cli": "^0.15.1",
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
     "cross-env": "^10.1.0",

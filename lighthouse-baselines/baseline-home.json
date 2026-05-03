@@ -1,0 +1,14 @@
+{
+  "categories": {
+    "performance": { "score": 0.52 }
+  },
+  "audits": {
+    "first-contentful-paint": { "numericValue": 4500 },
+    "largest-contentful-paint": { "numericValue": 11229 },
+    "total-blocking-time": { "numericValue": 247 }
+  },
+  "_meta": {
+    "source": "Spec 5 final mobile baseline (placeholder até QA Wave 3)",
+    "createdAt": "2026-05-02T14:00:00.000Z"
+  }
+}

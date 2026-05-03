@@ -1,0 +1,85 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lhci:
+    name: Lighthouse CI (desktop)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build production bundle
+        run: pnpm build
+
+      - name: Start server in background
+        run: |
+          pnpm start &
+          echo $! > /tmp/server.pid
+
+      - name: Wait for server (port 5000)
+        run: |
+          timeout 30 sh -c 'until curl -sf http://localhost:5000/ > /dev/null; do sleep 1; done'
+
+      - name: Run Lighthouse CI (autorun)
+        run: pnpm exec lhci autorun --config=.lighthouserc.json
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Compare against baseline
+        if: always()
+        run: |
+          # Copy LHCI's last-run reports into dist/lighthouse-final-{route}.json
+          # so compare-lighthouse.cjs can read them.
+          mkdir -p dist
+          node -e "
+            const fs=require('fs');
+            const path=require('path');
+            const dir='.lighthouseci';
+            if(!fs.existsSync(dir)){console.error('no .lighthouseci dir');process.exit(0);}
+            const files=fs.readdirSync(dir).filter(f=>f.startsWith('lhr-')&&f.endsWith('.json'));
+            const byRoute={home:[],servicos:[],portfolio:[]};
+            for(const f of files){
+              const j=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));
+              const u=new URL(j.finalUrl||j.requestedUrl);
+              const route=u.pathname==='/'?'home':u.pathname.replace(/^\//,'');
+              if(byRoute[route])byRoute[route].push(j);
+            }
+            for(const [route,runs] of Object.entries(byRoute)){
+              if(!runs.length)continue;
+              // pick median run by performance score
+              runs.sort((a,b)=>a.categories.performance.score-b.categories.performance.score);
+              const median=runs[Math.floor(runs.length/2)];
+              fs.writeFileSync('dist/lighthouse-final-'+route+'.json',JSON.stringify(median));
+              console.log('wrote dist/lighthouse-final-'+route+'.json');
+            }
+          "
+          node scripts/compare-lighthouse.cjs
+
+      - name: Stop server
+        if: always()
+        run: |
+          if [ -f /tmp/server.pid ]; then kill $(cat /tmp/server.pid) || true; fi

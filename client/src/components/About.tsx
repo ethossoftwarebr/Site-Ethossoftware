@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { LazyImage } from "@/components/ui/lazy-image";
-import softwareHouseImg from "@/assets/brand/image_1772683408265.png?w=600;1200&format=avif;webp;png&as=picture";
+import softwareHouseImg from "@/assets/brand/image_1772683408265.png?w=600;1200&quality=70&format=avif;webp;png&as=picture";
 
 export default function About() {
   return (

@@ -190,45 +190,42 @@ export function AuroraBackground({ className = "" }: AuroraBackgroundProps) {
       }
     };
 
+    // Defer heavy three.js bootstrap (~732KB chunk + WebGL setup) until the
+    // user signals engagement (first scroll/touch) OR a 3s timeout fires —
+    // whichever comes first. This keeps the WebGL chunk strictly outside the
+    // LCP measurement window on mobile 4x throttle. The 3s fallback ensures
+    // static-viewport users (no scroll) still see the aurora.
     let cleanup: (() => void) | undefined;
     let cancelled = false;
+    let initialized = false;
 
-    // Defer heavy three.js bootstrap (~732KB chunk + WebGL setup) until the
-    // browser is idle, so it doesn't compete with LCP / hydration. Falls
-    // back to setTimeout(100ms) on Safari (no requestIdleCallback support).
-    type IdleHandle = number;
-    type IdleCallback = (cb: () => void, opts?: { timeout?: number }) => IdleHandle;
-    const w = window as Window & {
-      requestIdleCallback?: IdleCallback;
-      cancelIdleCallback?: (handle: IdleHandle) => void;
+    const initOnce = () => {
+      if (initialized || cancelled) return;
+      initialized = true;
+      init().then((fn) => {
+        if (cancelled) {
+          // Effect already cleaned up — run any cleanup the init returned.
+          fn?.();
+          return;
+        }
+        cleanup = fn;
+      });
     };
-    const supportsIdle = typeof w.requestIdleCallback === "function";
-    const schedule: IdleCallback = supportsIdle
-      ? w.requestIdleCallback!.bind(w)
-      : (cb, _opts) => window.setTimeout(cb, 100) as unknown as IdleHandle;
-    const handle = schedule(
-      () => {
-        if (cancelled) return;
-        init().then((fn) => {
-          if (cancelled) {
-            // Effect already cleaned up — run any cleanup the init returned.
-            fn?.();
-            return;
-          }
-          cleanup = fn;
-        });
-      },
-      { timeout: 200 },
-    );
+
+    const onScroll = () => initOnce();
+    const onTouch = () => initOnce();
+    window.addEventListener("scroll", onScroll, { once: true, passive: true });
+    window.addEventListener("touchstart", onTouch, { once: true, passive: true });
+    const timeoutId = window.setTimeout(initOnce, 3000);
 
     return () => {
       cancelled = true;
-      if (supportsIdle && typeof w.cancelIdleCallback === "function") {
-        w.cancelIdleCallback(handle);
-      } else {
-        window.clearTimeout(handle as unknown as number);
-      }
-      cancelAnimationFrame(animId);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("touchstart", onTouch);
+      window.clearTimeout(timeoutId);
+      // `cleanup` (returned by `init`) already calls stopLoop() which cancels
+      // the RAF — no need for a separate cancelAnimationFrame here. If init
+      // never ran (cancelled before scroll/touch/3s), there's no RAF to cancel.
       cleanup?.();
     };
   }, []);

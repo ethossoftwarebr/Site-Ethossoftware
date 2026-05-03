@@ -6,6 +6,9 @@ vite.config.ts.*
 *.tar.gz
 package-lock.json
 
+# Lighthouse CI run artifacts (cache; baselines tracked in lighthouse-baselines/)
+.lighthouseci/
+
 # Mustard — local pipeline state (transient, not part of repo)
 .claude/.harness/
 .claude/.pipeline-states/
