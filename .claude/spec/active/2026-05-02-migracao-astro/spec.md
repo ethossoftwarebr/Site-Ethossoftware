@@ -224,22 +224,22 @@ Movem inteiros de `client/src/components/*.tsx` → `site-ethos-astro/src/compon
 
 ### qa-run Agent (Wave QA)
 
-- [ ] Executar AC-1..AC-9 (definidos abaixo)
-- [ ] Capturar Lighthouse mobile + desktop só na Home (informativo, não-bloqueante — target 90+ é Spec 9)
-- [ ] Reportar bundle size da Home (informativo — comparar com 1.15MB atual)
-- [ ] Reportar quaisquer concerns de paridade visual ou comportamental
+- [x] Executar AC-1..AC-9 → 6 pass + 1 N/A (AC-7 Aurora não em Home) + 2 deferred (AC-8/AC-9 user manual)
+- [x] Capturar Lighthouse mobile na Home Astro (preview prod, port 4322): Performance 28 / Accessibility 83 / Best Practices **100** / SEO **100** / FCP 4684ms / LCP 28784ms — perf esperado sem Astro Image (Spec 9 resolve); BP+SEO 100 são wins concretos vs SPA
+- [x] Reportar bundle size: client/ baseline 1136KB total / 576KB JS inicial → site-ethos-astro/dist 4073KB total (inclui imagens copiadas) / **517KB JS inicial → -59KB (-10%) com per-island chunks**
+- [x] Reportar concerns de paridade: CONCERN-8 (Aurora/Stats não em Home, correto); CONCERN-9 (112 hints ElementRef shadcn); CONCERN-10 (postcss.config.cjs Windows-monorepo); CONCERN-LH-PERF (Astro Image não configurado, Spec 9)
 
 ## Acceptance Criteria
 
-- [ ] AC-1: TypeScript zero erros em `site-ethos-astro/` — Command: `cd site-ethos-astro && pnpm check`
-- [ ] AC-2: Build limpo — Command: `cd site-ethos-astro && pnpm build` (exit 0; gera `dist/index.html`)
-- [ ] AC-3: Dev server inicia — Command: `cd site-ethos-astro && pnpm dev` em background + `curl -sf http://localhost:4321/` retorna 200
-- [ ] AC-4: 36 assets de imagem migrados — Command: `node -e "const fs=require('fs'),path=require('path');function walk(d){return fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)])}const c=walk('site-ethos-astro/src/assets').filter(f=>f.match(/\\.(png|jpe?g|webp|avif)$/i)).length;console.log('count:',c);process.exit(c>=36?0:1)"`
-- [ ] AC-5: 60 ui primitives migrados — Command: `node -e "console.log(require('fs').readdirSync('site-ethos-astro/src/components/ui').filter(f=>f.endsWith('.tsx')).length)"` ≥ 60
-- [ ] AC-6: 16 componentes feature presentes — Command: `node -e "const need=['Hero','Navbar','AuroraBackground','Stats','Services','Mission','Benefits','Portfolio','Testimonials','EthosIA','ClientCarousel','FAQ','WizardSection','WhatsAppWizard','Footer','WhatsAppButton'];const fs=require('fs');const ok=need.every(n=>fs.existsSync('site-ethos-astro/src/components/'+n+'.tsx'));process.exit(ok?0:1)"`
-- [ ] AC-7: AuroraBackground three.js carrega lazy-on-interaction (preserva Spec 6) — Command: `node scripts/diagnose-three-lazy.cjs` com URL ajustada para `http://localhost:4321/` — exit 0
-- [ ] AC-8: Visual diff manual aprovado — Command: orquestrador apresenta side-by-side screenshots ou descrição comparada; usuário aprova ou rejeita por componente
-- [ ] AC-9: Theme toggle dark/light funciona sem FOUC — Command: manual smoke test: hard reload em dark mode → não há flash light antes do dark aplicar
+- [x] AC-1: TypeScript zero erros — `pnpm --dir site-ethos-astro exec astro check` → 0 errors, 0 warnings, 112 hints **PASS**
+- [x] AC-2: Build limpo — `pnpm --dir site-ethos-astro build` exit 0, `dist/index.html` 186KB **PASS**
+- [x] AC-3: Dev server inicia — `pnpm dev` background + `curl http://localhost:4321/` → STATUS 200 **PASS**
+- [x] AC-4: 36 assets de imagem migrados — count: 36 **PASS**
+- [x] AC-5: 60 ui primitives migrados — count: 60 **PASS**
+- [x] AC-6: 16 componentes feature presentes — missing: [], todos presentes **PASS**
+- [x] AC-7: AuroraBackground three.js carrega lazy-on-interaction — **N/A**: AuroraBackground.tsx existe em site-ethos-astro/src/components/ com lazy guard preservado de Spec 6 + double-init guard adicionado em Bloco C, mas NÃO renderizado em index.astro (Home.tsx ground truth — Aurora apenas em ServicesPage). Re-validar AC em Spec 8 quando ServicesPage for migrada.
+- [ ] AC-8: Visual diff manual — **DEFERRED to user**: rodar `pnpm dev` em `client/` (porta 5000) e `pnpm --dir site-ethos-astro dev` (porta 4321) lado a lado, comparar 14 sections + animações + fonts + theme toggle
+- [ ] AC-9: Theme toggle sem FOUC — **DEFERRED to user**: DevTools em localhost:4321 → `localStorage.setItem('ethos-theme','dark')` + Ctrl+Shift+R → confirmar zero flash light antes de dark aplicar
 
 ## Risk register
 
