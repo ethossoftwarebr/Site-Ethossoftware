@@ -1,9 +1,10 @@
 # Spec 7 — Astro Bootstrap + Home POC (Spec 1/4 da migração)
 
-### Status: implementing
-### Phase: EXECUTE
+### Status: completed
+### Phase: CLOSE
 ### Scope: full
-### Checkpoint: 2026-05-03T15:00:00.000Z
+### Checkpoint: 2026-05-03T16:30:00.000Z
+### Closed: 2026-05-03T16:30:00.000Z (user accepted force-complete; AC-8/AC-9 manuais deferred)
 ### Approved: 2026-05-03T00:00:00.000Z (via /mustard:approve)
 ### Pipeline: /mustard:feature (Full scope — primeiro de 4 specs sequenciais que migram React SPA → Astro SSG)
 ### Model: opus (decisão arquitetural; setup de novo stack; Sonnet em retries mecânicos)
@@ -238,8 +239,8 @@ Movem inteiros de `client/src/components/*.tsx` → `site-ethos-astro/src/compon
 - [x] AC-5: 60 ui primitives migrados — count: 60 **PASS**
 - [x] AC-6: 16 componentes feature presentes — missing: [], todos presentes **PASS**
 - [x] AC-7: AuroraBackground three.js carrega lazy-on-interaction — **N/A**: AuroraBackground.tsx existe em site-ethos-astro/src/components/ com lazy guard preservado de Spec 6 + double-init guard adicionado em Bloco C, mas NÃO renderizado em index.astro (Home.tsx ground truth — Aurora apenas em ServicesPage). Re-validar AC em Spec 8 quando ServicesPage for migrada.
-- [ ] AC-8: Visual diff manual — **DEFERRED to user**: rodar `pnpm dev` em `client/` (porta 5000) e `pnpm --dir site-ethos-astro dev` (porta 4321) lado a lado, comparar 14 sections + animações + fonts + theme toggle
-- [ ] AC-9: Theme toggle sem FOUC — **DEFERRED to user**: DevTools em localhost:4321 → `localStorage.setItem('ethos-theme','dark')` + Ctrl+Shift+R → confirmar zero flash light antes de dark aplicar
+- [~] AC-8: Visual diff manual — **DEFERRED**: usuário optou por seguir specs sem smoke test agora; deve rodar side-by-side antes de promover Spec 9 (Lighthouse fail no perf 28 indicaria parity issue mais cedo, mas paridade visual fina permanece não-validada)
+- [~] AC-9: Theme toggle sem FOUC — **DEFERRED**: usuário optou por seguir specs sem smoke test; inline anti-FOUC script em Layout.astro está implementado e testado em build (HTML gerado contém o script no `<head>` antes do CSS)
 
 ## Risk register
 
