@@ -85,7 +85,9 @@ Movem inteiros de `client/src/components/*.tsx` → `site-ethos-astro/src/compon
 | `ThemeToggle.tsx` | parte do Navbar/Footer islands |
 
 **NÃO migram nesta spec (deferidos para Spec 8):**
-- About.tsx, Instagram.tsx, OrbitingSkills.tsx, Meteors.tsx, Sparkles.tsx — usados em ServicesPage / PortfolioPage / 404, não na Home
+- OrbitingSkills.tsx, Meteors.tsx — usados em ServicesPage / PortfolioPage / 404, não na Home
+
+> **Atualizado em Bloco D (CONCERN-8)**: spec original listava About + Instagram + Sparkles como deferidos, mas inspeção de `client/src/pages/Home.tsx` mostrou que About (line 70) e Instagram (line 72) ESTÃO na Home, e Sparkles é importado transitivamente por ClientCarousel. Os 3 foram migrados em Spec 7 conforme princípio "lift-and-shift fiel". AuroraBackground e Stats foram copiados em Bloco B/C (foundation completa) mas NÃO compõem index.astro pois Home.tsx não os usa — disponíveis para Spec 8.
 
 ### Files (~110 nesta spec)
 
@@ -199,24 +201,26 @@ Movem inteiros de `client/src/components/*.tsx` → `site-ethos-astro/src/compon
 
 **Agente: client-impl**
 
-- [ ] Criar `site-ethos-astro/src/pages/index.astro`:
-  - Frontmatter: imports de Layout + 16 componentes
-  - Body: estrutura conforme `client/src/pages/Home.tsx` atual, mas cada section vira `<Componente client:directive />`
-  - Hidratação: AuroraBackground `client:visible`, Hero/Navbar/Footer/WhatsAppButton `client:load`, demais sections `client:visible`
-  - WizardSection `client:load` (provê contexto para WhatsAppWizard child)
-- [ ] Configurar meta tags Home: title, description, OG/Twitter cards
-- [ ] `pnpm dev` em `site-ethos-astro/` — abre http://localhost:4321
-- [ ] Validação visual manual:
-  - Abrir lado a lado: `pnpm dev` atual (porta 5000) e Astro dev (porta 4321)
-  - Comparar Home: Hero, Aurora background, todas sections, animações de entrada, hover states, CTA WhatsApp, theme toggle
-  - Diferenças visuais devem ser ZERO (tolerância: pequenas diferenças de timing de animação que não comprometem UX)
-- [ ] Validação funcional:
-  - Theme toggle (dark/light) funciona sem FOUC
-  - WizardSection: clicar abre, preenche steps, gera link WhatsApp correto
-  - AuroraBackground three.js renderiza shader animado
-  - Scroll na Home dispara entrance animations das sections subsequentes
-- [ ] `pnpm build` em `site-ethos-astro/` — gera `dist/` com `index.html` e chunks JS pequenos por island
-- [ ] `pnpm preview` — serve `dist/` localmente; navegar Home; confirmar paridade visual também em build de produção
+- [x] Criou `site-ethos-astro/src/pages/index.astro`:
+  - Frontmatter: imports de Layout + 14 componentes Home + ogImageAsset; metadata title/description/canonical
+  - Body: ordem espelhada de `client/src/pages/Home.tsx`: NavbarIsland, Hero, ClientCarousel, Services, Benefits, Portfolio, Testimonials, About, Mission, Instagram, WizardSection, FAQ, Footer, WhatsAppButton, EthosIA. Quatro divs background blur (brand color halos) + main wrapper.
+  - Hidratação: NavbarIsland/Hero/WizardSection/Footer/WhatsAppButton `client:load`; ClientCarousel/Services/Benefits/Portfolio/Testimonials/About/Mission/Instagram/FAQ/EthosIA `client:visible`
+  - WizardSection `client:load` (provê WizardContext para WhatsAppWizard child preserved)
+- [x] Configurou meta tags Home: title + description + canonical + ogImage (logo brand) + Twitter card via `<slot name="head"/>` em Layout.astro extendido
+- [x] Criou `NavbarIsland.tsx` wrapper `<ThemeProvider><Navbar/></ThemeProvider>` — Footer não usa useTheme (única instância de Provider, evita CONCERN-7)
+- [x] Criou `postcss.config.cjs` vazio em site-ethos-astro/ — bloqueia upward search do PostCSS v3 do monorepo parent (que vaza via Vite); Astro usa `@tailwindcss/vite` direto
+- [x] Copiou About.tsx + Instagram.tsx + 5 fontes Outfit (`Outfit-{400,500,600,700,900}.woff2`) para site-ethos-astro/public/fonts/ — `@font-face` em global.css já aponta para `/fonts/Outfit-*.woff2` (auto-resolve)
+- [x] `pnpm --dir site-ethos-astro dev` abre http://localhost:4321 com STATUS:200; conteúdo retorna `<title>` correto + 286 brand-color hits + 16 mentions "Ethos Software" + 31 astro-island markers; zero erros no log
+- [x] `pnpm --dir site-ethos-astro build` exit 0 em 7.15s; `dist/index.html` gerado com placeholders `<astro-island>` para 13 ilhas + per-island JS chunks em `dist/_astro/`
+- [x] `astro check` → 0 errors, 0 warnings, 112 hints (108 ElementRef deprecated em shadcn primitives + 4 em About/Instagram — fora de escopo, lift-and-shift fiel)
+- [ ] **Validação visual manual** (USER-DRIVEN): abrir lado a lado `pnpm dev` em `client/` (porta 5000) e `site-ethos-astro/` (porta 4321); comparar Home section-por-section. Lista detalhada no T5 QA report.
+- [ ] **Validação funcional manual** (USER-DRIVEN): theme toggle sem FOUC; WizardSection 7-step wizard + WhatsApp link; framer-motion entrance animations on scroll. Deferida para T5 QA + user smoke test.
+- [ ] `pnpm preview` (USER-DRIVEN): serve `dist/` localmente; confirmar paridade visual também em build de produção. Deferida para T5/user.
+
+<!-- CONCERN-8: Spec original (linhas 67-83 + 87-89) listava 16 components Home + About/Instagram/Sparkles deferidos — análise de Home.tsx em Bloco D revelou 14 components ATUAIS + About/Instagram/Sparkles SÃO usados na Home. Esta spec foi corrigida (deferred reduzido a OrbitingSkills + Meteors). AuroraBackground + Stats copiados em foundation mas NÃO usados na Home (apenas ServicesPage — Spec 8). -->
+<!-- CONCERN-9: 112 hints `ElementRef deprecated` em shadcn ui primitives (preexistentes em client/, surfaceiam em check Astro pq config strict). Fora de escopo desta spec — lift-and-shift fiel não permite refactor. Endereçar em spec dedicada de modernização shadcn pós-cutover, OU rodar `npx shadcn@latest sync` para upgrade global. -->
+<!-- CONCERN-10: postcss.config.cjs vazio em site-ethos-astro/ blocked upward Vite search do monorepo parent's `postcss.config.js` (Tailwind v3-style usado por client/). Necessário até Spec 10 cutover (que deleta client/postcss.config.js). Documentar como Windows-monorepo gotcha. -->
+
 
 ### qa-run Agent (Wave QA)
 
