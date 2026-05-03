@@ -1,13 +1,21 @@
-// Perf baseline reader — reads committed baseline JSONs in lighthouse-baselines/ and prints metrics + LCP element.
+// Perf baseline reader — reads committed baseline JSONs and prints metrics + LCP element.
 // Renamed from scripts/extract-baseline.cjs; output path moved from dist/ to lighthouse-baselines/.
+// Env vars (all optional — defaults preserve Spec 6 backward-compat):
+//   LH_BASELINE_DIR    — dir for baseline files (default: "lighthouse-baselines")
+//   LH_BASELINE_PREFIX — prefix for baseline files (default: "baseline")
+//   LH_ROUTES          — comma-separated route names (default: "home,servicos,portfolio")
 const fs = require('fs');
 const path = require('path');
 
-const ROUTES = ['home', 'servicos', 'portfolio'];
+const BASELINE_DIR = process.env.LH_BASELINE_DIR ?? 'lighthouse-baselines';
+const BASELINE_PREFIX = process.env.LH_BASELINE_PREFIX ?? 'baseline';
+const ROUTES = (process.env.LH_ROUTES ?? 'home,servicos,portfolio').split(',').map(r => r.trim()).filter(Boolean);
 const out = {};
 
+console.log(`[perf-baseline] baselineDir=${BASELINE_DIR} baselinePrefix=${BASELINE_PREFIX} routes=${ROUTES.join(',')}`);
+
 for (const r of ROUTES) {
-  const file = path.join('lighthouse-baselines', `baseline-${r}.json`);
+  const file = path.join(BASELINE_DIR, `${BASELINE_PREFIX}-${r}.json`);
   if (!fs.existsSync(file)) {
     console.error(`MISSING: ${file}`);
     process.exit(1);
@@ -42,14 +50,15 @@ for (const r of ROUTES) {
 console.log(JSON.stringify(out, null, 2));
 
 // Identify worst offender across routes
-const avg = (k) => Object.values(out).reduce((s, x) => s + x[k], 0) / 3;
+const routeCount = Object.keys(out).length;
+const avg = (k) => Object.values(out).reduce((s, x) => s + x[k], 0) / routeCount;
 const offenders = {
   LCP: avg('LCP_ms'),
   TBT: avg('TBT_ms'),
   FCP: avg('FCP_ms'),
   SpeedIndex: avg('SI_ms'),
 };
-console.log('\n=== AVG ACROSS 3 ROUTES ===');
+console.log(`\n=== AVG ACROSS ${routeCount} ROUTES ===`);
 console.log(JSON.stringify(offenders, null, 2));
 
 // Targets per spec: LCP<2500, TBT<300, FCP<1800

@@ -38,12 +38,15 @@ const puppeteer = require('puppeteer');
   const threeRequests = [];
   const allAssetRequests = [];
   let t0 = Date.now();
+  // Matches Vite (client/): /assets/three-{hash}.js
+  // Matches Astro 6 (site-ethos-astro/): /_astro/three.module.{hash}.js OR /_astro/three-{hash}.js
+  const THREE_RE = /\/(assets|_astro)\/three(\.module)?[.\-][a-zA-Z0-9_-]+\.js/i;
   page.on('request', (req) => {
     const u = req.url();
-    if (u.includes('/assets/')) {
+    if (u.includes('/assets/') || u.includes('/_astro/')) {
       allAssetRequests.push({ url: u.split('/').pop(), atMs: Date.now() - t0 });
     }
-    if (u.match(/\/assets\/three-.*\.js/)) {
+    if (THREE_RE.test(u)) {
       threeRequests.push({ url: u, atMs: Date.now() - t0 });
     }
   });

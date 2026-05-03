@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   lhci:
-    name: Lighthouse CI (desktop)
+    name: Lighthouse CI (client mobile)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -83,3 +83,78 @@ jobs:
         if: always()
         run: |
           if [ -f /tmp/server.pid ]; then kill $(cat /tmp/server.pid) || true; fi
+
+  lighthouse-astro:
+    name: Lighthouse CI (Astro mobile port-clean)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Astro site
+        run: pnpm --dir site-ethos-astro build
+
+      - name: Start Astro preview in background
+        run: |
+          pnpm --dir site-ethos-astro preview &
+          echo $! > /tmp/astro.pid
+
+      - name: Wait for Astro preview (port 4321)
+        run: |
+          timeout 30 sh -c 'until curl -sf http://localhost:4321/ > /dev/null; do sleep 1; done'
+
+      - name: Run Lighthouse CI — Astro (autorun)
+        run: pnpm exec lhci autorun --config=.lighthouserc.astro.json
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Collect Astro LHCI reports into dist/
+        if: always()
+        run: |
+          mkdir -p dist
+          node -e "
+            const fs=require('fs');
+            const path=require('path');
+            const dir='.lighthouseci';
+            if(!fs.existsSync(dir)){console.error('no .lighthouseci dir');process.exit(0);}
+            const files=fs.readdirSync(dir).filter(f=>f.startsWith('lhr-')&&f.endsWith('.json'));
+            const routes=['home','servicos','portfolio','random-404-test'];
+            const byRoute=Object.fromEntries(routes.map(r=>[r,[]]));
+            for(const f of files){
+              const j=JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'));
+              const u=new URL(j.finalUrl||j.requestedUrl);
+              const seg=u.pathname==='/'?'home':u.pathname.replace(/^\//,'');
+              if(byRoute[seg])byRoute[seg].push(j);
+            }
+            for(const [route,runs] of Object.entries(byRoute)){
+              if(!runs.length)continue;
+              runs.sort((a,b)=>a.categories.performance.score-b.categories.performance.score);
+              const median=runs[Math.floor(runs.length/2)];
+              fs.writeFileSync('dist/lighthouse-astro-'+route+'.json',JSON.stringify(median));
+              console.log('wrote dist/lighthouse-astro-'+route+'.json');
+            }
+          "
+
+      - name: Cross-baseline regression gate (Astro vs client)
+        if: always()
+        run: pnpm perf:compare:cross
+
+      - name: Stop Astro preview
+        if: always()
+        run: |
+          if [ -f /tmp/astro.pid ]; then kill $(cat /tmp/astro.pid) || true; fi

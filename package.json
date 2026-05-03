@@ -15,7 +15,11 @@
     "build": "tsx scripts/build.ts",
     "start": "cross-env NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
-    "perf:check": "node scripts/perf-baseline.cjs && node scripts/compare-lighthouse.cjs"
+    "perf:check": "node scripts/perf-baseline.cjs && node scripts/compare-lighthouse.cjs",
+    "perf:lh:client": "node scripts/run-lighthouse-mobile.cjs",
+    "perf:lh:astro": "cross-env LH_PORT=4321 LH_ROUTES=home,servicos,portfolio,404 LH_OUT_PREFIX=lighthouse-astro node scripts/run-lighthouse-mobile.cjs",
+    "perf:compare:cross": "cross-env LH_FINAL_DIR=lighthouse-baselines LH_BASELINE_PREFIX=baseline LH_FINAL_PREFIX=baseline-astro LH_ROUTES=home,servicos,portfolio node scripts/compare-lighthouse.cjs",
+    "perf:baseline:astro": "cross-env LH_PORT=4321 LH_ROUTES=home,servicos,portfolio,404 LH_OUT_DIR=lighthouse-baselines LH_OUT_PREFIX=baseline-astro node scripts/run-lighthouse-mobile.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

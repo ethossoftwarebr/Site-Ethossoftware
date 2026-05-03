@@ -1,9 +1,24 @@
-// Compare current dist/lighthouse-final-{route}.json against committed lighthouse-baselines/baseline-{route}.json.
+// Compare final Lighthouse results against committed baselines.
 // Used by Lighthouse CI workflow + local `pnpm perf:check`.
+// Env vars (all optional — defaults preserve Spec 6 backward-compat):
+//   LH_BASELINE_DIR    — dir for baseline files (default: "lighthouse-baselines")
+//   LH_BASELINE_PREFIX — prefix for baseline files (default: "baseline")
+//   LH_FINAL_DIR       — dir for final/current files (default: "dist")
+//   LH_FINAL_PREFIX    — prefix for final/current files (default: "lighthouse-final")
+//   LH_ROUTES          — comma-separated route names (default: "home,servicos,portfolio")
+//
+// Cross-baseline mode (compare client vs astro baselines, both in lighthouse-baselines/):
+//   LH_BASELINE_PREFIX=baseline LH_FINAL_PREFIX=baseline-astro LH_FINAL_DIR=lighthouse-baselines
 const fs = require('fs');
 const path = require('path');
 
-const ROUTES = ['home', 'servicos', 'portfolio'];
+const BASELINE_DIR = process.env.LH_BASELINE_DIR ?? 'lighthouse-baselines';
+const BASELINE_PREFIX = process.env.LH_BASELINE_PREFIX ?? 'baseline';
+const FINAL_DIR = process.env.LH_FINAL_DIR ?? 'dist';
+const FINAL_PREFIX = process.env.LH_FINAL_PREFIX ?? 'lighthouse-final';
+const ROUTES = (process.env.LH_ROUTES ?? 'home,servicos,portfolio').split(',').map(r => r.trim()).filter(Boolean);
+
+console.log(`[compare-lighthouse] baselineDir=${BASELINE_DIR} baselinePrefix=${BASELINE_PREFIX} finalDir=${FINAL_DIR} finalPrefix=${FINAL_PREFIX} routes=${ROUTES.join(',')}`);
 
 function metrics(p) {
   const j = JSON.parse(fs.readFileSync(p, 'utf8'));
@@ -21,8 +36,8 @@ function metrics(p) {
 }
 
 const rows = ROUTES.map(r => {
-  const baselinePath = path.join('lighthouse-baselines', `baseline-${r}.json`);
-  const finalPath = path.join('dist', `lighthouse-final-${r}.json`);
+  const baselinePath = path.join(BASELINE_DIR, `${BASELINE_PREFIX}-${r}.json`);
+  const finalPath = path.join(FINAL_DIR, `${FINAL_PREFIX}-${r}.json`);
   if (!fs.existsSync(baselinePath)) {
     console.error(`MISSING baseline: ${baselinePath}`);
     process.exit(1);

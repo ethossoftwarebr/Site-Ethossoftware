@@ -2,9 +2,10 @@
   "ci": {
     "collect": {
       "url": [
-        "http://localhost:5000/",
-        "http://localhost:5000/servicos",
-        "http://localhost:5000/portfolio"
+        "http://localhost:4321/",
+        "http://localhost:4321/servicos",
+        "http://localhost:4321/portfolio",
+        "http://localhost:4321/404.html"
       ],
       "numberOfRuns": 3,
       "settings": {
@@ -14,6 +15,7 @@
     "assert": {
       "assertions": {
         "categories:performance": ["error", { "minScore": 0.50 }],
+        "categories:accessibility": ["warn", { "minScore": 0.90 }],
         "first-contentful-paint": ["warn", { "maxNumericValue": 4000 }],
         "largest-contentful-paint": ["warn", { "maxNumericValue": 4000 }],
         "total-blocking-time": ["warn", { "maxNumericValue": 300 }]
