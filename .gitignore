@@ -36,8 +36,9 @@ package-lock.json
 # Lighthouse CI run artifacts (cache; baselines tracked in lighthouse-baselines/)
 .lighthouseci/
 
-# Leftover cutover directory (physical remnant after git mv; only node_modules/dist inside)
+# Leftover cutover directories (physical remnant after git rm/mv; bash-safety hook blocks rm — manual cleanup via Explorer/PowerShell)
 site-ethos-astro/
+server/
 
 # Mustard — local pipeline state (transient, not part of repo)
 .claude/.harness/
