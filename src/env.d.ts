@@ -1,5 +1,14 @@
 /// <reference types="astro/client" />
 
+interface ImportMetaEnv {
+  readonly ANTHROPIC_API_KEY?: string;
+  readonly ANTHROPIC_MODEL?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 /**
  * Type declarations for `vite-imagetools` query-string imports.
  * Astro's `astro/client` types declare bare image imports as `ImageMetadata`,
