@@ -47,3 +47,4 @@ server/
 .claude/.agent-memory/
 .claude/.metrics/
 .claude/.detect-cache.json
+.claude/scheduled_tasks.lock
