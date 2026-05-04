@@ -11,7 +11,7 @@ import { imagetools } from 'vite-imagetools';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://ethossoftware.com.br',
-  output: 'server',
+  output: 'static',
   adapter: vercel(),
 
   integrations: [react()],
