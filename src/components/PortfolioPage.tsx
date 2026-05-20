@@ -10,21 +10,28 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import EthosIA from "@/components/EthosIA";
 import { LazyImage } from "@/components/ui/lazy-image";
 
-export default function PortfolioPageContent() {
+export default function PortfolioPage() {
   const [activeCategory, setActiveCategory] = useState("Todos");
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
-  const filtered = activeCategory === "Todos"
-    ? projects
-    : projects.filter(p => p.category === activeCategory);
+  const filtered =
+    activeCategory === "Todos"
+      ? projects
+      : projects.filter((p) => p.category === activeCategory);
 
   return (
     <main className="min-h-screen relative bg-background selection:bg-[#A229F2]/20 selection:text-[#531B8C]">
-      <div className="absolute top-0 left-[10%] w-[800px] h-[800px] bg-[#A229F2]/15 rounded-full blur-[120px] -z-10 pointer-events-none [contain:strict] [transform:translateZ(0)]" aria-hidden="true" />
-      <div className="absolute top-[30%] right-[-10%] w-[600px] h-[600px] bg-[#531B8C]/10 rounded-full blur-[100px] -z-10 pointer-events-none [contain:strict] [transform:translateZ(0)]" aria-hidden="true" />
+      <div
+        className="absolute top-0 left-[10%] w-[800px] h-[800px] bg-[#A229F2]/15 rounded-full blur-[120px] -z-10 pointer-events-none [contain:strict] [transform:translateZ(0)]"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute top-[30%] right-[-10%] w-[600px] h-[600px] bg-[#531B8C]/10 rounded-full blur-[100px] -z-10 pointer-events-none [contain:strict] [transform:translateZ(0)]"
+        aria-hidden="true"
+      />
 
       <Navbar />
 
@@ -50,7 +57,9 @@ export default function PortfolioPageContent() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#A229F2]/10 border border-[#A229F2]/20 mb-6"
           >
-            <span className="text-[#A229F2] font-bold tracking-widest uppercase text-xs">Portfólio Completo</span>
+            <span className="text-[#A229F2] font-bold tracking-widest uppercase text-xs">
+              Portfólio Completo
+            </span>
           </motion.div>
 
           <motion.h1
@@ -72,7 +81,8 @@ export default function PortfolioPageContent() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10"
           >
-            Do planejamento ao lançamento, transformamos desafios reais em soluções digitais que geram resultados mensuráveis.
+            Do planejamento ao lançamento, transformamos desafios reais em
+            soluções digitais que geram resultados mensuráveis.
           </motion.p>
 
           {/* Stats */}
@@ -88,8 +98,12 @@ export default function PortfolioPageContent() {
               { number: "3+", label: "Anos de Experiência" },
             ].map((stat, i) => (
               <div key={i} className="text-center">
-                <div className="text-3xl md:text-4xl font-black text-[#A229F2]">{stat.number}</div>
-                <div className="text-muted-foreground text-sm font-medium mt-1">{stat.label}</div>
+                <div className="text-3xl md:text-4xl font-black text-[#A229F2]">
+                  {stat.number}
+                </div>
+                <div className="text-muted-foreground text-sm font-medium mt-1">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </motion.div>
@@ -129,7 +143,9 @@ export default function PortfolioPageContent() {
           animate={{ opacity: 1 }}
           className="text-muted-foreground text-sm mb-8"
         >
-          Exibindo <span className="font-bold text-[#A229F2]">{filtered.length}</span> projeto{filtered.length !== 1 ? "s" : ""}
+          Exibindo{" "}
+          <span className="font-bold text-[#A229F2]">{filtered.length}</span>{" "}
+          projeto{filtered.length !== 1 ? "s" : ""}
           {activeCategory !== "Todos" && ` em "${activeCategory}"`}
         </motion.p>
 
@@ -148,7 +164,12 @@ export default function PortfolioPageContent() {
                 layout
                 initial={{ opacity: 0, y: 40, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.08, type: "spring", bounce: 0.3 }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.08,
+                  type: "spring",
+                  bounce: 0.3,
+                }}
                 whileHover={{ y: -12 }}
                 className="group flex flex-col bg-card rounded-3xl border border-[#A229F2]/10 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_-10px_rgba(159,36,232,0.25)] hover:border-[#A229F2]/40 transition-all duration-500 overflow-hidden cursor-pointer relative"
                 data-testid={`card-project-full-${index}`}
@@ -197,7 +218,10 @@ export default function PortfolioPageContent() {
 
                   <div className="flex flex-wrap gap-2 pt-5 border-t border-gray-100 group-hover:border-[#A229F2]/20 transition-colors duration-300">
                     {project.tags.map((tag, i) => (
-                      <span key={i} className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5 bg-secondary px-2.5 py-1 rounded-md group-hover:bg-[#A229F2]/5 group-hover:text-[#A229F2] transition-colors duration-300">
+                      <span
+                        key={i}
+                        className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5 bg-secondary px-2.5 py-1 rounded-md group-hover:bg-[#A229F2]/5 group-hover:text-[#A229F2] transition-colors duration-300"
+                      >
                         <span className="w-1.5 h-1.5 rounded-full bg-[#BA66F2]"></span>
                         {tag}
                       </span>
@@ -228,7 +252,12 @@ export default function PortfolioPageContent() {
               Entre em contato e vamos transformar a sua ideia em realidade.
             </p>
             <button
-              onClick={() => window.open("https://wa.me/556294667304?text=Olá! Vi o portfólio da Ethos Software e quero conversar sobre um projeto.", "_blank")}
+              onClick={() =>
+                window.open(
+                  "https://wa.me/556294667304?text=Olá! Vi o portfólio da Ethos Software e quero conversar sobre um projeto.",
+                  "_blank",
+                )
+              }
               className="inline-flex items-center gap-3 bg-white text-[#531B8C] font-bold px-8 py-4 rounded-full text-lg hover:bg-secondary transition-colors shadow-xl relative z-10"
               data-testid="button-cta-portfolio"
             >

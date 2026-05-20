@@ -154,7 +154,7 @@ const ModalIllustration = ({ Icon }: { Icon: LucideIcon }) => (
   </div>
 );
 
-export default function Services() {
+export default function ServicesHome() {
   const [selectedService, setSelectedService] = useState<
     (typeof services)[0] | null
   >(null);

@@ -1,6 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import PortfolioPageContent from '@/components/PortfolioPageContent';
+import PortfolioPage from '@/components/PortfolioPage';
 import ogImageAsset from '@/assets/brand/image_1772683408265.png';
 
 const title = 'Portfólio - Cases de Sucesso em Software | Ethos Software';
@@ -15,5 +15,5 @@ const canonical = 'https://ethossoftware.com.br/portfolio';
   ogImage={ogImageAsset.src}
   canonical={canonical}
 >
-  <PortfolioPageContent client:load />
+  <PortfolioPage client:load />
 </Layout>

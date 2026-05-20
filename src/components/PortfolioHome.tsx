@@ -9,7 +9,7 @@ const WA_BASE = "https://wa.me/556294667304?text=Olá! Vi o projeto ";
 
 const displayProjects = projects.slice(0, 6);
 
-export default function Portfolio() {
+export default function PortfolioHome() {
   const [selected, setSelected] = useState<(typeof projects)[0] | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -34,7 +34,9 @@ export default function Portfolio() {
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [selected]);
 
   const scrollLeft = () =>
@@ -58,7 +60,8 @@ export default function Portfolio() {
               Projetos que Entregamos
             </h2>
             <p className="text-muted-foreground max-w-xl text-base md:text-lg">
-              Do planejamento ao lançamento, criamos plataformas que geram resultados reais.
+              Do planejamento ao lançamento, criamos plataformas que geram
+              resultados reais.
             </p>
           </div>
 
@@ -246,7 +249,7 @@ export default function Portfolio() {
                   onClick={() =>
                     window.open(
                       `${WA_BASE}${encodeURIComponent(selected.title)} no portfólio da Ethos Software e quero algo similar.`,
-                      "_blank"
+                      "_blank",
                     )
                   }
                   data-testid="button-quero-similar"

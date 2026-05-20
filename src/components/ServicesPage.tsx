@@ -218,7 +218,7 @@ const processSteps = [
   },
 ];
 
-export default function ServicesPageContent() {
+export default function ServicesPage() {
   const [activeService, setActiveService] = useState(0);
 
   useEffect(() => {

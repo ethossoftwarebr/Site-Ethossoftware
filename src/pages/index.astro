@@ -3,9 +3,9 @@ import Layout from '@/layouts/Layout.astro';
 import NavbarIsland from '@/components/NavbarIsland';
 import Hero from '@/components/Hero';
 import ClientCarousel from '@/components/ClientCarousel';
-import Services from '@/components/Services';
+import ServicesHome from '@/components/ServicesHome';
 import Benefits from '@/components/Benefits';
-import Portfolio from '@/components/Portfolio';
+import PortfolioHome from '@/components/PortfolioHome';
 import Testimonials from '@/components/Testimonials';
 import About from '@/components/About';
 import Mission from '@/components/Mission';
@@ -42,9 +42,9 @@ const canonical = 'https://ethossoftware.com.br';
     <div class="flex flex-col gap-12 md:gap-20 pt-16 pb-0">
       <Hero client:load />
       <ClientCarousel client:visible />
-      <Services client:visible />
+      <ServicesHome client:visible />
       <Benefits client:visible />
-      <Portfolio client:visible />
+      <PortfolioHome client:visible />
       <Testimonials client:visible />
       <About client:visible />
       <Mission client:visible />
