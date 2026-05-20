@@ -12,7 +12,6 @@ import {
   X,
   Server,
   Layers,
-  Fingerprint,
   type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
