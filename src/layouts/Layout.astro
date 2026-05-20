@@ -14,7 +14,7 @@ const {
 import '@/styles/global.css';
 ---
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -40,15 +40,6 @@ import '@/styles/global.css';
     )}
 
     <slot name="head" />
-
-    <script is:inline>
-      (function() {
-        try {
-          const stored = localStorage.getItem('ethos-theme');
-          if (stored === 'dark') document.documentElement.classList.add('dark');
-        } catch (_) {}
-      })();
-    </script>
   </head>
   <body>
     <slot />

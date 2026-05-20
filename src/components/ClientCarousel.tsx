@@ -34,7 +34,7 @@ const clients = [
   { name: "BBT Transportes", logo: bbt },
   { name: "All Vida", logo: allVida },
   { name: "Caristeo", logo: caristeo },
-  { name: "Villa Carioca", logo: villaCarioca }
+  { name: "Villa Carioca", logo: villaCarioca },
 ];
 
 export default function ClientCarousel() {
@@ -58,20 +58,20 @@ export default function ClientCarousel() {
           Empresas que confiam na Ethos Software
         </p>
       </div>
-      
+
       {/* Container with fade edges */}
       <div className="relative w-full max-w-[90rem] mx-auto z-10">
         <div className="absolute left-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none"></div>
         <div className="absolute right-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none"></div>
-        
+
         {/* Scrolling track */}
         <div className="flex overflow-hidden">
-          <motion.div 
+          <motion.div
             className="flex whitespace-nowrap gap-8 md:gap-12 items-center px-4 md:px-6"
-            animate={{ 
-              x: ["0%", "-50%"] 
+            animate={{
+              x: ["0%", "-50%"],
             }}
-            transition={{ 
+            transition={{
               ease: "linear",
               duration: 40,
               repeat: Infinity,
@@ -88,7 +88,7 @@ export default function ClientCarousel() {
                   alt={`Logo ${client.name}`}
                   sizes="(max-width: 768px) 80px, 192px"
                   className="max-w-full max-h-full"
-                  imgClassName="max-w-full max-h-full object-contain mix-blend-multiply dark:mix-blend-normal dark:opacity-80 dark:brightness-150 dark:contrast-75"
+                  imgClassName="max-w-full max-h-full object-contain mix-blend-normal opacity-80 brightness-150 contrast-75"
                 />
               </div>
             ))}
