@@ -3,12 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Globe,
-  Settings,
-  Cpu,
-  Smartphone,
-  ShoppingBag,
-  Plug,
   CheckCircle2,
   ChevronRight,
   ArrowRight,
@@ -20,164 +14,14 @@ import {
   Rocket,
   HeartHandshake,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import EthosIA from "@/components/EthosIA";
 import OrbitingSkills from "@/components/OrbitingSkills";
 import { AuroraBackground } from "@/components/AuroraBackground";
 import { Button } from "@/components/ui/button";
 import { DeferredSection } from "@/components/ui/deferred-section";
+import { services } from "@/data/services";
 
 const WA_URL =
   "https://wa.me/556294667304?text=Olá! Vim pela página de serviços da Ethos Software e quero fazer um orçamento.";
-
-const services = [
-  {
-    id: "sites",
-    label: "Sites & Landing Pages",
-    icon: Globe,
-    tagline: "Presença digital que converte",
-    description:
-      "Criamos sites institucionais e landing pages de alta conversão com design moderno, responsivo e otimizado para SEO. Nosso foco é transformar visitantes em clientes reais, combinando UX estratégico com performance técnica.",
-    highlights: [
-      "Design responsivo para todos os dispositivos",
-      "Otimização SEO desde a estrutura",
-      "Velocidade de carregamento máxima",
-      "Integração com Google Analytics e Tag Manager",
-      "Formulários e chatbots de captura de leads",
-      "A/B Testing e otimização contínua",
-    ],
-    useCases: [
-      "Landing pages para campanhas",
-      "Sites institucionais",
-      "Blogs e portais de conteúdo",
-      "Sites de agências e profissionais liberais",
-    ],
-    deliveryTime: "1 a 4 semanas",
-    image: "bg-gradient-to-br from-[#531B8C] to-[#A229F2]",
-  },
-  {
-    id: "sistemas",
-    label: "Sistemas Web",
-    icon: Settings,
-    tagline: "CRM, ERP, SaaS e Dashboards sob medida",
-    description:
-      "Desenvolvemos sistemas de gestão personalizados para automatizar processos, centralizar dados e escalar operações. De CRMs e ERPs a plataformas SaaS completas com dashboards interativos em tempo real.",
-    highlights: [
-      "Autenticação, controle de acesso e permissões",
-      "Dashboards com dados em tempo real",
-      "APIs robustas e documentadas",
-      "Integrações com sistemas legados",
-      "Escalabilidade para crescimento",
-      "Relatórios automatizados e exportáveis",
-    ],
-    useCases: [
-      "CRM para equipes de vendas",
-      "ERP para operações",
-      "Plataformas SaaS B2B",
-      "Sistemas de gestão internos",
-    ],
-    deliveryTime: "4 a 16 semanas",
-    image: "bg-gradient-to-br from-[#1a0a2e] to-[#531B8C]",
-  },
-  {
-    id: "ia",
-    label: "Automações com IA",
-    icon: Cpu,
-    tagline: "Inteligência Artificial aplicada ao seu negócio",
-    description:
-      "Implementamos automações inteligentes com IA para eliminar tarefas repetitivas, otimizar atendimento, gerar insights estratégicos e tomar decisões baseadas em dados — tudo integrado ao seu fluxo de trabalho atual.",
-    highlights: [
-      "Chatbots com LLMs (GPT, Claude, Gemini)",
-      "Automação de atendimento via WhatsApp",
-      "Processamento e análise de documentos",
-      "Geração de relatórios com IA",
-      "Integração com n8n e Make",
-      "RAG e bases de conhecimento personalizadas",
-    ],
-    useCases: [
-      "Atendimento automatizado 24h",
-      "Triagem e qualificação de leads",
-      "Análise de dados e previsões",
-      "Automação de processos internos",
-    ],
-    deliveryTime: "2 a 8 semanas",
-    image: "bg-gradient-to-br from-[#A229F2] to-[#BA66F2]",
-  },
-  {
-    id: "mobile",
-    label: "Aplicativos Mobile",
-    icon: Smartphone,
-    tagline: "iOS e Android com experiência nativa",
-    description:
-      "Desenvolvemos aplicativos nativos e híbridos para iOS e Android com design intuitivo e performance excepcional. Integrados ao ecossistema digital do cliente — APIs, gateways de pagamento, notificações push e muito mais.",
-    highlights: [
-      "React Native e Expo para iOS e Android",
-      "Design UI/UX focado em conversão",
-      "Publicação nas stores (App Store e Play Store)",
-      "Notificações push e offline-first",
-      "Integração com câmera, GPS e sensores",
-      "Analytics e crash reporting",
-    ],
-    useCases: [
-      "Apps de marketplace e e-commerce",
-      "Apps de gestão e operações",
-      "Apps de delivery e logística",
-      "Apps de fidelidade e clube de vantagens",
-    ],
-    deliveryTime: "6 a 20 semanas",
-    image: "bg-gradient-to-br from-[#531B8C] to-[#BA66F2]",
-  },
-  {
-    id: "ecommerce",
-    label: "E-commerce",
-    icon: ShoppingBag,
-    tagline: "Lojas virtuais de alta conversão",
-    description:
-      "Criamos lojas virtuais completas, otimizadas para conversão e integradas com os principais meios de pagamento do mercado. Painel administrativo robusto, gestão de estoque, cupons e muito mais.",
-    highlights: [
-      "Integração com Mercado Pago, Stripe e PagSeguro",
-      "Gestão de produtos, estoque e pedidos",
-      "Recuperação de carrinho abandonado",
-      "Cupons, promoções e programa de fidelidade",
-      "Integração com marketplaces (ML, Shopee)",
-      "Relatórios de vendas e performance",
-    ],
-    useCases: [
-      "Lojas de moda e varejo",
-      "Produtos digitais e cursos",
-      "Atacado e distribuidoras",
-      "Marcas direto ao consumidor",
-    ],
-    deliveryTime: "4 a 12 semanas",
-    image: "bg-gradient-to-br from-[#BA66F2] to-[#531B8C]",
-  },
-  {
-    id: "apis",
-    label: "APIs & Integrações",
-    icon: Plug,
-    tagline: "Conecte todos os seus sistemas",
-    description:
-      "Desenvolvemos APIs RESTful e GraphQL robustas, além de integrações entre sistemas — CRMs, ERPs, gateways de pagamento, marketplaces, ferramentas de automação e qualquer plataforma do mercado.",
-    highlights: [
-      "APIs RESTful e GraphQL documentadas",
-      "Webhooks e integrações em tempo real",
-      "Integrações com Zapier, Make e n8n",
-      "Autenticação OAuth2 e JWT",
-      "Rate limiting e monitoramento",
-      "SDKs e bibliotecas para clientes",
-    ],
-    useCases: [
-      "Integração ERP ↔ E-commerce",
-      "Conexão com APIs de terceiros",
-      "Microserviços e arquitetura distribuída",
-      "Middleware para sistemas legados",
-    ],
-    deliveryTime: "2 a 10 semanas",
-    image: "bg-gradient-to-br from-[#1a0a2e] to-[#A229F2]",
-  },
-];
 
 const processSteps = [
   {
@@ -239,8 +83,6 @@ export default function ServicesPage() {
         aria-hidden="true"
       />
 
-      <Navbar />
-
       {/* Hero */}
       <section className="pt-32 pb-14 md:pt-40 md:pb-16 relative overflow-hidden bg-[#07050f]">
         {/* Aurora WebGL background */}
@@ -257,7 +99,7 @@ export default function ServicesPage() {
 
         <div className="container mx-auto px-4 max-w-5xl relative z-20">
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
@@ -273,7 +115,7 @@ export default function ServicesPage() {
             </div>
           </motion.div>
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
@@ -299,12 +141,21 @@ export default function ServicesPage() {
       {/* Services Tabs */}
       <section className="py-4 relative border-t border-[#A229F2]/10 bg-background/90 backdrop-blur-sm sticky top-[64px] md:top-[80px] z-40">
         <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex gap-1 overflow-x-auto scrollbar-hide pb-1">
+          <div
+            className="flex gap-1 overflow-x-auto scrollbar-hide pb-1"
+            role="tablist"
+            aria-label="Serviços"
+          >
             {services.map((s, i) => {
               const SIcon = s.icon;
               return (
                 <button
+                  type="button"
                   key={s.id}
+                  id={`tab-service-${s.id}`}
+                  role="tab"
+                  aria-selected={activeService === i}
+                  aria-controls="service-panel"
                   onClick={() => setActiveService(i)}
                   data-testid={`tab-service-${s.id}`}
                   className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all flex-shrink-0 ${
@@ -328,6 +179,9 @@ export default function ServicesPage() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeService}
+              id="service-panel"
+              role="tabpanel"
+              aria-labelledby={`tab-service-${service.id}`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
@@ -598,10 +452,6 @@ export default function ServicesPage() {
           </motion.div>
         </div>
       </section>
-
-      <Footer />
-      <WhatsAppButton />
-      <EthosIA />
     </main>
   );
 }

@@ -4,14 +4,43 @@ interface Props {
   description?: string;
   ogImage?: string;
   canonical?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 const {
   title = 'Ethos Software',
   description = 'Desenvolvimento de software sob medida',
   ogImage,
   canonical,
+  structuredData,
 } = Astro.props;
 import '@/styles/global.css';
+import defaultOgImageAsset from '@/assets/brand/image_1772683408265.png';
+
+const siteUrl = Astro.site ?? Astro.url;
+const resolvedCanonical = canonical ?? new URL(Astro.url.pathname, siteUrl).href;
+const resolvedOgImage = new URL(ogImage ?? defaultOgImageAsset.src, siteUrl).href;
+const extraStructuredData = Array.isArray(structuredData)
+  ? structuredData
+  : structuredData
+    ? [structuredData]
+    : [];
+const schemas = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Ethos Software',
+    url: 'https://ethossoftware.com.br',
+    logo: resolvedOgImage,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+55-62-9466-7304',
+      contactType: 'sales',
+      areaServed: 'BR',
+      availableLanguage: 'Portuguese',
+    },
+  },
+  ...extraStructuredData,
+];
 ---
 <!doctype html>
 <html lang="pt-BR" class="dark">
@@ -21,23 +50,23 @@ import '@/styles/global.css';
     <meta name="description" content={description} />
     <title>{title}</title>
 
-    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="canonical" href={resolvedCanonical} />
 
-    {ogImage && (
-      <>
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:type" content="website" />
-        <meta property="og:locale" content="pt_BR" />
-        <meta property="og:site_name" content="Ethos Software" />
-        {canonical && <meta property="og:url" content={canonical} />}
-        <meta property="og:image" content={ogImage} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={ogImage} />
-      </>
-    )}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Ethos Software" />
+    <meta property="og:url" content={resolvedCanonical} />
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={resolvedOgImage} />
+
+    {schemas.map((schema) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
 
     <slot name="head" />
   </head>

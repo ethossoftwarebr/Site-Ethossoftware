@@ -6,41 +6,14 @@ import {
   AccordionItem,
 } from "@/components/ui/accordion";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { faqItems, type FaqIcon } from "@/data/faq";
 
-const faqs = [
-  {
-    id: "1",
-    icon: Clock,
-    question: "Quanto tempo demora para um site ou sistema ficar pronto?",
-    sub: "Prazos transparentes desde o início do projeto",
-    answer:
-      "Um site institucional ou Landing Page de alta conversão costuma ser entregue entre 7 a 10 dias. Para sistemas mais robustos e personalizados, o prazo é ajustado de acordo com a complexidade do projeto. Sempre estabelecemos um cronograma transparente no início.",
-  },
-  {
-    id: "2",
-    icon: Headphones,
-    question: "Vocês dão suporte e manutenção após a entrega?",
-    sub: "Manutenção, hospedagem e suporte técnico inclusos",
-    answer:
-      "Sim! A Ethos oferece planos mensais de manutenção e hospedagem. Assim, garantimos que seu sistema fique sempre no ar, seguro, atualizado e funcionando perfeitamente, com suporte técnico à sua disposição.",
-  },
-  {
-    id: "3",
-    icon: Building2,
-    question: "A Ethos atende o meu segmento de negócio?",
-    sub: "Soluções para os mais variados nichos e setores",
-    answer:
-      "Nós criamos soluções para os mais diversos nichos: contabilidades, escritórios de advocacia, clínicas de estética, consultórios odontológicos, oficinas, lojas de roupas, gestão de bares e restaurantes, entre muitos outros. Se há um problema no dia a dia da sua empresa, nós desenvolvemos o software para resolver.",
-  },
-  {
-    id: "4",
-    icon: Bot,
-    question: "Como funciona o desenvolvimento das Automações com IA?",
-    sub: "IA personalizada trabalhando 24/7 para o seu negócio",
-    answer:
-      "Nós criamos automações totalmente sob medida para a necessidade que você enfrenta. Mapeamos os gargalos do seu atendimento ou processos internos e implementamos uma IA que trabalha 24/7 de forma personalizada para a sua empresa.",
-  },
-];
+const faqIcons: Record<FaqIcon, typeof Clock> = {
+  clock: Clock,
+  headphones: Headphones,
+  building: Building2,
+  bot: Bot,
+};
 
 export default function FAQ() {
   return (
@@ -65,8 +38,8 @@ export default function FAQ() {
           transition={{ duration: 0.5 }}
         >
           <Accordion type="single" collapsible defaultValue="1" className="w-full space-y-1">
-            {faqs.map((faq) => {
-              const Icon = faq.icon;
+            {faqItems.map((faq) => {
+              const Icon = faqIcons[faq.icon];
               return (
                 <AccordionItem
                   key={faq.id}
@@ -75,7 +48,7 @@ export default function FAQ() {
                 >
                   <AccordionPrimitive.Header className="flex">
                     <AccordionPrimitive.Trigger
-                      className="flex flex-1 items-center justify-between px-5 py-4 text-left transition-all [&[data-state=open]>svg]:rotate-180 focus:outline-none"
+                      className="flex flex-1 items-center justify-between px-5 py-4 text-left transition-all [&[data-state=open]>svg]:rotate-180 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg"
                       data-testid={`faq-trigger-${faq.id}`}
                     >
                       <span className="flex items-center gap-4">

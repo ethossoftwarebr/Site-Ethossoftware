@@ -37,7 +37,7 @@ export default function Benefits() {
     <section id="features" className="py-16 md:py-24 bg-[#111111] relative overflow-hidden z-0">
       {/* Animated Motherboard / Circuit Background Elements */}
       <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" className="absolute top-0 left-0">
+        <svg aria-hidden="true" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" className="absolute top-0 left-0">
           <defs>
             <pattern id="circuit-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
               <path d="M10,10 h20 v20 h-20 z" fill="none" stroke="#A229F2" strokeWidth="1" />

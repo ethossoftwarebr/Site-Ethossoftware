@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, MessageCircle, Bot, User, ExternalLink, Sparkles } from "lucide-react";
+import { X, Send, Bot, User, ExternalLink, Sparkles } from "lucide-react";
 
 const WA_NUMBER = "556294667304";
 
@@ -142,6 +142,7 @@ export default function EthosIA() {
                 <div className="text-white/70 text-xs">Assistente virtual · Online</div>
               </div>
               <button
+                type="button"
                 onClick={openWhatsApp}
                 data-testid="button-ethos-ia-humano"
                 className="text-white/70 hover:text-white text-[10px] font-medium flex items-center gap-1 bg-white/10 px-2 py-1 rounded-lg transition-colors"
@@ -208,6 +209,7 @@ export default function EthosIA() {
                   style={{ minHeight: "38px" }}
                 />
                 <button
+                  type="button"
                   onClick={sendMessage}
                   disabled={!input.trim() || loading}
                   data-testid="button-ethos-ia-send"
@@ -217,7 +219,7 @@ export default function EthosIA() {
                 </button>
               </div>
               <p className="text-center text-[#AAAAAA] text-[9px] mt-2">
-                Ethos.IA · Pode cometer erros · <button onClick={openWhatsApp} className="underline hover:text-[#A229F2] transition-colors">Falar com humano</button>
+                Ethos.IA · Pode cometer erros · <button type="button" onClick={openWhatsApp} className="underline hover:text-[#A229F2] transition-colors">Falar com humano</button>
               </p>
             </div>
           </motion.div>

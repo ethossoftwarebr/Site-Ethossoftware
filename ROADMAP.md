@@ -5,6 +5,19 @@
 > **Gerado por:** `/scan --full -enrich` + auditoria multi-agente (performance · arquitetura · design/UX/a11y · pesquisa de mercado).
 > **Data:** 2026-07-12 · **Stack:** Astro 6.2.1 (static) · React 19 islands · Tailwind v4 · framer-motion · Three.js · Vercel serverless.
 
+> **Atualização em 2026-09-08:** P0-01 a P0-07 e a fundação de qualidade P1-01 a P1-03 foram implementados na branch `site-audit-roadmap-p0-03`. `pnpm validate` está verde (Astro/TypeScript, Biome, 8 testes e build), e o build gera o sitemap. As metas numéricas de Lighthouse e a inspeção visual/teclado continuam pendentes: o Chrome do Windows não abriu corretamente via WSL e o navegador Linux do Puppeteer não foi instalado por completo. O scorecard abaixo permanece como baseline anterior, não como medição do código atual.
+
+| Spec | Implementação | Validação restante |
+| --- | --- | --- |
+| P0-01 CLS | Concluída | Lighthouse e inspeção visual |
+| P0-02 LCP SSR | Concluída | Lighthouse e inspeção visual |
+| P0-03 código morto | Concluída no commit `7f394fc` | Nenhuma |
+| P0-04 dados de Services | Concluída | Nenhuma além de revisão visual |
+| P0-05 SEO técnico | Concluída | Rich Results Test após deploy |
+| P0-06 hidratação | Concluída para as rotas previstas | Lighthouse/TBT após deploy |
+| P0-07 acessibilidade | Correções críticas concluídas | Auditoria manual e Lighthouse a11y |
+| P1-01 a P1-03 | Vitest, CI e Biome concluídos | Ativar proteção da branch no GitHub |
+
 ---
 
 ## 1. Sumário Executivo

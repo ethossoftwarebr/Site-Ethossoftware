@@ -1,12 +1,14 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 
 const WA_URL = "https://wa.me/556294667304?text=Olá! Vim pelo site da Ethos Software e gostaria de conversar sobre um projeto.";
 
 export default function WhatsAppButton() {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <motion.div
-      initial={{ scale: 0, opacity: 0 }}
+      initial={shouldReduceMotion ? false : { scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ 
         type: "spring",
@@ -27,7 +29,7 @@ export default function WhatsAppButton() {
           Fale no WhatsApp
         </span>
         <MessageCircle className="w-7 h-7" />
-        <span className="absolute inset-0 rounded-full border-2 border-[#25D366] animate-ping opacity-75"></span>
+        <span className="absolute inset-0 rounded-full border-2 border-[#25D366] motion-safe:animate-ping opacity-75"></span>
       </a>
     </motion.div>
   );

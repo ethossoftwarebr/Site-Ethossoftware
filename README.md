@@ -16,17 +16,27 @@ Site institucional da [Ethos Software](https://ethossoftware.com.br), construíd
 
 ## Setup
 
+Requisitos: Node.js 24 e pnpm 10.33.0.
+
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
 pnpm dev        # http://localhost:4321
 ```
 
-## Build
+Copie `.env.example` para `.env` e preencha apenas as variáveis necessárias no ambiente local.
+
+## Qualidade e build
 
 ```bash
-pnpm build      # output → .vercel/output/
-pnpm preview    # preview built site locally
+pnpm check      # tipos TypeScript e componentes Astro
+pnpm lint       # análise estática com Biome
+pnpm test       # testes unitários com Vitest
+pnpm build      # build de produção → .vercel/output/
+pnpm validate   # executa todos os gates acima
+pnpm preview    # preview local do build
 ```
+
+O mesmo pipeline roda no GitHub Actions em pull requests e em pushes para `main`.
 
 ## Deploy
 
@@ -41,6 +51,12 @@ Vercel via `@astrojs/vercel` adapter (hybrid: static pages + serverless function
 pnpm perf:lh             # Lighthouse mobile (rotas: home, servicos, portfolio, 404)
 pnpm perf:compare:cross  # Comparar vs baselines commitados
 pnpm perf:baseline       # Snapshot baselines → lighthouse-baselines/
+```
+
+No WSL, se o Chrome não for detectado automaticamente, informe um executável Linux compatível:
+
+```bash
+LH_CHROME_PATH=/caminho/para/chrome pnpm perf:lh
 ```
 
 ## Histórico de specs

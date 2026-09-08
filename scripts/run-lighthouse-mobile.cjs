@@ -5,8 +5,9 @@
 //   LH_ROUTES     — comma-separated route names (default: "home,servicos,portfolio,404")
 //   LH_OUT_DIR    — output directory (default: "dist")
 //   LH_OUT_PREFIX — output file prefix (default: "lighthouse-final")
-const fs = require('fs');
-const path = require('path');
+//   LH_CHROME_PATH — optional explicit Chrome/Chromium executable
+const fs = require('node:fs');
+const path = require('node:path');
 
 async function main() {
   const lighthouseModule = await import('lighthouse');
@@ -37,6 +38,7 @@ async function main() {
     const runs = [];
     for (let i = 0; i < NUM_RUNS; i++) {
       const chrome = await chromeLauncher.launch({
+        chromePath: process.env.LH_CHROME_PATH,
         chromeFlags: ['--headless=new', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
       });
       try {
@@ -65,7 +67,7 @@ async function main() {
             },
           }
         );
-        if (result && result.lhr) {
+        if (result?.lhr) {
           runs.push(result.lhr);
           const s = Math.round((result.lhr.categories.performance.score || 0) * 100);
           const lcp = Math.round(result.lhr.audits['largest-contentful-paint']?.numericValue || 0);
@@ -77,7 +79,7 @@ async function main() {
         // chrome-launcher's destroyTmp() races with Chrome on Windows and throws EPERM
         // when temp dir lock files are still held. Swallow — process exits cleanly anyway
         // and TEMP gets gc'd by Windows.
-        try { await chrome.kill(); } catch (e) { /* ignore EPERM/lock errors on Windows */ }
+        try { chrome.kill(); } catch { /* ignore EPERM/lock errors on Windows */ }
       }
     }
     if (runs.length === 0) {

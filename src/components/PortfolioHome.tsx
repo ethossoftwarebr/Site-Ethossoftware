@@ -68,6 +68,7 @@ export default function PortfolioHome() {
           {/* Scroll arrows */}
           <div className="flex gap-3 flex-shrink-0">
             <button
+              type="button"
               onClick={scrollLeft}
               disabled={!canScrollLeft}
               data-testid="button-carousel-prev"
@@ -76,6 +77,7 @@ export default function PortfolioHome() {
               <ArrowLeft className="w-5 h-5" />
             </button>
             <button
+              type="button"
               onClick={scrollRight}
               disabled={!canScrollRight}
               data-testid="button-carousel-next"
@@ -219,6 +221,7 @@ export default function PortfolioHome() {
               {/* Details panel */}
               <div className="flex flex-col p-6 md:p-8 overflow-y-auto flex-1 relative">
                 <button
+                  type="button"
                   onClick={() => setSelected(null)}
                   data-testid="button-close-modal"
                   className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-secondary hover:bg-[#A229F2]/10 hover:text-[#A229F2] transition-colors"
@@ -246,6 +249,7 @@ export default function PortfolioHome() {
                 </div>
 
                 <button
+                  type="button"
                   onClick={() =>
                     window.open(
                       `${WA_BASE}${encodeURIComponent(selected.title)} no portfólio da Ethos Software e quero algo similar.`,

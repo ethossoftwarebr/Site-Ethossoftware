@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
-import { z } from "zod";
 import { SYSTEM_PROMPT } from "@/lib/chat-content";
+import { chatBodySchema } from "@/lib/chat-schema";
 
 export const prerender = false;
 
@@ -15,15 +15,6 @@ const ORIGIN_ALLOWLIST = new Set([
   "https://www.ethossoftware.com.br",
   "http://localhost:4321",
 ]);
-
-const MessageSchema = z.object({
-  role: z.enum(["user", "assistant"]),
-  content: z.string().min(1).max(1500),
-});
-
-const BodySchema = z.object({
-  messages: z.array(MessageSchema).min(1).max(20),
-});
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -44,7 +35,7 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: "invalid JSON body" }, 400);
   }
 
-  const parsed = BodySchema.safeParse(raw);
+  const parsed = chatBodySchema.safeParse(raw);
   if (!parsed.success) {
     return json(
       { error: "invalid body", details: parsed.error.flatten() },

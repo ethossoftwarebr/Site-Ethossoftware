@@ -1,95 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { GradientCard } from "@/components/ui/gradient-card";
 import {
-  Globe,
-  ShoppingCart,
-  Bot,
-  Code2,
-  Smartphone,
-  BriefcaseBusiness,
-  Zap,
-  Database,
   X,
   Server,
   Layers,
   type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
-
-const services = [
-  {
-    title: "Sites Institucionais",
-    description:
-      "Criamos a presença digital perfeita para qualquer tipo de ramo, com design moderno e responsivo.",
-    fullDescription:
-      "Ter um site não é mais um luxo, é o requisito mínimo para transmitir confiança. Desenvolvemos sites institucionais ultra rápidos, otimizados para o Google (SEO) e que refletem exatamente a essência da sua marca, transformando visitantes em clientes reais.",
-    icon: Globe,
-    color: "text-[#A229F2]",
-  },
-  {
-    title: "Páginas de Vendas",
-    description:
-      "Landing pages e Marketplaces completos otimizados para maximizar suas conversões e vendas online.",
-    fullDescription:
-      "Sua página de vendas é o seu melhor vendedor, pois trabalha 24h por dia. Construímos Landing Pages com foco absoluto em conversão (Copywriting visual, carregamento instantâneo e design focado na ação), ideais para lançamentos, infoprodutos e captação de leads.",
-    icon: ShoppingCart,
-    color: "text-[#531B8C]",
-  },
-  {
-    title: "Automações com IA",
-    description:
-      "Bots de atendimento inteligente e automações que trabalham para o seu negócio 24 horas por dia.",
-    fullDescription:
-      "A Inteligência Artificial chegou para revolucionar o atendimento. Criamos robôs que respondem seus clientes no WhatsApp e Instagram como se fossem humanos, qualificam leads, agendam reuniões e tiram dúvidas de forma instantânea, reduzindo custos e aumentando vendas.",
-    icon: Bot,
-    color: "text-[#A229F2]",
-  },
-  {
-    title: "Criação de SaaS",
-    description:
-      "Desenvolvemos plataformas e softwares como serviço robustos, escaláveis e seguros.",
-    fullDescription:
-      "Tem uma ideia inovadora? Nós construímos o seu Software as a Service (SaaS). Desde o banco de dados até a interface do usuário, cuidamos de toda a engenharia de software para que você tenha um sistema seguro, preparado para receber milhares de usuários e faturar no modelo de recorrência.",
-    icon: Database,
-    color: "text-[#531B8C]",
-  },
-  {
-    title: "APIs e Integrações",
-    description:
-      "Integrações personalizadas para conectar todos os sistemas que sua empresa já utiliza.",
-    fullDescription:
-      "Elimine o trabalho manual e repetitivo. Nós conectamos os sistemas que você já usa (CRMs, ERPs, gateways de pagamento, plataformas de e-mail) através de APIs, fazendo com que as informações fluam automaticamente entre eles sem intervenção humana.",
-    icon: Code2,
-    color: "text-[#A229F2]",
-  },
-  {
-    title: "Aplicativos Mobile",
-    description:
-      "Criação de apps em APK e publicação nas lojas oficiais Google Play e AppStore.",
-    fullDescription:
-      "Coloque sua empresa no bolso do seu cliente. Desenvolvemos aplicativos nativos e híbridos de alta performance. Cuidamos de todo o processo, desde a concepção do layout, desenvolvimento, até a aprovação burocrática nas lojas de aplicativos da Apple e do Google.",
-    icon: Smartphone,
-    color: "text-[#531B8C]",
-  },
-  {
-    title: "Softwares Personalizados",
-    description:
-      "Sistemas sob medida para a gestão eficiente da sua empresa, integrando todos os processos internos.",
-    fullDescription:
-      "Se os softwares de prateleira não atendem sua operação, nós criamos um do zero para você. Sistemas de gestão de estoque, controle de RH, painéis de logística ou portais financeiros. Construímos ferramentas exclusivas que se moldam ao seu modelo de negócio, e não o contrário.",
-    icon: BriefcaseBusiness,
-    color: "text-[#A229F2]",
-  },
-  {
-    title: "Performance",
-    description:
-      "Soluções otimizadas focadas em entregar a melhor experiência e velocidade para o usuário final.",
-    fullDescription:
-      "Cada segundo de carregamento perdido significa menos clientes. Aplicamos engenharia de ponta para otimizar servidores, refatorar códigos lentos e garantir que sua aplicação entregue velocidade máxima e nota 100 nas métricas do Google Lighthouse.",
-    icon: Zap,
-    color: "text-[#531B8C]",
-  },
-];
+import { services } from "@/data/services";
 
 // Decorative animated component for the modal
 const ModalIllustration = ({ Icon }: { Icon: LucideIcon }) => (
@@ -207,17 +125,18 @@ export default function ServicesHome() {
                 </motion.div>
 
                 <h3 className="text-xl font-bold text-white mb-3 tracking-tight group-hover:text-[#BA66F2] transition-colors duration-300">
-                  {service.title}
+                  {service.label}
                 </h3>
 
                 <p className="text-white/55 leading-snug text-sm">
-                  {service.description}
+                  {service.homeDescription}
                 </p>
               </div>
 
               <div className="mt-6 flex items-center text-sm font-semibold text-[#A229F2] opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-400">
                 Saiba mais
                 <svg
+                  aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
@@ -258,6 +177,7 @@ export default function ServicesHome() {
               </div>
               <div className="p-5 sm:p-6 md:p-10 md:w-7/12 flex flex-col relative flex-1 overflow-y-auto bg-card">
                 <button
+                  type="button"
                   onClick={() => setSelectedService(null)}
                   className="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 w-8 h-8 flex items-center justify-center rounded-full bg-secondary hover:bg-[#A229F2]/10 hover:text-[#A229F2] transition-colors z-10"
                 >
@@ -279,21 +199,22 @@ export default function ServicesHome() {
                 </div>
 
                 <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-foreground mb-2 sm:mb-4 pr-8">
-                  {selectedService.title}
+                  {selectedService.label}
                 </h3>
 
                 <div className="w-10 sm:w-12 h-1 bg-gradient-to-r from-[#A229F2] to-[#531B8C] mb-4 sm:mb-6 rounded-full" />
 
                 <p className="text-muted-foreground leading-relaxed text-sm sm:text-base md:text-lg mb-6 sm:mb-8 flex-1">
-                  {selectedService.fullDescription}
+                  {selectedService.description}
                 </p>
 
                 <button
+                  type="button"
                   onClick={() => {
                     setSelectedService(null);
                     window.open(
                       "https://wa.me/556294667304?text=Olá! Gostaria de saber mais sobre as soluções de " +
-                        selectedService.title +
+                        selectedService.label +
                         " da Ethos Software.",
                       "_blank",
                     );

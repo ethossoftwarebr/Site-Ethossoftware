@@ -1,4 +1,9 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -83,6 +88,7 @@ const floatingIcons = [
 ];
 
 export default function Hero() {
+  const shouldReduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -104,7 +110,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(162,41,242,0.03)_1px,transparent_1px)] bg-[length:24px_24px] pointer-events-none" />
       {/* Floating Animated Icons with Parallax */}
       <motion.div
-        style={{ y, opacity }}
+        style={shouldReduceMotion ? undefined : { y, opacity }}
         className="absolute inset-0 pointer-events-none"
       >
         {floatingIcons.map((item, index) => (
@@ -118,11 +124,15 @@ export default function Hero() {
               width: item.size * 2,
               height: item.size * 2,
             }}
-            animate={{
-              y: [0, -30, 0],
-              rotate: [0, 15, -15, 0],
-              scale: [1, 1.1, 1],
-            }}
+            animate={
+              shouldReduceMotion
+                ? undefined
+                : {
+                    y: [0, -30, 0],
+                    rotate: [0, 15, -15, 0],
+                    scale: [1, 1.1, 1],
+                  }
+            }
             transition={{
               duration: 6,
               repeat: Infinity,
@@ -136,7 +146,7 @@ export default function Hero() {
         ))}
       </motion.div>
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="max-w-5xl mx-auto px-4 relative z-10"

@@ -143,7 +143,7 @@ export function AuroraBackground({ className = "" }: AuroraBackgroundProps) {
           const dt = Math.min((now - last) / 1000, 0.05);
           material.uniforms.iTime.value += dt;
           last = now;
-          renderer!.render(scene, camera);
+          renderer?.render(scene, camera);
         };
 
         const startLoop = () => {

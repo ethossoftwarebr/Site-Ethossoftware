@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetFooter } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { MenuToggle } from "@/components/ui/menu-toggle";
 import { cn } from "@/lib/utils";
 import logoEthos from "@/assets/brand/Captura_de_tela_2026-02-26_010155-removebg-preview_1772078653004.png";
@@ -74,7 +79,11 @@ function useActiveSection(enabled: boolean) {
       observers.push(observer);
     });
 
-    return () => observers.forEach((o) => o.disconnect());
+    return () => {
+      observers.forEach((observer) => {
+        observer.disconnect();
+      });
+    };
   }, [enabled]);
 
   return activeSection;
@@ -215,6 +224,7 @@ export default function Navbar() {
           {/* Mobile: hamburger */}
           <div className="lg:hidden flex items-center gap-1">
             <button
+              type="button"
               className={`flex items-center justify-center w-9 h-9 rounded-md border transition-colors duration-300 ${
                 isTransparent
                   ? "border-white/30 text-white"
@@ -237,6 +247,7 @@ export default function Navbar() {
           hideClose
           className="bg-card supports-[backdrop-filter]:bg-card/95 backdrop-blur-lg flex flex-col gap-0 p-0 w-72 border-r border-border"
         >
+          <SheetTitle className="sr-only">Menu de navegação</SheetTitle>
           <div className="flex items-center gap-1 px-4 pt-5 pb-4 border-b border-border">
             <img
               src={logoEthos.src}

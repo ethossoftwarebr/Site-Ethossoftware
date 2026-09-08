@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   ChevronRight,
   ChevronLeft,
@@ -23,6 +23,7 @@ import { buildMessage, type WizardData } from "@/lib/wizard-message";
 const WA_NUMBER = "556294667304";
 
 export default function WizardSection() {
+  const shouldReduceMotion = useReducedMotion();
   const [step, setStep] = useState(1);
   const [started, setStarted] = useState(false);
   const [data, setData] = useState<WizardData>({
@@ -37,12 +38,19 @@ export default function WizardSection() {
   });
 
   const TOTAL_STEPS = 7;
-  const progress = ((step - 1) / (TOTAL_STEPS - 1)) * 100;
 
   const currentObjectives =
     objectives[data.profile as keyof typeof objectives] || objectives.empresa;
   const currentSegments = data.profile === "ideia" ? ideaTypes : segments;
   const showStageStep = data.profile === "novo" || data.profile === "ideia";
+  const displayedSteps = showStageStep
+    ? steps
+    : steps.filter((item) => item.id !== 3);
+  const displayedStepIndex = displayedSteps.findIndex((item) => item.id === step);
+  const progress =
+    displayedStepIndex < 0
+      ? 0
+      : (displayedStepIndex / (displayedSteps.length - 1)) * 100;
 
   const canAdvance = () => {
     if (step === 1) return !!data.profile;
@@ -89,10 +97,6 @@ export default function WizardSection() {
         : [...d.solutions, val],
     }));
   };
-
-  const displayedSteps = showStageStep
-    ? steps
-    : steps.filter((s) => s.id !== 3);
 
   if (!started) {
     return (
@@ -157,8 +161,8 @@ export default function WizardSection() {
             </div>
 
             <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.04 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
               onClick={() => setStarted(true)}
               data-testid="button-iniciar-wizard"
               className="inline-flex items-center gap-3 bg-[#A229F2] hover:bg-[#531B8C] text-white font-bold px-10 py-4 rounded-full text-lg shadow-lg shadow-[#A229F2]/30 transition-colors"
@@ -203,14 +207,12 @@ export default function WizardSection() {
               <div className="flex justify-between mb-2 gap-1">
                 {displayedSteps.map((s, idx) => {
                   const displayId = idx + 1;
-                  const isDone =
-                    step > (showStageStep ? s.id : s.id > 2 ? s.id - 1 : s.id);
-                  const isCurrent =
-                    step ===
-                    (showStageStep ? s.id : s.id > 2 ? s.id - 1 : s.id);
+                  const isDone = step > s.id;
+                  const isCurrent = step === s.id;
                   return (
                     <div
                       key={s.id}
+                      aria-current={isCurrent ? "step" : undefined}
                       className={`flex flex-col items-center gap-1 flex-1 ${isDone || isCurrent ? "opacity-100" : "opacity-30"} transition-opacity`}
                     >
                       <div
@@ -228,14 +230,21 @@ export default function WizardSection() {
                           displayId
                         )}
                       </div>
-                      <span className="text-white/60 text-[9px] font-medium hidden sm:block text-center">
+                      <span className="text-white/70 text-[8px] sm:text-[9px] font-medium text-center leading-tight">
                         {s.title}
                       </span>
                     </div>
                   );
                 })}
               </div>
-              <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden">
+              <div
+                className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden"
+                role="progressbar"
+                aria-label="Progresso da proposta"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={Math.round(progress)}
+              >
                 <motion.div
                   className="h-full bg-white rounded-full"
                   animate={{ width: `${progress}%` }}
@@ -258,19 +267,22 @@ export default function WizardSection() {
                   transition={{ duration: 0.25 }}
                   className="flex flex-col flex-1"
                 >
-                  <h3 className="text-xl font-bold text-foreground mb-1">
+                  <h3 id="wizard-profile-title" className="text-xl font-bold text-foreground mb-1">
                     Como você se descreve?
                   </h3>
                   <p className="text-muted-foreground text-sm mb-5">
                     Isso nos ajuda a personalizar as próximas perguntas.
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup" aria-labelledby="wizard-profile-title">
                     {profiles.map((p) => {
                       const Icon = p.icon;
                       const sel = data.profile === p.value;
                       return (
                         <button
+                          type="button"
                           key={p.value}
+                          role="radio"
+                          aria-checked={sel}
                           onClick={() =>
                             setData((d) => ({ ...d, profile: p.value }))
                           }
@@ -312,7 +324,7 @@ export default function WizardSection() {
                   transition={{ duration: 0.25 }}
                   className="flex flex-col flex-1"
                 >
-                  <h3 className="text-xl font-bold text-foreground mb-1">
+                  <h3 id="wizard-segment-title" className="text-xl font-bold text-foreground mb-1">
                     {data.profile === "ideia"
                       ? "Que tipo de solução você imagina?"
                       : "Qual é o seu segmento?"}
@@ -320,12 +332,15 @@ export default function WizardSection() {
                   <p className="text-muted-foreground text-sm mb-5">
                     Selecione a opção que melhor descreve seu contexto.
                   </p>
-                  <div className="grid grid-cols-2 gap-2 overflow-y-auto max-h-64">
+                  <div className="grid grid-cols-2 gap-2 overflow-y-auto max-h-64" role="radiogroup" aria-labelledby="wizard-segment-title">
                     {currentSegments.map((s) => {
                       const sel = data.segment === s.label;
                       return (
                         <button
+                          type="button"
                           key={s.label}
+                          role="radio"
+                          aria-checked={sel}
                           onClick={() =>
                             setData((d) => ({
                               ...d,
@@ -355,6 +370,7 @@ export default function WizardSection() {
                     >
                       <input
                         type="text"
+                        aria-label="Descreva seu segmento ou ideia"
                         placeholder="Descreva seu segmento ou ideia..."
                         value={data.segmentCustom}
                         onChange={(e) =>
@@ -364,7 +380,6 @@ export default function WizardSection() {
                           }))
                         }
                         data-testid="input-segment-custom"
-                        autoFocus
                         className="w-full px-4 py-3 rounded-xl border-2 border-[#A229F2] focus:outline-none text-sm"
                       />
                     </motion.div>
@@ -382,7 +397,7 @@ export default function WizardSection() {
                   transition={{ duration: 0.25 }}
                   className="flex flex-col flex-1"
                 >
-                  <h3 className="text-xl font-bold text-foreground mb-1">
+                  <h3 id="wizard-stage-title" className="text-xl font-bold text-foreground mb-1">
                     {data.profile === "empresa"
                       ? "Qual é o porte da sua empresa?"
                       : "Em que estágio você está?"}
@@ -390,7 +405,7 @@ export default function WizardSection() {
                   <p className="text-muted-foreground text-sm mb-5">
                     Isso nos ajuda a entender a escala da solução ideal.
                   </p>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2" role="radiogroup" aria-labelledby="wizard-stage-title">
                     {(data.profile === "empresa"
                       ? companySizes.map((c) => ({
                           label: c.label,
@@ -402,7 +417,10 @@ export default function WizardSection() {
                       const sel = data.stage === val;
                       return (
                         <button
+                          type="button"
                           key={val}
+                          role="radio"
+                          aria-checked={sel}
                           onClick={() => setData((d) => ({ ...d, stage: val }))}
                           data-testid={`button-stage-${val}`}
                           className={`flex items-center justify-between px-4 py-3.5 rounded-xl border-2 text-left transition-all ${sel ? "border-[#A229F2] bg-[#A229F2]/10" : "border-border hover:border-[#A229F2]/40 hover:bg-[#A229F2]/5"}`}
@@ -432,18 +450,21 @@ export default function WizardSection() {
                   transition={{ duration: 0.25 }}
                   className="flex flex-col flex-1"
                 >
-                  <h3 className="text-xl font-bold text-foreground mb-1">
+                  <h3 id="wizard-objective-title" className="text-xl font-bold text-foreground mb-1">
                     Qual é o seu principal objetivo?
                   </h3>
                   <p className="text-muted-foreground text-sm mb-5">
                     O que você mais quer conquistar agora?
                   </p>
-                  <div className="flex flex-col gap-2 overflow-y-auto max-h-64">
+                  <div className="flex flex-col gap-2 overflow-y-auto max-h-64" role="radiogroup" aria-labelledby="wizard-objective-title">
                     {currentObjectives.map((obj) => {
                       const sel = data.objective === obj.label;
                       return (
                         <button
+                          type="button"
                           key={obj.label}
+                          role="radio"
+                          aria-checked={sel}
                           onClick={() =>
                             setData((d) => ({ ...d, objective: obj.label }))
                           }
@@ -478,18 +499,21 @@ export default function WizardSection() {
                   transition={{ duration: 0.25 }}
                   className="flex flex-col flex-1"
                 >
-                  <h3 className="text-xl font-bold text-foreground mb-1">
+                  <h3 id="wizard-solution-title" className="text-xl font-bold text-foreground mb-1">
                     Que tipo de solução você busca?
                   </h3>
                   <p className="text-muted-foreground text-sm mb-5">
                     Pode selecionar mais de uma opção.
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2" role="group" aria-labelledby="wizard-solution-title">
                     {solutionOptions.map((so) => {
                       const sel = data.solutions.includes(so.value);
                       return (
                         <button
+                          type="button"
                           key={so.value}
+                          role="checkbox"
+                          aria-checked={sel}
                           onClick={() => toggleSolution(so.value)}
                           data-testid={`button-sol-${so.value}`}
                           className={`flex items-center gap-2 px-3 py-3 rounded-xl border-2 text-left text-sm font-medium transition-all ${sel ? "border-[#A229F2] bg-[#A229F2]/10 text-[#531B8C]" : "border-border text-muted-foreground hover:border-[#A229F2]/40 hover:bg-[#A229F2]/5"}`}
@@ -517,19 +541,22 @@ export default function WizardSection() {
                   transition={{ duration: 0.25 }}
                   className="flex flex-col flex-1"
                 >
-                  <h3 className="text-xl font-bold text-foreground mb-1">
+                  <h3 id="wizard-budget-title" className="text-xl font-bold text-foreground mb-1">
                     Qual é o seu investimento previsto?
                   </h3>
                   <p className="text-muted-foreground text-sm mb-5">
                     Isso nos ajuda a montar uma proposta que caiba no seu bolso.
                     Sem compromisso.
                   </p>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2" role="radiogroup" aria-labelledby="wizard-budget-title">
                     {budgets.map((b) => {
                       const sel = data.budget === b.value;
                       return (
                         <button
+                          type="button"
                           key={b.value}
+                          role="radio"
+                          aria-checked={sel}
                           onClick={() =>
                             setData((d) => ({ ...d, budget: b.value }))
                           }
@@ -569,11 +596,12 @@ export default function WizardSection() {
                   </div>
 
                   <div className="mb-4">
-                    <label className="text-sm font-semibold text-foreground block mb-2">
+                    <label htmlFor="wizard-name" className="text-sm font-semibold text-foreground block mb-2">
                       Seu nome (opcional)
                     </label>
                     <input
                       type="text"
+                      id="wizard-name"
                       placeholder="Como posso te chamar?"
                       value={data.name}
                       onChange={(e) =>
@@ -606,6 +634,7 @@ export default function WizardSection() {
           {/* Navigation */}
           <div className="bg-card border border-t-0 border-[#A229F2]/10 rounded-b-3xl px-6 md:px-8 py-4 flex items-center justify-between gap-3">
             <button
+              type="button"
               onClick={step === 1 ? () => setStarted(false) : handleBack}
               data-testid="button-wizard-voltar"
               className="flex items-center gap-2 text-muted-foreground hover:text-[#531B8C] font-semibold text-sm transition-colors px-4 py-2.5 rounded-xl hover:bg-[#A229F2]/5"
@@ -616,6 +645,7 @@ export default function WizardSection() {
 
             {step < 7 ? (
               <button
+                type="button"
                 onClick={handleNext}
                 disabled={!canAdvance()}
                 data-testid="button-wizard-proximo"
@@ -626,6 +656,7 @@ export default function WizardSection() {
               </button>
             ) : (
               <button
+                type="button"
                 onClick={handleSend}
                 data-testid="button-wizard-enviar"
                 className="flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold px-6 py-2.5 rounded-xl transition-colors text-sm shadow-lg shadow-green-500/30"

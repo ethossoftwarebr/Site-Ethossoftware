@@ -15,12 +15,25 @@ import FAQ from '@/components/FAQ';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import EthosIA from '@/components/EthosIA';
+import { faqItems } from '@/data/faq';
 import ogImageAsset from '@/assets/brand/image_1772683408265.png';
 
 const title = 'Ethos Software — Desenvolvimento de Software sob Medida';
 const description =
   'Software house em Goiânia: sites de alta conversão, sistemas web, apps mobile e automações com IA. Mais de 40 projetos entregues com 100% de satisfação.';
 const canonical = 'https://ethossoftware.com.br';
+const faqStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: answer,
+    },
+  })),
+};
 ---
 
 <Layout
@@ -28,14 +41,15 @@ const canonical = 'https://ethossoftware.com.br';
   description={description}
   ogImage={ogImageAsset.src}
   canonical={canonical}
+  structuredData={faqStructuredData}
 >
   <main
     class="min-h-screen relative overflow-hidden bg-background selection:bg-[#A229F2]/20 selection:text-[#531B8C]"
   >
-    <div class="absolute top-0 left-[10%] w-[800px] h-[800px] bg-[#A229F2]/20 rounded-full blur-[120px] -z-10"></div>
-    <div class="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-[#531B8C]/10 rounded-full blur-[100px] -z-10"></div>
-    <div class="absolute top-[60%] left-[-20%] w-[900px] h-[900px] bg-[#A229F2]/10 rounded-full blur-[150px] -z-10"></div>
-    <div class="absolute bottom-[10%] right-[-10%] w-[700px] h-[700px] bg-[#531B8C]/20 rounded-full blur-[120px] -z-10"></div>
+    <div aria-hidden="true" class="absolute top-0 left-[10%] w-[800px] h-[800px] bg-[#A229F2]/20 rounded-full blur-[120px] -z-10 pointer-events-none [contain:strict]"></div>
+    <div aria-hidden="true" class="absolute top-[64rem] right-[-10%] w-[600px] h-[600px] bg-[#531B8C]/10 rounded-full blur-[100px] -z-10 pointer-events-none [contain:strict]"></div>
+    <div aria-hidden="true" class="absolute top-[192rem] left-[-20%] w-[900px] h-[900px] bg-[#A229F2]/10 rounded-full blur-[150px] -z-10 pointer-events-none [contain:strict]"></div>
+    <div aria-hidden="true" class="absolute top-[320rem] right-[-10%] w-[700px] h-[700px] bg-[#531B8C]/20 rounded-full blur-[120px] -z-10 pointer-events-none [contain:strict]"></div>
 
     <NavbarIsland client:load />
 

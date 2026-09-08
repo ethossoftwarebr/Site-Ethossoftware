@@ -4,10 +4,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, ArrowLeft, Filter } from "lucide-react";
 import { projects, categories } from "@/data/projects";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import EthosIA from "@/components/EthosIA";
 import { LazyImage } from "@/components/ui/lazy-image";
 
 export default function PortfolioPage() {
@@ -33,13 +29,11 @@ export default function PortfolioPage() {
         aria-hidden="true"
       />
 
-      <Navbar />
-
       {/* Hero */}
       <section className="pt-32 pb-16 md:pt-40 md:pb-20 relative z-10">
         <div className="container mx-auto px-4 text-center">
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
@@ -52,7 +46,7 @@ export default function PortfolioPage() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={false}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#A229F2]/10 border border-[#A229F2]/20 mb-6"
@@ -63,7 +57,7 @@ export default function PortfolioPage() {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-4xl md:text-6xl lg:text-7xl font-black text-foreground mb-6 leading-tight"
@@ -76,7 +70,7 @@ export default function PortfolioPage() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
             className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10"
@@ -87,7 +81,7 @@ export default function PortfolioPage() {
 
           {/* Stats */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
             className="flex flex-wrap justify-center gap-8 md:gap-16 mb-6"
@@ -115,10 +109,17 @@ export default function PortfolioPage() {
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-3 overflow-x-auto pb-1 scrollbar-hide">
             <Filter className="w-4 h-4 text-[#A229F2] flex-shrink-0" />
-            <div className="flex gap-2 flex-nowrap">
+            <div
+              className="flex gap-2 flex-nowrap"
+              role="radiogroup"
+              aria-label="Filtrar projetos por categoria"
+            >
               {categories.map((cat) => (
                 <button
+                  type="button"
                   key={cat}
+                  role="radio"
+                  aria-checked={activeCategory === cat}
                   onClick={() => setActiveCategory(cat)}
                   data-testid={`button-filter-${cat.toLowerCase().replace(/\s+/g, "-")}`}
                   className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-300 ${
@@ -252,6 +253,7 @@ export default function PortfolioPage() {
               Entre em contato e vamos transformar a sua ideia em realidade.
             </p>
             <button
+              type="button"
               onClick={() =>
                 window.open(
                   "https://wa.me/556294667304?text=Olá! Vi o portfólio da Ethos Software e quero conversar sobre um projeto.",
@@ -267,10 +269,6 @@ export default function PortfolioPage() {
           </motion.div>
         </div>
       </section>
-
-      <Footer />
-      <WhatsAppButton />
-      <EthosIA />
     </main>
   );
 }

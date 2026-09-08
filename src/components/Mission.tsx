@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Target, Lightbulb, HeartHandshake, Sparkles, Rocket, Users } from "lucide-react";
+import { Target, HeartHandshake, Sparkles, Rocket } from "lucide-react";
 import { useRef } from "react";
 
 const pillars = [

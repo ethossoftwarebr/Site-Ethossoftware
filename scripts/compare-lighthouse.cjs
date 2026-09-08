@@ -10,8 +10,8 @@
 //
 // Cross-baseline mode (compare client vs astro baselines, both in lighthouse-baselines/):
 //   LH_BASELINE_PREFIX=baseline LH_FINAL_PREFIX=baseline-astro LH_FINAL_DIR=lighthouse-baselines
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const BASELINE_DIR = process.env.LH_BASELINE_DIR ?? 'lighthouse-baselines';
 const BASELINE_PREFIX = process.env.LH_BASELINE_PREFIX ?? 'baseline';
@@ -31,7 +31,7 @@ function metrics(p) {
     FCP: Math.round(a['first-contentful-paint']?.numericValue || 0),
     SI: Math.round(a['speed-index']?.numericValue || 0),
     CLS: a['cumulative-layout-shift']?.numericValue ?? 0,
-    TTI: Math.round(a['interactive']?.numericValue || 0),
+    TTI: Math.round(a.interactive?.numericValue || 0),
     LCP_element: a['largest-contentful-paint-element']?.details?.items?.[0]?.node?.nodeLabel?.slice(0, 60) || null,
   };
 }
@@ -71,7 +71,6 @@ for (const row of rows) {
 }
 
 const finalScores = rows.map(r => r.final.score);
-const finalLCPs = rows.map(r => r.final.LCP);
 const avgScore = finalScores.reduce((s, x) => s + x, 0) / finalScores.length;
 
 // Regression gate: bloqueia se score médio cai > 3 pontos vs baseline
