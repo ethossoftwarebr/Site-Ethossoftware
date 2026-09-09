@@ -25,7 +25,7 @@ export function buildMessage(data: WizardData): string {
       ? data.segmentCustom
       : data.segment;
 
-  return `Olá! Vim pelo site da Ethos Software e gostaria de um projeto 🚀
+  return `Olá! Vim pelo site da Ethos Software e gostaria de um projeto.
 
 *Meu perfil:* ${profile}${segmentDisplay ? `\n*Segmento/Contexto:* ${segmentDisplay}` : ""}${data.stage ? `\n*Estágio atual:* ${data.stage}` : ""}
 

@@ -5,23 +5,18 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0" +
-" hover-elevate active-elevate-2",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        // No hover; primary border (uses hover-elevate)
-        default: "bg-primary text-primary-foreground border border-primary-border",
+        default: "bg-primary text-primary-foreground border border-primary hover:bg-accent",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm border-destructive-border",
-        // Inherits surrounding bg + text color; shadow-xs; no hover
+          "bg-destructive text-destructive-foreground border border-destructive",
         outline:
-          " border [border-color:var(--button-outline)] shadow-xs active:shadow-none ",
-        // Bordered, no hover/shadow; secondary border
+          "border border-input bg-background hover:border-primary hover:text-primary",
         secondary:
-          "border bg-secondary text-secondary-foreground border border-secondary-border ",
-        // No hover; transparent border
-        ghost: "border border-transparent",
+          "border border-border bg-secondary text-secondary-foreground hover:border-primary",
+        ghost: "border border-transparent hover:text-primary",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

@@ -18,7 +18,7 @@ describe("buildMessage", () => {
 
     expect(message).toContain("Tenho uma empresa");
     expect(message).toContain("Site Institucional, E-commerce");
-    expect(message).toContain("R$ 5.000 – R$ 15.000");
+    expect(message).toContain("R$ 5.000 a R$ 15.000");
     expect(message).toContain("*Meu nome:* João");
   });
 

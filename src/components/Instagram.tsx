@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Instagram as InstagramIcon } from "lucide-react";
 
 export default function Instagram() {
   useEffect(() => {
@@ -26,25 +25,23 @@ export default function Instagram() {
           transition={{ duration: 0.7 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#A229F2]/10 border border-[#A229F2]/20 mb-6">
-            <InstagramIcon className="w-4 h-4 text-[#A229F2]" />
-            <span className="text-[#A229F2] font-bold tracking-widest uppercase text-xs">Instagram</span>
+          <div className="inline-flex items-center px-4 py-2 rounded-sm bg-[#8E2DBA]/10 border border-[#8E2DBA]/20 mb-6">
+            <span className="text-[#8E2DBA] font-bold tracking-widest uppercase text-xs">Instagram</span>
           </div>
 
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mt-2 mb-4">
-            Siga-nos no Instagram
+            Acompanhe a Ethos no Instagram
           </h2>
           <p className="text-muted-foreground text-lg mb-2">
-            Acompanhe nossos projetos, bastidores e novidades
+            Projetos, rotina de desenvolvimento e atualizações da empresa.
           </p>
           <a
             href="https://www.instagram.com/ethossoftware"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-[#A229F2] font-semibold hover:text-[#531B8C] transition-colors text-base"
+            className="inline-flex items-center text-[#8E2DBA] font-semibold hover:text-[#67228A] transition-colors text-base"
             data-testid="link-instagram-profile"
           >
-            <InstagramIcon className="w-4 h-4" />
             @ethossoftware
           </a>
         </motion.div>

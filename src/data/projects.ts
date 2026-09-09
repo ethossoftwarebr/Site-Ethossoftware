@@ -19,49 +19,49 @@ export const projects: Project[] = [
   {
     title: "Contacnet Contabilidade",
     category: "Site Institucional",
-    description: "Plataforma web moderna para escritório de contabilidade com foco em inteligência tributária, apresentando design corporativo e navegação intuitiva para atração de novos clientes empresariais.",
+    description: "Site institucional para escritório de contabilidade, com apresentação dos serviços, conteúdo organizado e canais de contato para empresas interessadas.",
     image: projContacnet,
-    tags: ["React", "Tailwind CSS", "SEO Otimizado"]
+    tags: ["React", "Tailwind CSS", "SEO técnico"]
   },
   {
     title: "Daniel Assunção Advogados",
     category: "Portal Jurídico",
-    description: "Site completo para escritório de advocacia especializado em concursos e servidores públicos. Design sóbrio e profissional com área de artigos e captação de leads jurídicos.",
+    description: "Site para escritório de advocacia especializado em concursos e servidores públicos, com apresentação das áreas de atuação, artigos e canais de contato.",
     image: projDaniel,
-    tags: ["UI/UX", "Conversão", "WordPress"]
+    tags: ["UI/UX", "Conteúdo jurídico", "WordPress"]
   },
   {
     title: "I9 Contabilidade",
     category: "Site Institucional",
-    description: "Plataforma contábil digital inteligente e consultiva. Layout corporativo moderno focado em conversão B2B, com apresentação clara de soluções para abertura de empresas e migração contábil.",
+    description: "Site institucional para contabilidade digital, com conteúdo voltado a empresas e apresentação dos serviços de abertura e migração contábil.",
     image: projI9Contabilidade,
-    tags: ["Contabilidade Digital", "Foco em B2B", "Alta Conversão"]
+    tags: ["Contabilidade Digital", "B2B", "Estrutura comercial"]
   },
   {
     title: "Dra. Maria Laura Odontologia",
     category: "Site Profissional",
-    description: "Portal focado em excelência odontológica e estética do sorriso. Design elegante que reflete o cuidado premium, com agendamento direto e apresentação de tratamentos modernos.",
+    description: "Site profissional para clínica odontológica, com apresentação de tratamentos, informações da especialista e acesso direto ao agendamento.",
     image: projMariaLaura,
-    tags: ["Estética", "Design Premium", "Branding"]
+    tags: ["Odontologia", "Identidade visual", "Agendamento"]
   },
   {
     title: "Office Chagas Dashboard",
     category: "CRM & Automação",
-    description: "Painel administrativo de gestão completa com controle de agendamentos, métricas de atendimento em tempo real e administração de múltiplas empresas parceiras. Focado em escalabilidade.",
+    description: "Painel administrativo para controle de agendamentos, acompanhamento de atendimentos e gestão de empresas parceiras em uma única interface.",
     image: projOfficeChagas,
     tags: ["Dashboard SaaS", "Métricas", "Gestão B2B"]
   },
   {
     title: "Espeto Show - Gestão de Bares",
     category: "Sistema de Gestão",
-    description: "Plataforma completa para gestão de bares e restaurantes. Inclui mapa de mesas em tempo real, controle de pedidos no balcão e integração com PDV, melhorando a agilidade do atendimento.",
+    description: "Sistema para bares e restaurantes com mapa de mesas, controle de pedidos no balcão e integração com o ponto de venda.",
     image: projEspetoShow,
     tags: ["Gestão", "PDV", "Tempo Real"]
   },
   {
     title: "Automação com IA & Chatbot",
     category: "Automação com IA",
-    description: "Solução de atendimento inteligente com chatbot treinado para o negócio do cliente, integrado ao WhatsApp e outros canais. Reduz tempo de resposta e aumenta conversões 24/7.",
+    description: "Automação de atendimento com base de conhecimento do cliente e integração com WhatsApp e outros canais definidos no projeto.",
     image: projAutomacaoChatbot,
     tags: ["IA", "Chatbot", "WhatsApp"]
   }

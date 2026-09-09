@@ -1,207 +1,99 @@
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowRight,
-  MessageCircle,
-  Code2,
-  Database,
-  Smartphone,
-  Globe,
-  Cpu,
-  LayoutTemplate,
-  Sparkles,
-  Zap,
-} from "lucide-react";
-import { useRef } from "react";
 
-const floatingIcons = [
+const WHATSAPP_URL =
+  "https://wa.me/556294667304?text=Olá! Gostaria de conversar sobre um projeto com a Ethos Software.";
+
+const capabilities = [
   {
-    Icon: Code2,
-    top: "15%",
-    left: "10%",
-    delay: 0,
-    size: 32,
-    color: "text-[#A229F2]",
+    number: "01",
+    title: "Sites e produtos digitais",
+    description: "Interfaces responsivas e alinhadas ao objetivo do projeto.",
   },
   {
-    Icon: Database,
-    top: "20%",
-    right: "15%",
-    delay: 0.5,
-    size: 40,
-    color: "text-[#531B8C]",
+    number: "02",
+    title: "Sistemas sob medida",
+    description: "Soluções para organizar processos, acessos e informações.",
   },
   {
-    Icon: Smartphone,
-    top: "60%",
-    left: "15%",
-    delay: 1,
-    size: 36,
-    color: "text-[#A229F2]",
-  },
-  {
-    Icon: Globe,
-    top: "65%",
-    right: "10%",
-    delay: 1.5,
-    size: 48,
-    color: "text-[#531B8C]",
-  },
-  {
-    Icon: Cpu,
-    top: "40%",
-    left: "5%",
-    delay: 2,
-    size: 28,
-    color: "text-[#BA66F2]",
-  },
-  {
-    Icon: LayoutTemplate,
-    top: "35%",
-    right: "8%",
-    delay: 2.5,
-    size: 34,
-    color: "text-[#A229F2]",
-  },
-  {
-    Icon: Sparkles,
-    top: "80%",
-    left: "25%",
-    delay: 3,
-    size: 24,
-    color: "text-[#BA66F2]",
-  },
-  {
-    Icon: Zap,
-    top: "10%",
-    right: "25%",
-    delay: 3.5,
-    size: 28,
-    color: "text-[#531B8C]",
+    number: "03",
+    title: "Automações e integrações",
+    description: "Conexão entre ferramentas e redução de tarefas manuais.",
   },
 ];
 
 export default function Hero() {
-  const shouldReduceMotion = useReducedMotion();
-  const containerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
-  const whatsappUrl =
-    "https://wa.me/556294667304?text=Olá! Gostaria de saber mais sobre as soluções da Ethos Software.";
+  const openWhatsApp = () => window.open(WHATSAPP_URL, "_blank");
 
   return (
-    <section
-      ref={containerRef}
-      className="pt-24 pb-24 flex flex-col items-center justify-center text-center relative z-10 min-h-[90vh] overflow-hidden bg-gradient-to-b from-background via-card to-background"
-    >
-      {/* Dynamic Background Elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(162,41,242,0.03)_1px,transparent_1px)] bg-[length:24px_24px] pointer-events-none" />
-      {/* Floating Animated Icons with Parallax */}
-      <motion.div
-        style={shouldReduceMotion ? undefined : { y, opacity }}
-        className="absolute inset-0 pointer-events-none"
-      >
-        {floatingIcons.map((item, index) => (
-          <motion.div
-            key={index}
-            className={`absolute ${item.color}/40 hidden md:flex items-center justify-center bg-white/50 backdrop-blur-sm rounded-2xl border border-white/60 shadow-xl`}
-            style={{
-              top: item.top,
-              left: item.left,
-              right: item.right,
-              width: item.size * 2,
-              height: item.size * 2,
-            }}
-            animate={
-              shouldReduceMotion
-                ? undefined
-                : {
-                    y: [0, -30, 0],
-                    rotate: [0, 15, -15, 0],
-                    scale: [1, 1.1, 1],
-                  }
-            }
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              repeatType: "reverse",
-              delay: item.delay,
-              ease: "easeInOut",
-            }}
-          >
-            <item.Icon size={item.size} />
-          </motion.div>
-        ))}
-      </motion.div>
-      <motion.div
-        initial={false}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="max-w-5xl mx-auto px-4 relative z-10"
-      >
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.6, type: "spring" }}
-          className="inline-flex items-center gap-3 py-2 px-6 rounded-full bg-card text-primary text-sm font-bold mb-10 border border-[#A229F2]/20 shadow-[0_8px_30px_rgba(159,36,232,0.12)] hover:shadow-[0_8px_30px_rgba(159,36,232,0.2)] transition-shadow cursor-default"
-        >
-          <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#A229F2] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-[#A229F2]"></span>
-          </span>
-          Software House em Goiânia · 40+ projetos entregues
-        </motion.div>
+    <section className="relative z-10 border-b border-border bg-[#FBFAFC]">
+      <div className="mx-auto grid min-h-[620px] max-w-7xl grid-cols-1 items-center gap-14 px-4 py-20 md:px-6 lg:grid-cols-12 lg:gap-20 lg:py-24">
+        <div className="lg:col-span-7">
+          <p className="mb-6 text-xs font-bold uppercase tracking-[0.18em] text-[#8E2DBA]">
+            Tecnologia aplicada ao seu negócio
+          </p>
 
-        <h1 className="text-5xl sm:text-[70px] md:text-8xl lg:text-9xl font-black text-foreground mb-8 tracking-tighter leading-[1.1] md:leading-none">
-          Sistemas Inteligentes <br className="hidden sm:block" />
-          <span className="relative inline-block mt-2">
-            <span className="absolute -inset-2 bg-gradient-to-r from-[#A229F2]/20 to-[#531B8C]/20 blur-2xl rounded-full"></span>
-            <span className="relative bg-clip-text text-transparent bg-gradient-to-r from-[#A229F2] via-[#BA66F2] to-[#531B8C] text-[48px] sm:text-[70px] md:text-8xl lg:text-9xl">
-              para escalar seu negócio
-            </span>
-          </span>
-        </h1>
+          <h1 className="max-w-3xl text-[40px] font-bold leading-[1.08] tracking-[-0.035em] text-foreground sm:text-5xl lg:text-[62px]">
+            Soluções digitais construídas para funcionar no dia a dia.
+          </h1>
 
-        <p className="text-muted-foreground mb-10 md:mb-14 max-w-3xl mx-auto font-medium text-[16px] sm:text-[20px] md:text-[24px]">
-          Mais do que código, entregamos{" "}
-          <strong className="text-primary">resultados</strong>. Sites,
-          automações com IA e sistemas que transformam empresas comuns em
-          líderes de mercado.
-        </p>
+          <p className="mt-7 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            A Ethos desenvolve sites, sistemas e automações a partir de um
+            escopo claro, com acompanhamento durante o projeto e responsabilidade
+            sobre o que foi acordado.
+          </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-          <ShinyButton
-            onClick={() => window.open(whatsappUrl, "_blank")}
-            className="w-full sm:w-auto text-xl"
-            style={{ padding: "1rem 2.5rem" }}
-          >
-            Começar Meu Projeto
-            <ArrowRight className="w-6 h-6" />
-          </ShinyButton>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <ShinyButton
+              onClick={openWhatsApp}
+              className="w-full justify-center sm:w-auto"
+              style={{ padding: "0.9rem 1.5rem" }}
+            >
+              Apresentar meu projeto
+            </ShinyButton>
 
-          <Button
-            variant="outline"
-            size="lg"
-            className="w-full sm:w-auto text-xl h-16 px-10 rounded-full border-2 border-[#A229F2]/30 hover:border-[#A229F2] bg-card hover:bg-[#A229F2]/5 text-foreground shadow-lg transition-all duration-300 hover:-translate-y-1"
-            onClick={() => window.open(whatsappUrl, "_blank")}
-          >
-            Falar com Especialista
-            <MessageCircle className="ml-3 w-6 h-6 text-[#A229F2]" />
-          </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="h-auto w-full border-border bg-transparent px-6 py-3.5 text-base text-foreground hover:border-primary hover:bg-secondary sm:w-auto"
+              onClick={() => {
+                window.location.href = "/portfolio";
+              }}
+            >
+              Conhecer o portfólio
+            </Button>
+          </div>
         </div>
-      </motion.div>
+
+        <aside className="lg:col-span-5" aria-label="Principais áreas de atuação">
+          <div className="border-t-[3px] border-[#8E2DBA]">
+            <div className="border-b border-border py-5">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                Áreas de atuação
+              </p>
+            </div>
+
+            {capabilities.map((capability) => (
+              <div
+                key={capability.number}
+                className="grid grid-cols-[2rem_1fr] gap-4 border-b border-border py-5"
+              >
+                <span className="pt-1 text-[11px] font-bold text-[#8E2DBA]">
+                  {capability.number}
+                </span>
+                <div>
+                  <h2 className="text-base font-semibold text-foreground">
+                    {capability.title}
+                  </h2>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    {capability.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </aside>
+      </div>
     </section>
   );
 }

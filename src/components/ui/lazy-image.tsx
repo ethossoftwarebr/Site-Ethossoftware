@@ -1,7 +1,7 @@
 import { forwardRef, type ImgHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-/** Preferred codec order for `<picture>` — browser picks the first supported format. */
+/** Preferred codec order for `<picture>`, browser picks the first supported format. */
 const FORMAT_ORDER = ["avif", "webp", "jpg", "jpeg", "png"];
 
 /**
@@ -23,9 +23,9 @@ interface LazyImageProps
   extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "loading"> {
   src: LazyImageSrc;
   alt: string;
-  /** Width in pixels — used to compute aspect-ratio (CLS=0). Required for `string` src. */
+  /** Width in pixels, used to compute aspect-ratio (CLS=0). Required for `string` src. */
   width?: number;
-  /** Height in pixels — used to compute aspect-ratio (CLS=0). Required for `string` src. */
+  /** Height in pixels, used to compute aspect-ratio (CLS=0). Required for `string` src. */
   height?: number;
   /** Above-the-fold images. `true` => eager + high fetchpriority. */
   priority?: boolean;
@@ -40,7 +40,7 @@ function isPicture(src: LazyImageSrc): src is PictureSource {
 }
 
 /**
- * <LazyImage> — drop-in replacement for `<img>` that:
+ * <LazyImage>, drop-in replacement for `<img>` that:
  * - Accepts both plain string `src` and `vite-imagetools` `?as=picture` output
  * - Renders `<picture>` with AVIF + WebP sources + fallback when given Picture object
  * - Sets `aspect-ratio` CSS to reserve layout space (eliminates CLS)

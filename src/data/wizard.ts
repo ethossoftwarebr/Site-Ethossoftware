@@ -1,38 +1,22 @@
-import {
-  Building2,
-  Users,
-  Lightbulb,
-  Wrench,
-  DollarSign,
-  Send,
-  User,
-  Rocket,
-  Laptop,
-} from "lucide-react";
-
 export const profiles = [
   {
     label: "Tenho uma empresa",
     value: "empresa",
-    icon: Building2,
     desc: "Já possuo um negócio ativo",
   },
   {
     label: "Vou abrir um negócio",
     value: "novo",
-    icon: Rocket,
     desc: "Estou planejando minha empresa",
   },
   {
     label: "Tenho uma ideia de app/sistema",
     value: "ideia",
-    icon: Laptop,
     desc: "Quero criar algo do zero",
   },
   {
     label: "Sou pessoa física",
     value: "pessoa",
-    icon: User,
     desc: "Freelancer, profissional autônomo",
   },
 ];
@@ -82,36 +66,36 @@ export const businessStages = [
 
 export const objectives = {
   empresa: [
-    { label: "Atrair mais clientes online", icon: "📈" },
-    { label: "Automatizar processos manuais", icon: "⚙️" },
-    { label: "Organizar a gestão da empresa", icon: "📋" },
-    { label: "Modernizar meu site/sistema atual", icon: "🔄" },
-    { label: "Vender mais pelo digital", icon: "💰" },
-    { label: "Escalar sem contratar mais", icon: "🚀" },
+    { label: "Atrair mais clientes online" },
+    { label: "Automatizar processos manuais" },
+    { label: "Organizar a gestão da empresa" },
+    { label: "Modernizar meu site/sistema atual" },
+    { label: "Vender mais pelo digital" },
+    { label: "Escalar sem contratar mais" },
   ],
   novo: [
-    { label: "Criar presença digital desde o início", icon: "🌐" },
-    { label: "Lançar meu produto/serviço online", icon: "🚀" },
-    { label: "Montar um sistema de gestão", icon: "⚙️" },
-    { label: "Automatizar o atendimento", icon: "🤖" },
-    { label: "Criar uma loja virtual", icon: "🛍️" },
-    { label: "Construir minha marca no digital", icon: "✨" },
+    { label: "Criar presença digital desde o início" },
+    { label: "Lançar meu produto/serviço online" },
+    { label: "Montar um sistema de gestão" },
+    { label: "Automatizar o atendimento" },
+    { label: "Criar uma loja virtual" },
+    { label: "Construir minha marca no digital" },
   ],
   ideia: [
-    { label: "Desenvolver meu MVP rapidamente", icon: "⚡" },
-    { label: "Validar minha ideia com protótipo", icon: "🧪" },
-    { label: "Criar um produto escalável (SaaS)", icon: "📈" },
-    { label: "Automatizar um processo que vi", icon: "⚙️" },
-    { label: "Resolver um problema do mercado", icon: "💡" },
-    { label: "Monetizar minha expertise", icon: "💰" },
+    { label: "Desenvolver meu MVP rapidamente" },
+    { label: "Validar minha ideia com protótipo" },
+    { label: "Criar um produto escalável (SaaS)" },
+    { label: "Automatizar um processo que vi" },
+    { label: "Resolver um problema do mercado" },
+    { label: "Monetizar minha expertise" },
   ],
   pessoa: [
-    { label: "Ter um site/portfólio profissional", icon: "🌐" },
-    { label: "Automatizar meu trabalho repetitivo", icon: "⚙️" },
-    { label: "Criar uma ferramenta para meus clientes", icon: "🛠️" },
-    { label: "Aumentar minha renda com tecnologia", icon: "💰" },
-    { label: "Aprender a escalar meu negócio solo", icon: "🚀" },
-    { label: "Organizar meu fluxo de trabalho", icon: "📋" },
+    { label: "Ter um site/portfólio profissional" },
+    { label: "Automatizar meu trabalho repetitivo" },
+    { label: "Criar uma ferramenta para meus clientes" },
+    { label: "Aumentar minha renda com tecnologia" },
+    { label: "Aprender a escalar meu negócio solo" },
+    { label: "Organizar meu fluxo de trabalho" },
   ],
 };
 
@@ -129,19 +113,19 @@ export const solutionOptions = [
 
 export const budgets = [
   { label: "Até R$ 2.000", value: "ate2k" },
-  { label: "R$ 2.000 – R$ 5.000", value: "2k5k" },
-  { label: "R$ 5.000 – R$ 15.000", value: "5k15k" },
-  { label: "R$ 15.000 – R$ 50.000", value: "15k50k" },
+  { label: "R$ 2.000 a R$ 5.000", value: "2k5k" },
+  { label: "R$ 5.000 a R$ 15.000", value: "5k15k" },
+  { label: "R$ 15.000 a R$ 50.000", value: "15k50k" },
   { label: "Acima de R$ 50.000", value: "50kplus" },
   { label: "Ainda não sei", value: "naosabe" },
 ];
 
 export const steps = [
-  { id: 1, title: "Perfil", icon: User },
-  { id: 2, title: "Contexto", icon: Building2 },
-  { id: 3, title: "Estágio", icon: Users },
-  { id: 4, title: "Objetivo", icon: Lightbulb },
-  { id: 5, title: "Solução", icon: Wrench },
-  { id: 6, title: "Investimento", icon: DollarSign },
-  { id: 7, title: "Enviar", icon: Send },
+  { id: 1, title: "Perfil" },
+  { id: 2, title: "Contexto" },
+  { id: 3, title: "Estágio" },
+  { id: 4, title: "Objetivo" },
+  { id: 5, title: "Solução" },
+  { id: 6, title: "Investimento" },
+  { id: 7, title: "Enviar" },
 ];

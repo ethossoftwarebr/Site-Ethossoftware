@@ -56,7 +56,7 @@ const techIcons: Record<string, { svg: () => JSX.Element; color: string }> = {
     ),
   },
   nextjs: {
-    color: "#FFFFFF",
+    color: "#FBFAFC",
     svg: () => (
       <svg aria-hidden="true" viewBox="0 0 24 24" className="w-full h-full">
         <circle cx="12" cy="12" r="12" fill="#000" />
@@ -103,13 +103,13 @@ const skillsConfig: SkillConfig[] = [
   { id: "tailwind", orbitRadius: 110, size: 40, speed: 0.5, iconType: "tailwind", phaseShift: (4 * Math.PI) / 3, glowColor: "purple", label: "Tailwind CSS", color: "#06B6D4" },
   { id: "node", orbitRadius: 195, size: 48, speed: -0.3, iconType: "node", phaseShift: 0, glowColor: "violet", label: "Node.js", color: "#339933" },
   { id: "python", orbitRadius: 195, size: 44, speed: -0.3, iconType: "python", phaseShift: Math.PI / 2, glowColor: "violet", label: "Python", color: "#3776AB" },
-  { id: "nextjs", orbitRadius: 195, size: 44, speed: -0.3, iconType: "nextjs", phaseShift: Math.PI, glowColor: "violet", label: "Next.js", color: "#FFFFFF" },
+  { id: "nextjs", orbitRadius: 195, size: 44, speed: -0.3, iconType: "nextjs", phaseShift: Math.PI, glowColor: "violet", label: "Next.js", color: "#FBFAFC" },
   { id: "reactnative", orbitRadius: 195, size: 42, speed: -0.3, iconType: "reactnative", phaseShift: (3 * Math.PI) / 2, glowColor: "violet", label: "React Native", color: "#61DAFB" },
 ];
 
 const OrbitingSkill = memo(({ config, angle }: { config: SkillConfig; angle: number }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const { orbitRadius, size, iconType, label, color } = config;
+  const { orbitRadius, size, iconType, label } = config;
   const x = Math.cos(angle) * orbitRadius;
   const y = Math.sin(angle) * orbitRadius;
   const Icon = techIcons[iconType]?.svg;
@@ -122,12 +122,12 @@ const OrbitingSkill = memo(({ config, angle }: { config: SkillConfig; angle: num
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`relative w-full h-full p-2 bg-[#1a0a2e]/90 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer border border-[#A229F2]/20 ${isHovered ? "scale-125" : ""}`}
-        style={{ boxShadow: isHovered ? `0 0 28px ${color}50, 0 0 55px ${color}20` : "0 4px 15px rgba(0,0,0,0.3)" }}
+        className={`relative w-full h-full p-2 bg-[#FBFAFC] rounded-md flex items-center justify-center transition-all duration-300 cursor-pointer border border-[#D8CCDC] ${isHovered ? "scale-125" : ""}`}
+        style={{ boxShadow: "none" }}
       >
         {Icon && <Icon />}
         {isHovered && (
-          <div className="absolute -bottom-9 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#0a0a1a]/95 backdrop-blur-sm rounded-lg text-xs text-white whitespace-nowrap pointer-events-none border border-[#A229F2]/30 font-medium">
+          <div className="absolute -bottom-9 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#67228A] rounded-lg text-xs text-white whitespace-nowrap pointer-events-none border border-[#76557F] font-medium">
             {label}
           </div>
         )}
@@ -139,13 +139,12 @@ OrbitingSkill.displayName = "OrbitingSkill";
 
 const GlowingOrbitPath = memo(({ radius, glowColor }: { radius: number; glowColor: GlowColor }) => {
   const colors = glowColor === "purple"
-    ? { primary: "rgba(162,41,242,0.35)", secondary: "rgba(162,41,242,0.15)", border: "rgba(162,41,242,0.25)" }
-    : { primary: "rgba(83,27,140,0.35)", secondary: "rgba(83,27,140,0.15)", border: "rgba(186,102,242,0.2)" };
+    ? { border: "rgba(142,45,186,0.35)" }
+    : { border: "rgba(103,34,138,0.35)" };
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none" style={{ width: `${radius * 2}px`, height: `${radius * 2}px` }}>
-      <div className="absolute inset-0 rounded-full animate-pulse" style={{ background: `radial-gradient(circle, transparent 30%, ${colors.secondary} 70%, ${colors.primary} 100%)`, boxShadow: `0 0 50px ${colors.primary}, inset 0 0 50px ${colors.secondary}` }} />
-      <div className="absolute inset-0 rounded-full" style={{ border: `1px solid ${colors.border}` }} />
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md pointer-events-none" style={{ width: `${radius * 2}px`, height: `${radius * 2}px` }}>
+      <div className="absolute inset-0 rounded-md" style={{ border: `1px solid ${colors.border}` }} />
     </div>
   );
 });
@@ -178,17 +177,9 @@ export default function OrbitingSkills() {
         <GlowingOrbitPath radius={110} glowColor="purple" />
         <GlowingOrbitPath radius={195} glowColor="violet" />
 
-        <div className="w-20 h-20 bg-gradient-to-br from-[#531B8C] to-[#1a0a2e] rounded-full flex items-center justify-center z-10 relative shadow-2xl border border-[#A229F2]/30">
-          <div className="absolute inset-0 rounded-full bg-[#A229F2]/20 blur-xl animate-pulse" />
-          <div className="absolute inset-0 rounded-full bg-[#531B8C]/30 blur-2xl animate-pulse" style={{ animationDelay: "1s" }} />
+        <div className="w-20 h-20 bg-[#67228A] rounded-md flex items-center justify-center z-10 relative border border-[#76557F]">
           <div className="relative z-10">
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="url(#ethosGrad)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <defs>
-                <linearGradient id="ethosGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#A229F2" />
-                  <stop offset="100%" stopColor="#BA66F2" />
-                </linearGradient>
-              </defs>
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FBFAFC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="16 18 22 12 16 6" />
               <polyline points="8 6 2 12 8 18" />
             </svg>

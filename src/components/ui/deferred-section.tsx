@@ -10,7 +10,7 @@ interface DeferredSectionProps {
  * Hydration-safe scroll-aware section.
  *
  * Initial state is `shouldRender=true` so the children are present on first paint
- * — this matches the prerendered HTML and prevents React 19 hydration mismatches.
+ *, this matches the prerendered HTML and prevents React 19 hydration mismatches.
  * After hydration, an IntersectionObserver toggles rendering based on viewport
  * proximity: when the section is far from the viewport it unmounts (memory hygiene),
  * and when it approaches again it remounts.

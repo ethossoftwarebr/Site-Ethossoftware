@@ -1,7 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { ShinyButton } from "@/components/ui/shiny-button";
-import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -16,22 +14,14 @@ const WA_URL =
   "https://wa.me/556294667304?text=Olá! Vim pelo site da Ethos Software e quero conversar sobre um projeto.";
 
 const navLinks = [
-  { label: "Soluções", anchor: "services", page: null },
-  { label: "Serviços", anchor: null, page: "/servicos" },
-  { label: "Portfólio", anchor: "portfolio", page: "/portfolio" },
-  { label: "Sobre Nós", anchor: "sobre", page: null },
-];
+  { label: "Início", page: "/", anchor: null },
+  { label: "Serviços", page: "/servicos", anchor: null },
+  { label: "Portfólio", page: "/portfolio", anchor: null },
+  { label: "Empresa", page: null, anchor: "sobre" },
+  { label: "Contato", page: null, anchor: "proposta" },
+] as const;
 
-const SECTION_IDS = ["services", "features", "portfolio", "sobre"];
-const SECTION_TO_ANCHOR: Record<string, string> = {
-  services: "services",
-  features: "services",
-  portfolio: "portfolio",
-  sobre: "sobre",
-};
-
-/* Pages whose hero starts dark — navbar begins transparent with white text */
-const DARK_HERO_PAGES = ["/servicos"];
+const SECTION_IDS = ["sobre", "proposta"];
 
 function useActiveSection(enabled: boolean) {
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -42,47 +32,47 @@ function useActiveSection(enabled: boolean) {
       return;
     }
 
-    const navEl = document.querySelector("nav");
-    const navHeight = navEl ? navEl.getBoundingClientRect().height : 56;
-    const observers: IntersectionObserver[] = [];
     const sectionVisibility: Record<string, number> = {};
+    const observers: IntersectionObserver[] = [];
 
     const updateActive = () => {
-      let best: string | null = null;
-      let bestRatio = 0;
+      let visibleSection: string | null = null;
+      let visibleRatio = 0;
+
       for (const id of SECTION_IDS) {
         const ratio = sectionVisibility[id] ?? 0;
-        if (ratio > bestRatio) {
-          bestRatio = ratio;
-          best = id;
+        if (ratio > visibleRatio) {
+          visibleRatio = ratio;
+          visibleSection = id;
         }
       }
-      setActiveSection(best);
+
+      setActiveSection(visibleSection);
     };
 
-    SECTION_IDS.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
+    for (const id of SECTION_IDS) {
+      const element = document.getElementById(id);
+      if (!element) continue;
+
       const observer = new IntersectionObserver(
         (entries) => {
-          entries.forEach((e) => {
-            sectionVisibility[id] = e.intersectionRatio;
-          });
+          for (const entry of entries) {
+            sectionVisibility[id] = entry.intersectionRatio;
+          }
           updateActive();
         },
         {
-          threshold: Array.from({ length: 21 }, (_, i) => i * 0.05),
-          rootMargin: `-${Math.round(navHeight)}px 0px 0px 0px`,
+          threshold: [0, 0.2, 0.4, 0.6],
+          rootMargin: "-120px 0px -45% 0px",
         },
       );
-      observer.observe(el);
+
+      observer.observe(element);
       observers.push(observer);
-    });
+    }
 
     return () => {
-      observers.forEach((observer) => {
-        observer.disconnect();
-      });
+      for (const observer of observers) observer.disconnect();
     };
   }, [enabled]);
 
@@ -93,105 +83,74 @@ function isLinkActive(
   link: (typeof navLinks)[number],
   activeSection: string | null,
   location: string,
-): boolean {
-  if (link.page && location === link.page) return true;
-  if (link.anchor)
-    return (
-      activeSection !== null && SECTION_TO_ANCHOR[activeSection] === link.anchor
-    );
-  return false;
+) {
+  if (link.anchor) return location === "/" && activeSection === link.anchor;
+  if (link.page === "/") return location === "/" && activeSection === null;
+  return link.page === location;
 }
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  // SSR-safe location: default to "/" on server; sync to window.location on mount.
-  const [location, setLocation] = useState<string>("/");
+  const [location, setLocation] = useState("/");
+
   useEffect(() => {
-    if (typeof window !== "undefined") setLocation(window.location.pathname);
+    setLocation(window.location.pathname);
   }, []);
+
   const isHome = location === "/";
-  const hasDarkHero = DARK_HERO_PAGES.includes(location);
   const activeSection = useActiveSection(isHome);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  /* transparent = on dark hero AND not yet scrolled */
-  const isTransparent = hasDarkHero && !scrolled;
-
-  const getHref = (anchor: string | null, page: string | null) => {
-    if (page === "/servicos") return "/servicos";
-    if (page === "/portfolio") return "/portfolio";
-    if (!anchor) return "/";
-    if (anchor === "portfolio") return isHome ? "#portfolio" : "/portfolio";
-    return isHome ? `#${anchor}` : `/#${anchor}`;
+  const getHref = (link: (typeof navLinks)[number]) => {
+    if (link.page) return link.page;
+    return isHome ? `#${link.anchor}` : `/#${link.anchor}`;
   };
+
+  const openWhatsApp = () => window.open(WA_URL, "_blank");
 
   return (
     <>
-      <motion.header
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className={`fixed top-0 left-0 right-0 z-50 w-full border-b transition-colors duration-300 ${
-          isTransparent
-            ? "bg-transparent border-white/10 backdrop-blur-none"
-            : "bg-background/95 supports-[backdrop-filter]:bg-background/90 backdrop-blur-lg border-border shadow-sm"
-        }`}
-      >
-        <nav className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between px-4">
-          {/* Logo */}
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-[#FBFAFC]">
+        <div className="h-1 bg-[#8E2DBA]" aria-hidden="true" />
+
+        <nav className="mx-auto flex h-[76px] w-full max-w-7xl items-stretch justify-between px-4 md:px-6">
           <a
             href="/"
             data-testid="link-logo-home"
-            className="flex items-center cursor-pointer gap-1"
+            className="flex items-center gap-3 py-3"
+            aria-label="Ethos Software, página inicial"
           >
             <img
               src={logoEthos.src}
-              alt="Ethos Software"
-              className="w-9 h-9 object-contain transition-[filter] duration-300 brightness-0 invert"
+              alt=""
+              className="h-11 w-11 shrink-0 object-contain"
             />
-            <span
-              className={`font-bold tracking-tight text-[19px] transition-colors duration-300 ${
-                isTransparent ? "text-white" : "text-white"
-              }`}
-            >
+            <span className="whitespace-nowrap text-xl font-bold leading-none tracking-[-0.02em] text-foreground">
               Ethos Software
             </span>
           </a>
 
-          {/* Desktop links */}
-          <div className="hidden items-center gap-1 lg:flex">
+          <div className="hidden items-stretch lg:flex">
             {navLinks.map((link) => {
               const active = isLinkActive(link, activeSection, location);
+
               return (
                 <a
                   key={link.label}
-                  href={getHref(link.anchor, link.page)}
+                  href={getHref(link)}
                   data-testid={`link-nav-${link.page ?? link.anchor}`}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
-                    buttonVariants({ variant: "ghost" }),
-                    "relative font-medium text-[15px] transition-colors duration-300",
-                    isTransparent
-                      ? active
-                        ? "text-white hover:text-white hover:bg-white/10"
-                        : "text-white/80 hover:text-white hover:bg-white/10"
-                      : active
-                        ? "text-primary"
-                        : "text-foreground/80 hover:text-foreground",
+                    "relative flex items-center px-4 text-[14px] font-medium transition-colors",
+                    active
+                      ? "text-primary"
+                      : "text-foreground/75 hover:text-primary",
                   )}
                 >
                   {link.label}
                   {active && (
                     <span
-                      className={`absolute bottom-1.5 left-3 right-3 h-0.5 rounded-full transition-colors duration-300 ${
-                        isTransparent ? "bg-white" : "bg-primary"
-                      }`}
+                      className="absolute inset-x-4 bottom-0 h-[3px] bg-[#8E2DBA]"
+                      aria-hidden="true"
                     />
                   )}
                 </a>
@@ -199,99 +158,93 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Desktop CTA */}
-          <div className="hidden lg:flex items-center gap-2">
-            {isTransparent ? (
-              <Button
-                onClick={() => window.open(WA_URL, "_blank")}
-                data-testid="button-falar-especialista-navbar"
-                variant="outline"
-                className="text-[14px] border-white/40 text-white bg-white/10 hover:bg-white/20 hover:text-white hover:border-white/60"
-              >
-                Falar com Especialista
-              </Button>
-            ) : (
-              <ShinyButton
-                onClick={() => window.open(WA_URL, "_blank")}
-                data-testid="button-falar-especialista-navbar"
-                className="text-[14px]"
-              >
-                Falar com Especialista
-              </ShinyButton>
-            )}
+          <div className="hidden items-center lg:flex">
+            <ShinyButton
+              onClick={openWhatsApp}
+              data-testid="button-falar-especialista-navbar"
+              className="text-[14px]"
+              style={{ padding: "0.75rem 1.25rem" }}
+            >
+              Falar com a equipe
+            </ShinyButton>
           </div>
 
-          {/* Mobile: hamburger */}
-          <div className="lg:hidden flex items-center gap-1">
+          <div className="flex items-center lg:hidden">
             <button
               type="button"
-              className={`flex items-center justify-center w-9 h-9 rounded-md border transition-colors duration-300 ${
-                isTransparent
-                  ? "border-white/30 text-white"
-                  : "border-border text-foreground"
-              }`}
-              onClick={() => setOpen(!open)}
+              className="flex h-10 items-center gap-3 rounded-md border border-border px-3 text-sm font-semibold text-foreground hover:border-primary hover:text-primary transition-colors"
+              onClick={() => setOpen(true)}
               data-testid="button-mobile-menu-toggle"
               aria-label="Abrir menu"
+              aria-expanded={open}
             >
-              <MenuToggle strokeWidth={2.5} open={open} />
+              <span>Menu</span>
+              <MenuToggle strokeWidth={2} open={open} />
             </button>
           </div>
         </nav>
-      </motion.header>
+      </header>
 
-      {/* Mobile Sheet */}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
-          side="left"
-          hideClose
-          className="bg-card supports-[backdrop-filter]:bg-card/95 backdrop-blur-lg flex flex-col gap-0 p-0 w-72 border-r border-border"
+          side="right"
+          className="flex w-[88vw] max-w-sm flex-col gap-0 border-l border-border bg-card p-0"
         >
           <SheetTitle className="sr-only">Menu de navegação</SheetTitle>
-          <div className="flex items-center gap-1 px-4 pt-5 pb-4 border-b border-border">
-            <img
-              src={logoEthos.src}
-              alt="Ethos Software"
-              className="w-8 h-8 object-contain brightness-0 invert"
-            />
-            <span className="font-bold text-white text-[17px]">
+          <div className="h-1 bg-[#8E2DBA]" aria-hidden="true" />
+
+          <div className="flex items-center gap-3 border-b border-border px-5 py-5">
+            <img src={logoEthos.src} alt="" className="h-10 w-10 object-contain" />
+            <div className="text-lg font-bold tracking-[-0.02em] text-foreground">
               Ethos Software
-            </span>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-1 px-3 py-4 flex-1 overflow-y-auto">
-            {navLinks.map((link) => {
-              const active = isLinkActive(link, activeSection, location);
-              return (
-                <a
-                  key={link.label}
-                  href={getHref(link.anchor, link.page)}
-                  onClick={() => setOpen(false)}
-                  data-testid={`link-mobile-nav-${link.page ?? link.anchor}`}
-                  className={cn(
-                    buttonVariants({ variant: "ghost" }),
-                    "justify-start text-[15px] font-semibold",
-                    active
-                      ? "text-primary bg-primary/10"
-                      : "text-foreground/80",
-                  )}
-                >
-                  {link.label}
-                </a>
-              );
-            })}
+          <div className="flex flex-1 flex-col px-5 py-6">
+            <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+              Navegação
+            </p>
+            <div className="border-t border-border">
+              {navLinks.map((link, index) => {
+                const active = isLinkActive(link, activeSection, location);
+
+                return (
+                  <a
+                    key={link.label}
+                    href={getHref(link)}
+                    onClick={() => setOpen(false)}
+                    data-testid={`link-mobile-nav-${link.page ?? link.anchor}`}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "flex items-center gap-4 border-b border-border py-4 text-base font-semibold transition-colors",
+                      active
+                        ? "text-primary"
+                        : "text-foreground hover:text-primary",
+                    )}
+                  >
+                    <span className="w-5 text-[10px] font-bold text-muted-foreground">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    {link.label}
+                  </a>
+                );
+              })}
+            </div>
           </div>
 
-          <SheetFooter className="p-4 border-t border-border flex-col sm:flex-col gap-2">
+          <SheetFooter className="flex-col gap-4 border-t border-border bg-[#F3EFF5] p-5 sm:flex-col">
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Apresente a necessidade da sua empresa para nossa equipe.
+            </p>
             <ShinyButton
               onClick={() => {
                 setOpen(false);
-                window.open(WA_URL, "_blank");
+                openWhatsApp();
               }}
               data-testid="button-falar-especialista-mobile"
               className="w-full justify-center text-[15px]"
             >
-              Falar com Especialista
+              Falar com a equipe
             </ShinyButton>
           </SheetFooter>
         </SheetContent>

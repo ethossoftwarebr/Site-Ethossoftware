@@ -66,26 +66,26 @@
 }
 
 :root {
-  --background: 270 50% 5%;
-  --foreground: 260 80% 97%;
-  --card: 265 45% 9%;
-  --card-foreground: 260 80% 97%;
-  --popover: 265 45% 9%;
-  --popover-foreground: 260 80% 97%;
-  --primary: 280 75% 62%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 265 35% 14%;
-  --secondary-foreground: 260 60% 90%;
-  --muted: 265 35% 14%;
-  --muted-foreground: 265 20% 60%;
-  --accent: 265 40% 20%;
-  --accent-foreground: 280 70% 75%;
+  --background: 300 7% 97%;
+  --foreground: 285 8% 16%;
+  --card: 300 8% 99%;
+  --card-foreground: 285 8% 16%;
+  --popover: 300 8% 99%;
+  --popover-foreground: 285 8% 16%;
+  --primary: 283 61% 45%;
+  --primary-foreground: 300 20% 98%;
+  --secondary: 288 18% 92%;
+  --secondary-foreground: 285 10% 20%;
+  --muted: 288 16% 92%;
+  --muted-foreground: 285 5% 40%;
+  --accent: 283 60% 34%;
+  --accent-foreground: 300 20% 98%;
   --destructive: 0 72% 51%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 265 30% 18%;
-  --input: 265 35% 13%;
-  --ring: 280 70% 62%;
-  --radius: 1rem;
+  --destructive-foreground: 300 20% 98%;
+  --border: 288 13% 84%;
+  --input: 288 13% 84%;
+  --ring: 283 61% 45%;
+  --radius: 0.75rem;
 }
 
 @layer base {
@@ -102,56 +102,13 @@
 }
 
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-[#A229F2] to-[#531B8C];
-}
-
-.glass-card {
-  @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
-}
-
-.hero-glow {
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(
-    circle,
-    rgba(159, 36, 232, 0.4) 0%,
-    rgba(89, 22, 139, 0.1) 50%,
-    rgba(255, 255, 255, 0) 70%
-  );
-  border-radius: 50%;
-  filter: blur(60px);
-  z-index: -1;
-  pointer-events: none;
+  @apply text-primary;
 }
 
 /* ── ShinyButton ─────────────────────────────────────────── */
-@property --gradient-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-@property --gradient-percent {
-  syntax: "<percentage>";
-  initial-value: 5%;
-  inherits: false;
-}
-@property --gradient-shine {
-  syntax: "<color>";
-  initial-value: white;
-  inherits: false;
-}
-
 .shiny-cta {
-  --shiny-cta-bg: #531b8c;
-  --shiny-cta-bg-subtle: #3d1470;
-  --shiny-cta-fg: #ffffff;
-  --shiny-cta-highlight: #a229f2;
-  --shiny-cta-highlight-subtle: #ba66f2;
-  --animation: gradient-angle linear infinite;
-  --duration: 3s;
-  --shadow-size: 2px;
-  --transition: 350ms cubic-bezier(0.25, 1, 0.5, 1);
+  --shiny-cta-bg: #67228a;
+  --shiny-cta-fg: #fbfafc;
   isolation: isolate;
   position: relative;
   overflow: hidden;
@@ -160,78 +117,15 @@
   font-size: 1rem;
   line-height: 1.2;
   font-weight: 600;
-  border: 1px solid transparent;
-  border-radius: 360px;
+  border: 1px solid #67228a;
+  border-radius: 10px;
   color: var(--shiny-cta-fg);
-  background:
-    linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box,
-    conic-gradient(
-        from var(--gradient-angle),
-        transparent,
-        var(--shiny-cta-highlight) var(--gradient-percent),
-        var(--gradient-shine) calc(var(--gradient-percent) * 2),
-        var(--shiny-cta-highlight) calc(var(--gradient-percent) * 3),
-        transparent calc(var(--gradient-percent) * 4)
-      )
-      border-box;
-  box-shadow: inset 0 0 0 1px var(--shiny-cta-bg-subtle);
-  transition: var(--transition);
-  transition-property: --gradient-percent, --gradient-shine, box-shadow;
-}
-
-.shiny-cta::before,
-.shiny-cta::after,
-.shiny-cta span::before {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  inset-inline-start: 50%;
-  inset-block-start: 50%;
-  translate: -50% -50%;
-  z-index: -1;
+  background: var(--shiny-cta-bg);
+  transition: background-color 200ms ease, border-color 200ms ease;
 }
 
 .shiny-cta:active {
   translate: 0 1px;
-}
-
-.shiny-cta::before {
-  --size: calc(100% - var(--shadow-size) * 3);
-  --position: 2px;
-  --space: calc(var(--position) * 2);
-  width: var(--size);
-  height: var(--size);
-  background: radial-gradient(
-      circle at var(--position) var(--position),
-      rgba(255, 255, 255, 0.25) calc(var(--position) / 4),
-      transparent 0
-    )
-    padding-box;
-  background-size: var(--space) var(--space);
-  background-repeat: space;
-  mask-image: conic-gradient(
-    from calc(var(--gradient-angle) + 45deg),
-    black,
-    transparent 10% 90%,
-    black
-  );
-  border-radius: inherit;
-  opacity: 0.4;
-  z-index: -1;
-}
-
-.shiny-cta::after {
-  --animation: shimmer-spin linear infinite;
-  width: 100%;
-  aspect-ratio: 1;
-  background: linear-gradient(
-    -50deg,
-    transparent,
-    var(--shiny-cta-highlight),
-    transparent
-  );
-  mask-image: radial-gradient(circle at bottom, transparent 40%, black);
-  opacity: 0.5;
 }
 
 .shiny-cta span {
@@ -240,47 +134,6 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.shiny-cta span::before {
-  --size: calc(100% + 1rem);
-  width: var(--size);
-  height: var(--size);
-  box-shadow: inset 0 -1ex 2rem 4px var(--shiny-cta-highlight);
-  opacity: 0;
-  transition: opacity var(--transition);
-  animation: calc(var(--duration) * 1.5) breathe-glow linear infinite;
-}
-
-.shiny-cta,
-.shiny-cta::before,
-.shiny-cta::after {
-  animation:
-    var(--animation) var(--duration),
-    var(--animation) calc(var(--duration) / 0.4) reverse;
-  animation-composition: add;
-}
-
-@keyframes gradient-angle {
-  to {
-    --gradient-angle: 360deg;
-  }
-}
-
-@keyframes shimmer-spin {
-  to {
-    rotate: 360deg;
-  }
-}
-
-@keyframes breathe-glow {
-  from,
-  to {
-    scale: 1;
-  }
-  50% {
-    scale: 1.2;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

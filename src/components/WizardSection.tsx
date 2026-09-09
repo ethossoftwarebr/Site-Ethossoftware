@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronRight,
   ChevronLeft,
   MessageCircle,
   CheckCircle2,
-  Sparkles,
 } from "lucide-react";
 import {
   profiles,
@@ -23,7 +22,6 @@ import { buildMessage, type WizardData } from "@/lib/wizard-message";
 const WA_NUMBER = "556294667304";
 
 export default function WizardSection() {
-  const shouldReduceMotion = useReducedMotion();
   const [step, setStep] = useState(1);
   const [started, setStarted] = useState(false);
   const [data, setData] = useState<WizardData>({
@@ -109,47 +107,42 @@ export default function WizardSection() {
             transition={{ duration: 0.7 }}
             className="max-w-3xl mx-auto text-center"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#A229F2]/10 border border-[#A229F2]/20 mb-6">
-              <Sparkles className="w-4 h-4 text-[#A229F2]" />
-              <span className="text-[#A229F2] font-bold tracking-widest uppercase text-xs">
-                Proposta Personalizada
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#8E2DBA]/10 border border-[#8E2DBA]/20 mb-6">
+              <span className="text-[#8E2DBA] font-bold tracking-widest uppercase text-xs">
+                Levantamento inicial
               </span>
             </div>
 
             <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
-              Descubra a solução{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A229F2] to-[#531B8C]">
-                ideal para você
+              Organize as informações{" "}
+              <span className="text-primary">
+                do seu projeto
               </span>
             </h2>
             <p className="text-muted-foreground text-lg mb-10 max-w-xl mx-auto">
-              Responda algumas perguntas rápidas e receba uma mensagem
-              personalizada para nossa equipe. Em menos de 2 minutos.
+              Responda algumas perguntas para enviar à nossa equipe o contexto
+              inicial da sua necessidade.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
               {[
                 {
-                  icon: "🎯",
-                  label: "Personalizado",
-                  desc: "Para o seu perfil específico",
+                  label: "Contexto",
+                  desc: "Informações sobre a necessidade",
                 },
                 {
-                  icon: "⚡",
                   label: "2 minutos",
-                  desc: "Rápido e sem burocracia",
+                  desc: "Preenchimento objetivo",
                 },
                 {
-                  icon: "💬",
                   label: "Sem compromisso",
-                  desc: "Só uma conversa inicial",
+                  desc: "Análise antes da proposta",
                 },
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="bg-card rounded-2xl p-5 border border-[#A229F2]/10 text-center"
+                  className="bg-card rounded-md p-5 border border-[#8E2DBA]/10 text-center"
                 >
-                  <div className="text-3xl mb-2">{item.icon}</div>
                   <div className="font-bold text-foreground text-sm">
                     {item.label}
                   </div>
@@ -160,16 +153,14 @@ export default function WizardSection() {
               ))}
             </div>
 
-            <motion.button
-              whileHover={shouldReduceMotion ? undefined : { scale: 1.04 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+            <button
+              type="button"
               onClick={() => setStarted(true)}
               data-testid="button-iniciar-wizard"
-              className="inline-flex items-center gap-3 bg-[#A229F2] hover:bg-[#531B8C] text-white font-bold px-10 py-4 rounded-full text-lg shadow-lg shadow-[#A229F2]/30 transition-colors"
+              className="inline-flex items-center gap-3 bg-[#8E2DBA] hover:bg-[#67228A] text-white font-bold px-10 py-4 rounded-md text-lg transition-colors"
             >
-              <Sparkles className="w-5 h-5" />
-              Montar minha proposta gratuita
-            </motion.button>
+              Enviar informações para análise
+            </button>
           </motion.div>
         </div>
       </section>
@@ -186,18 +177,14 @@ export default function WizardSection() {
           className="max-w-2xl mx-auto"
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-[#531B8C] to-[#A229F2] rounded-t-3xl p-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="bg-[#67228A] rounded-t-lg p-6 relative overflow-hidden">
             <div className="relative z-10 flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
               <div>
                 <h3 className="text-white font-bold text-lg">
-                  Monte sua proposta personalizada
+                  Informações iniciais do projeto
                 </h3>
                 <p className="text-white/70 text-xs">
-                  Ethos Software — gratuito e sem compromisso
+                  Ethos Software, análise inicial sem compromisso
                 </p>
               </div>
             </div>
@@ -218,7 +205,7 @@ export default function WizardSection() {
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-all ${
                           isDone
-                            ? "bg-white text-[#531B8C]"
+                            ? "bg-white text-[#67228A]"
                             : isCurrent
                               ? "bg-white/30 text-white border border-white"
                               : "bg-white/10 text-white/50"
@@ -255,7 +242,7 @@ export default function WizardSection() {
           </div>
 
           {/* Content */}
-          <div className="bg-card border border-[#A229F2]/10 p-6 md:p-8 min-h-[360px] flex flex-col overflow-hidden">
+          <div className="bg-card border border-[#8E2DBA]/10 p-6 md:p-8 min-h-[360px] flex flex-col overflow-hidden">
             <AnimatePresence mode="wait">
               {/* Step 1: Profile */}
               {step === 1 && (
@@ -275,7 +262,6 @@ export default function WizardSection() {
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup" aria-labelledby="wizard-profile-title">
                     {profiles.map((p) => {
-                      const Icon = p.icon;
                       const sel = data.profile === p.value;
                       return (
                         <button
@@ -287,16 +273,11 @@ export default function WizardSection() {
                             setData((d) => ({ ...d, profile: p.value }))
                           }
                           data-testid={`button-profile-${p.value}`}
-                          className={`flex items-center gap-3 px-4 py-4 rounded-xl border-2 text-left transition-all ${sel ? "border-[#A229F2] bg-[#A229F2]/10" : "border-border hover:border-[#A229F2]/40 hover:bg-[#A229F2]/5"}`}
+                          className={`flex items-center gap-3 px-4 py-4 rounded-md border-2 text-left transition-all ${sel ? "border-[#8E2DBA] bg-[#8E2DBA]/10" : "border-border hover:border-[#8E2DBA]/40 hover:bg-[#8E2DBA]/5"}`}
                         >
-                          <div
-                            className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${sel ? "bg-[#A229F2] text-white" : "bg-secondary text-muted-foreground"}`}
-                          >
-                            <Icon className="w-5 h-5" />
-                          </div>
                           <div>
                             <div
-                              className={`font-semibold text-sm ${sel ? "text-[#531B8C]" : "text-foreground"}`}
+                              className={`font-semibold text-sm ${sel ? "text-[#67228A]" : "text-foreground"}`}
                             >
                               {p.label}
                             </div>
@@ -305,7 +286,7 @@ export default function WizardSection() {
                             </div>
                           </div>
                           {sel && (
-                            <CheckCircle2 className="w-4 h-4 text-[#A229F2] ml-auto flex-shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-[#8E2DBA] ml-auto flex-shrink-0" />
                           )}
                         </button>
                       );
@@ -350,13 +331,13 @@ export default function WizardSection() {
                             }))
                           }
                           data-testid={`button-segment-${s.label}`}
-                          className={`flex items-center gap-2 px-3 py-3 rounded-xl border-2 text-left text-sm font-medium transition-all ${sel ? "border-[#A229F2] bg-[#A229F2]/10 text-[#531B8C]" : "border-border text-muted-foreground hover:border-[#A229F2]/40 hover:bg-[#A229F2]/5"}`}
+                          className={`flex items-center gap-2 px-3 py-3 rounded-md border-2 text-left text-sm font-medium transition-all ${sel ? "border-[#8E2DBA] bg-[#8E2DBA]/10 text-[#67228A]" : "border-border text-muted-foreground hover:border-[#8E2DBA]/40 hover:bg-[#8E2DBA]/5"}`}
                         >
                           <span className="leading-tight flex-1">
                             {s.label}
                           </span>
                           {sel && (
-                            <CheckCircle2 className="w-4 h-4 text-[#A229F2] flex-shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-[#8E2DBA] flex-shrink-0" />
                           )}
                         </button>
                       );
@@ -380,7 +361,7 @@ export default function WizardSection() {
                           }))
                         }
                         data-testid="input-segment-custom"
-                        className="w-full px-4 py-3 rounded-xl border-2 border-[#A229F2] focus:outline-none text-sm"
+                        className="w-full px-4 py-3 rounded-md border-2 border-[#8E2DBA] focus:outline-none text-sm"
                       />
                     </motion.div>
                   )}
@@ -423,15 +404,15 @@ export default function WizardSection() {
                           aria-checked={sel}
                           onClick={() => setData((d) => ({ ...d, stage: val }))}
                           data-testid={`button-stage-${val}`}
-                          className={`flex items-center justify-between px-4 py-3.5 rounded-xl border-2 text-left transition-all ${sel ? "border-[#A229F2] bg-[#A229F2]/10" : "border-border hover:border-[#A229F2]/40 hover:bg-[#A229F2]/5"}`}
+                          className={`flex items-center justify-between px-4 py-3.5 rounded-md border-2 text-left transition-all ${sel ? "border-[#8E2DBA] bg-[#8E2DBA]/10" : "border-border hover:border-[#8E2DBA]/40 hover:bg-[#8E2DBA]/5"}`}
                         >
                           <span
-                            className={`font-semibold text-sm ${sel ? "text-[#531B8C]" : "text-foreground"}`}
+                            className={`font-semibold text-sm ${sel ? "text-[#67228A]" : "text-foreground"}`}
                           >
                             {s.label}
                           </span>
                           {sel && (
-                            <CheckCircle2 className="w-5 h-5 text-[#A229F2] flex-shrink-0" />
+                            <CheckCircle2 className="w-5 h-5 text-[#8E2DBA] flex-shrink-0" />
                           )}
                         </button>
                       );
@@ -469,18 +450,15 @@ export default function WizardSection() {
                             setData((d) => ({ ...d, objective: obj.label }))
                           }
                           data-testid={`button-obj-${currentObjectives.indexOf(obj)}`}
-                          className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 text-left transition-all ${sel ? "border-[#A229F2] bg-[#A229F2]/10" : "border-border hover:border-[#A229F2]/40 hover:bg-[#A229F2]/5"}`}
+                          className={`flex items-center gap-3 px-4 py-3.5 rounded-md border-2 text-left transition-all ${sel ? "border-[#8E2DBA] bg-[#8E2DBA]/10" : "border-border hover:border-[#8E2DBA]/40 hover:bg-[#8E2DBA]/5"}`}
                         >
-                          <span className="text-xl flex-shrink-0">
-                            {obj.icon}
-                          </span>
                           <span
-                            className={`text-sm font-medium leading-snug ${sel ? "text-[#531B8C]" : "text-foreground"}`}
+                            className={`text-sm font-medium leading-snug ${sel ? "text-[#67228A]" : "text-foreground"}`}
                           >
                             {obj.label}
                           </span>
                           {sel && (
-                            <CheckCircle2 className="w-4 h-4 text-[#A229F2] ml-auto flex-shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-[#8E2DBA] ml-auto flex-shrink-0" />
                           )}
                         </button>
                       );
@@ -516,13 +494,13 @@ export default function WizardSection() {
                           aria-checked={sel}
                           onClick={() => toggleSolution(so.value)}
                           data-testid={`button-sol-${so.value}`}
-                          className={`flex items-center gap-2 px-3 py-3 rounded-xl border-2 text-left text-sm font-medium transition-all ${sel ? "border-[#A229F2] bg-[#A229F2]/10 text-[#531B8C]" : "border-border text-muted-foreground hover:border-[#A229F2]/40 hover:bg-[#A229F2]/5"}`}
+                          className={`flex items-center gap-2 px-3 py-3 rounded-md border-2 text-left text-sm font-medium transition-all ${sel ? "border-[#8E2DBA] bg-[#8E2DBA]/10 text-[#67228A]" : "border-border text-muted-foreground hover:border-[#8E2DBA]/40 hover:bg-[#8E2DBA]/5"}`}
                         >
                           <span className="leading-tight flex-1">
                             {so.label}
                           </span>
                           {sel && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#A229F2] flex-shrink-0" />
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#8E2DBA] flex-shrink-0" />
                           )}
                         </button>
                       );
@@ -561,15 +539,15 @@ export default function WizardSection() {
                             setData((d) => ({ ...d, budget: b.value }))
                           }
                           data-testid={`button-budget-${b.value}`}
-                          className={`flex items-center justify-between px-5 py-3.5 rounded-xl border-2 text-left transition-all ${sel ? "border-[#A229F2] bg-[#A229F2]/10" : "border-border hover:border-[#A229F2]/40 hover:bg-[#A229F2]/5"}`}
+                          className={`flex items-center justify-between px-5 py-3.5 rounded-md border-2 text-left transition-all ${sel ? "border-[#8E2DBA] bg-[#8E2DBA]/10" : "border-border hover:border-[#8E2DBA]/40 hover:bg-[#8E2DBA]/5"}`}
                         >
                           <span
-                            className={`font-semibold text-sm ${sel ? "text-[#531B8C]" : "text-foreground"}`}
+                            className={`font-semibold text-sm ${sel ? "text-[#67228A]" : "text-foreground"}`}
                           >
                             {b.label}
                           </span>
                           {sel && (
-                            <CheckCircle2 className="w-5 h-5 text-[#A229F2] flex-shrink-0" />
+                            <CheckCircle2 className="w-5 h-5 text-[#8E2DBA] flex-shrink-0" />
                           )}
                         </button>
                       );
@@ -588,8 +566,7 @@ export default function WizardSection() {
                   transition={{ duration: 0.25 }}
                   className="flex flex-col flex-1"
                 >
-                  <div className="flex items-center gap-2 mb-3">
-                    <Sparkles className="w-5 h-5 text-[#A229F2]" />
+                  <div className="mb-3">
                     <h3 className="text-xl font-bold text-foreground">
                       Sua mensagem está pronta!
                     </h3>
@@ -608,19 +585,19 @@ export default function WizardSection() {
                         setData((d) => ({ ...d, name: e.target.value }))
                       }
                       data-testid="input-name"
-                      className="w-full px-4 py-2.5 rounded-xl border-2 border-border focus:border-[#A229F2] focus:outline-none text-sm transition-colors"
+                      className="w-full px-4 py-2.5 rounded-md border-2 border-border focus:border-[#8E2DBA] focus:outline-none text-sm transition-colors"
                     />
                   </div>
 
-                  <div className="bg-[#E5DDD5] rounded-2xl p-4 flex-1 relative overflow-hidden">
+                  <div className="bg-[#E7E0D5] rounded-md p-4 flex-1 relative overflow-hidden">
                     <div className="relative z-10 flex justify-end">
-                      <div className="bg-[#DCF8C6] rounded-2xl rounded-tr-sm px-4 py-3 max-w-xs shadow-sm">
+                      <div className="bg-[#DCE5D8] rounded-md rounded-tr-sm px-4 py-3 max-w-xs">
                         <pre className="text-foreground text-xs leading-relaxed font-sans whitespace-pre-wrap break-words">
                           {buildMessage(data)}
                         </pre>
                         <div className="flex justify-end mt-1">
                           <span className="text-muted-foreground text-[10px]">
-                            agora ✓✓
+                            agora
                           </span>
                         </div>
                       </div>
@@ -632,12 +609,12 @@ export default function WizardSection() {
           </div>
 
           {/* Navigation */}
-          <div className="bg-card border border-t-0 border-[#A229F2]/10 rounded-b-3xl px-6 md:px-8 py-4 flex items-center justify-between gap-3">
+          <div className="bg-card border border-t-0 border-[#8E2DBA]/10 rounded-b-lg px-6 md:px-8 py-4 flex items-center justify-between gap-3">
             <button
               type="button"
               onClick={step === 1 ? () => setStarted(false) : handleBack}
               data-testid="button-wizard-voltar"
-              className="flex items-center gap-2 text-muted-foreground hover:text-[#531B8C] font-semibold text-sm transition-colors px-4 py-2.5 rounded-xl hover:bg-[#A229F2]/5"
+              className="flex items-center gap-2 text-muted-foreground hover:text-[#67228A] font-semibold text-sm transition-colors px-4 py-2.5 rounded-md hover:bg-[#8E2DBA]/5"
             >
               <ChevronLeft className="w-4 h-4" />
               {step === 1 ? "Cancelar" : "Voltar"}
@@ -649,7 +626,7 @@ export default function WizardSection() {
                 onClick={handleNext}
                 disabled={!canAdvance()}
                 data-testid="button-wizard-proximo"
-                className="flex items-center gap-2 bg-[#A229F2] hover:bg-[#531B8C] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold px-6 py-2.5 rounded-xl transition-colors text-sm"
+                className="flex items-center gap-2 bg-[#8E2DBA] hover:bg-[#67228A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold px-6 py-2.5 rounded-md transition-colors text-sm"
               >
                 Próximo
                 <ChevronRight className="w-4 h-4" />
@@ -659,7 +636,7 @@ export default function WizardSection() {
                 type="button"
                 onClick={handleSend}
                 data-testid="button-wizard-enviar"
-                className="flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold px-6 py-2.5 rounded-xl transition-colors text-sm shadow-lg shadow-green-500/30"
+                className="flex items-center gap-2 bg-[#3E7658] hover:bg-[#315E48] text-white font-bold px-6 py-2.5 rounded-md transition-colors text-sm"
               >
                 <MessageCircle className="w-4 h-4" />
                 Enviar no WhatsApp

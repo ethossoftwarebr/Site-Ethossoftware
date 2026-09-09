@@ -110,11 +110,11 @@ export function AuroraBackground({ className = "" }: AuroraBackgroundProps) {
 
                 float tailNoise = fbm(v + vec2(iTime * 0.5, i)) * 0.3 * (1.0 - (i / 35.0));
 
-                /* Ethos palette: violet–magenta–purple aurora */
+                /* Ethos palette: deep purple and restrained violet */
                 vec4 auroraColors = vec4(
-                  0.35 + 0.35 * sin(i * 0.25 + iTime * 0.4),
-                  0.02 + 0.08 * cos(i * 0.30 + iTime * 0.5),
-                  0.55 + 0.35 * sin(i * 0.40 + iTime * 0.3),
+                  0.40 + 0.15 * sin(i * 0.25 + iTime * 0.4),
+                  0.12 + 0.08 * cos(i * 0.30 + iTime * 0.5),
+                  0.50 + 0.16 * sin(i * 0.40 + iTime * 0.3),
                   1.0
                 );
 
@@ -161,7 +161,7 @@ export function AuroraBackground({ className = "" }: AuroraBackgroundProps) {
 
         startLoop();
 
-        // Pause shader RAF when the hero scrolls offscreen — saves GPU work
+        // Pause shader RAF when the hero scrolls offscreen, saves GPU work
         // when the WebGL canvas isn't visible.
         const io = new IntersectionObserver(
           (entries) => {
@@ -197,7 +197,7 @@ export function AuroraBackground({ className = "" }: AuroraBackgroundProps) {
     };
 
     // Defer heavy three.js bootstrap (~732KB chunk + WebGL setup) until the
-    // user signals engagement (first scroll/touch) OR a 3s timeout fires —
+    // user signals engagement (first scroll/touch) OR a 3s timeout fires ,
     // whichever comes first. This keeps the WebGL chunk strictly outside the
     // LCP measurement window on mobile 4x throttle. The 3s fallback ensures
     // static-viewport users (no scroll) still see the aurora.
@@ -210,7 +210,7 @@ export function AuroraBackground({ className = "" }: AuroraBackgroundProps) {
       initialized = true;
       init().then((fn) => {
         if (cancelled) {
-          // Effect already cleaned up — run any cleanup the init returned.
+          // Effect already cleaned up, run any cleanup the init returned.
           fn?.();
           return;
         }
@@ -230,7 +230,7 @@ export function AuroraBackground({ className = "" }: AuroraBackgroundProps) {
       window.removeEventListener("touchstart", onTouch);
       window.clearTimeout(timeoutId);
       // `cleanup` (returned by `init`) already calls stopLoop() which cancels
-      // the RAF — no need for a separate cancelAnimationFrame here. If init
+      // the RAF, no need for a separate cancelAnimationFrame here. If init
       // never ran (cancelled before scroll/touch/3s), there's no RAF to cancel.
       cleanup?.();
     };
@@ -242,8 +242,7 @@ export function AuroraBackground({ className = "" }: AuroraBackgroundProps) {
         className={`absolute inset-0 pointer-events-none ${className}`}
         aria-hidden="true"
         style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 20% 40%, #531B8C 0%, #2d0e52 35%, #07050f 70%)",
+          background: "#F3EFF5",
         }}
       />
     );

@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Sparkles } from "@/components/Sparkles";
 import { LazyImage } from "@/components/ui/lazy-image";
 import construMais from "@/assets/clients/image_1772062082099.png?w=200;400&format=avif;webp;png&as=picture";
 import advLeite from "@/assets/clients/image_1772062142489.png?w=200;400&format=avif;webp;png&as=picture";
@@ -39,23 +38,10 @@ const clients = [
 
 export default function ClientCarousel() {
   return (
-    <section className="py-8 md:py-12 bg-background border-y border-[#A229F2]/10 overflow-hidden relative z-10">
-      <Sparkles
-        className="absolute inset-0 w-full h-full"
-        color="#A229F2"
-        background="transparent"
-        density={120}
-        size={1.2}
-        minSize={0.4}
-        speed={0.4}
-        minSpeed={0.1}
-        opacity={0.6}
-        minOpacity={0.1}
-        opacitySpeed={1.5}
-      />
+    <section className="py-8 md:py-12 bg-background border-y border-[#8E2DBA]/10 overflow-hidden relative z-10">
       <div className="container mx-auto px-4 mb-4 md:mb-8 text-center relative z-10">
         <p className="text-[10px] md:text-sm font-semibold text-foreground uppercase tracking-widest">
-          Empresas que confiam na Ethos Software
+          Empresas atendidas pela Ethos Software
         </p>
       </div>
 
@@ -81,7 +67,7 @@ export default function ClientCarousel() {
             {[...clients, ...clients].map((client, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 hover:scale-105 transition-all duration-300 w-20 sm:w-28 md:w-48 h-12 md:h-20 flex items-center justify-center bg-background"
+                className="flex-shrink-0 w-20 sm:w-28 md:w-48 h-12 md:h-20 flex items-center justify-center bg-background"
               >
                 <LazyImage
                   src={client.logo}

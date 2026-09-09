@@ -17,7 +17,7 @@ interface SparklesProps {
   speed?: number;
   maxSize?: number;
   maxOpacity?: number;
-  // Compat aliases — accepted for callsite ergonomics; currently unused by the canvas implementation.
+  // Compat aliases, accepted for callsite ergonomics; currently unused by the canvas implementation.
   background?: string;
   size?: number;
   minSize?: number;
@@ -29,7 +29,7 @@ interface SparklesProps {
 
 export function Sparkles({
   className = "",
-  color = "#A229F2",
+  color = "#8E2DBA",
   density = 80,
   speed = 0.3,
   maxSize = 2,
@@ -104,7 +104,7 @@ export function Sparkles({
 
     startLoop();
 
-    // Pause RAF loop when canvas is offscreen — avoids burning a full
+    // Pause RAF loop when canvas is offscreen, avoids burning a full
     // animation frame on a section the user can't see. Particle state is
     // preserved across pause/resume so there's no flicker on re-entry.
     const io = new IntersectionObserver(

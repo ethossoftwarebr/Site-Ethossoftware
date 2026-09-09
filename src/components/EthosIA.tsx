@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Bot, User, ExternalLink, Sparkles } from "lucide-react";
+import { X, Send, Bot, ExternalLink } from "lucide-react";
 
 const WA_NUMBER = "556294667304";
 
@@ -11,7 +11,7 @@ interface Message {
 
 const INITIAL_MESSAGE: Message = {
   role: "assistant",
-  content: "Olá! Sou a **Ethos.IA** 👋\n\nEstou aqui para te ajudar a entender qual solução da Ethos Software é ideal para o seu negócio ou ideia.\n\nMe conta: o que você está tentando resolver ou construir?",
+  content: "Olá! Sou a **Ethos.IA**.\n\nPosso ajudar a organizar as informações iniciais sobre a sua necessidade e apresentar os serviços da Ethos Software.\n\nO que você precisa resolver ou construir?",
 };
 
 function formatText(text: string) {
@@ -71,7 +71,7 @@ export default function EthosIA() {
     } catch {
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: "Ops! Tive um problema. Fale com nossa equipe no WhatsApp: +55 62 9466-7304 📱"
+        content: "Ops! Tive um problema. Fale com nossa equipe no WhatsApp: +55 62 9466-7304."
       }]);
     } finally {
       setLoading(false);
@@ -93,31 +93,28 @@ export default function EthosIA() {
     <>
       {/* Toggle button */}
       <motion.button
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 260, damping: 20, delay: 1.5 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.25, delay: 1 }}
         onClick={() => setOpen(o => !o)}
         data-testid="button-ethos-ia-toggle"
-        className="fixed bottom-24 right-6 z-50 w-14 h-14 bg-gradient-to-br from-[#531B8C] to-[#A229F2] text-white rounded-full shadow-[0_8px_30px_rgba(162,41,242,0.5)] flex items-center justify-center group"
+        className="fixed bottom-24 right-6 z-50 w-14 h-14 bg-[#67228A] text-white rounded-full flex items-center justify-center group"
       >
         <AnimatePresence mode="wait">
           {open ? (
-            <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
+            <motion.div key="close" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
               <X className="w-6 h-6" />
             </motion.div>
           ) : (
-            <motion.div key="bot" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
+            <motion.div key="bot" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
               <Bot className="w-6 h-6" />
             </motion.div>
           )}
         </AnimatePresence>
         {!open && (
-          <span className="absolute right-full mr-3 bg-white text-[#531B8C] text-xs font-bold px-3 py-1.5 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-[#A229F2]/10">
+          <span className="absolute right-full mr-3 bg-card text-[#67228A] text-xs font-bold px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-[#8E2DBA]/10">
             Ethos.IA
           </span>
-        )}
-        {!open && (
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#25D366] rounded-full border-2 border-white" />
         )}
       </motion.button>
 
@@ -125,18 +122,15 @@ export default function EthosIA() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed bottom-44 right-6 z-50 w-[340px] max-w-[calc(100vw-3rem)] bg-white rounded-3xl shadow-2xl overflow-hidden border border-[#A229F2]/10 flex flex-col"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 12 }}
+            transition={{ duration: 0.2 }}
+            className="fixed bottom-44 right-6 z-50 w-[340px] max-w-[calc(100vw-3rem)] bg-card rounded-lg overflow-hidden border border-[#8E2DBA]/10 flex flex-col"
             style={{ maxHeight: "500px" }}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-[#531B8C] to-[#A229F2] px-4 py-3 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-                <Sparkles className="w-4 h-4 text-white" />
-              </div>
+            <div className="bg-[#67228A] px-4 py-3 flex items-center gap-3">
               <div className="flex-1 min-w-0">
                 <div className="text-white font-bold text-sm">Ethos.IA</div>
                 <div className="text-white/70 text-xs">Assistente virtual · Online</div>
@@ -153,7 +147,7 @@ export default function EthosIA() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#F7F7F7]">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#F3EFF5]">
               {messages.map((msg, i) => (
                 <motion.div
                   key={i}
@@ -162,13 +156,10 @@ export default function EthosIA() {
                   transition={{ duration: 0.2 }}
                   className={`flex gap-2 ${msg.role === "user" ? "flex-row-reverse" : "flex-row"}`}
                 >
-                  <div className={`w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center ${msg.role === "user" ? "bg-[#A229F2]" : "bg-gradient-to-br from-[#531B8C] to-[#A229F2]"}`}>
-                    {msg.role === "user" ? <User className="w-3.5 h-3.5 text-white" /> : <Bot className="w-3.5 h-3.5 text-white" />}
-                  </div>
-                  <div className={`max-w-[75%] px-3 py-2.5 rounded-2xl text-xs leading-relaxed ${
+                  <div className={`max-w-[75%] px-3 py-2.5 rounded-md text-xs leading-relaxed ${
                     msg.role === "user"
-                      ? "bg-[#A229F2] text-white rounded-tr-sm"
-                      : "bg-white text-[#222222] rounded-tl-sm shadow-sm border border-gray-100"
+                      ? "bg-[#8E2DBA] text-white rounded-tr-sm"
+                      : "bg-card text-[#2A332F] rounded-tl-sm border border-border"
                   }`}>
                     {formatText(msg.content)}
                   </div>
@@ -177,16 +168,13 @@ export default function EthosIA() {
 
               {loading && (
                 <div className="flex gap-2">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#531B8C] to-[#A229F2] flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-3.5 h-3.5 text-white" />
-                  </div>
-                  <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-gray-100 flex items-center gap-1">
+                  <div className="bg-card rounded-md rounded-tl-sm px-4 py-3 border border-border flex items-center gap-1">
                     {[0, 1, 2].map(i => (
                       <motion.div
                         key={i}
                         animate={{ y: [0, -4, 0] }}
                         transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
-                        className="w-1.5 h-1.5 bg-[#A229F2] rounded-full"
+                        className="w-1.5 h-1.5 bg-[#8E2DBA] rounded-md"
                       />
                     ))}
                   </div>
@@ -196,7 +184,7 @@ export default function EthosIA() {
             </div>
 
             {/* Input */}
-            <div className="p-3 bg-white border-t border-gray-100">
+            <div className="p-3 bg-card border-t border-border">
               <div className="flex gap-2 items-end">
                 <textarea
                   value={input}
@@ -205,7 +193,7 @@ export default function EthosIA() {
                   placeholder="Digite sua mensagem..."
                   rows={1}
                   data-testid="input-ethos-ia"
-                  className="flex-1 resize-none px-3 py-2.5 text-xs rounded-xl border border-gray-200 focus:border-[#A229F2] focus:outline-none leading-relaxed max-h-20 overflow-y-auto"
+                  className="flex-1 resize-none px-3 py-2.5 text-xs rounded-md border border-gray-200 focus:border-[#8E2DBA] focus:outline-none leading-relaxed max-h-20 overflow-y-auto"
                   style={{ minHeight: "38px" }}
                 />
                 <button
@@ -213,13 +201,13 @@ export default function EthosIA() {
                   onClick={sendMessage}
                   disabled={!input.trim() || loading}
                   data-testid="button-ethos-ia-send"
-                  className="w-9 h-9 bg-[#A229F2] hover:bg-[#531B8C] disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl flex items-center justify-center transition-colors flex-shrink-0"
+                  className="w-9 h-9 bg-[#8E2DBA] hover:bg-[#67228A] disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-md flex items-center justify-center transition-colors flex-shrink-0"
                 >
                   <Send className="w-4 h-4" />
                 </button>
               </div>
-              <p className="text-center text-[#AAAAAA] text-[9px] mt-2">
-                Ethos.IA · Pode cometer erros · <button type="button" onClick={openWhatsApp} className="underline hover:text-[#A229F2] transition-colors">Falar com humano</button>
+              <p className="text-center text-[#777E79] text-[9px] mt-2">
+                A Ethos.IA pode cometer erros. <button type="button" onClick={openWhatsApp} className="underline hover:text-[#8E2DBA] transition-colors">Falar com a equipe</button>
               </p>
             </div>
           </motion.div>

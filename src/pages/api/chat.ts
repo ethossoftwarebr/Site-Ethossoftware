@@ -5,10 +5,10 @@ import { chatBodySchema } from "@/lib/chat-schema";
 export const prerender = false;
 
 const FALLBACK_NO_KEY =
-  "Olá! Sou a Ethos.IA e estou sendo configurada. Em breve poderei te ajudar aqui. Por enquanto, fale diretamente com nossa equipe pelo WhatsApp: +55 62 9466-7304 📱";
+  "Olá! Sou a Ethos.IA e estou sendo configurada. Em breve poderei te ajudar aqui. Por enquanto, fale diretamente com nossa equipe pelo WhatsApp: +55 62 9466-7304.";
 
 const FALLBACK_ERROR =
-  "Ops! Tive um problema técnico. Fale com nossa equipe diretamente pelo WhatsApp: +55 62 9466-7304 📱";
+  "Ops! Tive um problema técnico. Fale com nossa equipe diretamente pelo WhatsApp: +55 62 9466-7304.";
 
 const ORIGIN_ALLOWLIST = new Set([
   "https://ethossoftware.com.br",
