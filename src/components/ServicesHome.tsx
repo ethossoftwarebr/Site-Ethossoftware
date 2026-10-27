@@ -1,85 +1,144 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { GradientCard } from "@/components/ui/gradient-card";
-import {
-  X,
-  type LucideIcon,
-} from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { X } from "lucide-react";
 import { useState } from "react";
+import { LazyImage } from "@/components/ui/lazy-image";
+import { projects } from "@/data/projects";
 import { services } from "@/data/services";
 
-const ModalIllustration = ({ Icon }: { Icon: LucideIcon }) => (
-  <div className="relative w-full h-full min-h-[250px] flex items-center justify-center bg-[#67228A] overflow-hidden">
-    <div className="relative w-32 h-32 bg-[#FBFAFC] rounded-md border border-white/30 flex items-center justify-center">
-        <Icon className="w-16 h-16 text-[#67228A]" strokeWidth={1.5} />
-    </div>
-  </div>
-);
+const projectByService = [0, 4, 6, 3, 5, 4];
 
 export default function ServicesHome() {
+  const [activeService, setActiveService] = useState(0);
   const [selectedService, setSelectedService] = useState<
     (typeof services)[0] | null
   >(null);
+  const service = services[activeService];
+  const featuredProject = projects[projectByService[activeService]];
 
   return (
     <section
       id="services"
-      className={`py-16 md:py-20 relative ${selectedService ? "z-[99999]" : "z-10"}`}
+      className={`ethos-section relative ${selectedService ? "z-[99999]" : "z-10"}`}
     >
-      <div className="text-center mb-12 md:mb-16 px-4">
-        <span className="text-[#8E2DBA] font-semibold tracking-wider uppercase text-sm">
-          Nossas Soluções
-        </span>
-        <h2 className="text-3xl md:text-5xl font-bold text-foreground mt-4 mb-4 md:mb-6">
-          Soluções para necessidades reais
-        </h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
-          Planejamos e desenvolvemos cada solução a partir do processo, das
-          prioridades e dos resultados definidos com o cliente.
-        </p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-[80rem] mx-auto px-4">
-        {services.map((service, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{
-              duration: 0.7,
-              delay: index * 0.1,
-              ease: "easeOut",
-            }}
+      <div className="ethos-container">
+        <header className="mx-auto mb-16 max-w-3xl text-center">
+          <span className="ethos-eyebrow">Nossas soluções</span>
+          <h2 className="ethos-heading mt-5">
+            Soluções para necessidades reais
+          </h2>
+          <p className="ethos-copy mx-auto mt-6 max-w-2xl">
+            Planejamos e desenvolvemos cada solução a partir do processo, das
+            prioridades e dos resultados definidos com o cliente.
+          </p>
+        </header>
+
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div
+            className="border-t border-border"
+            role="tablist"
+            aria-label="Soluções Ethos"
           >
-            <GradientCard
-              onClick={() => setSelectedService(service)}
-              className="p-6 flex flex-col h-full text-left group"
-            >
-              <div className="flex-1">
-                <div
-                  className="w-14 h-14 rounded-md bg-[#EEE8F0] border border-[#D9CFDC] flex items-center justify-center mb-5 group-hover:border-[#8E2DBA]/40 transition-colors"
+            {services.map((item, index) => {
+              const active = activeService === index;
+              const Icon = item.icon;
+
+              return (
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  key={item.id}
+                  onClick={() => setActiveService(index)}
+                  className="mb-2 grid w-full grid-cols-[2.5rem_1fr_auto] items-start gap-3 rounded-lg border border-primary bg-primary px-4 py-5 text-left text-white transition-colors hover:border-accent hover:bg-accent"
                 >
-                  <service.icon
-                    className="w-7 h-7 text-[#8E2DBA]"
-                    strokeWidth={1.5}
+                  <Icon
+                    className={
+                      active
+                        ? "mt-0.5 h-5 w-5 text-white"
+                        : "mt-0.5 h-5 w-5 text-white"
+                    }
+                    strokeWidth={1.7}
+                  />
+                  <span>
+                    <span
+                      className={
+                        active
+                          ? "block text-lg font-semibold text-white"
+                          : "block text-base font-normal text-white"
+                      }
+                    >
+                      {item.label}
+                    </span>
+                    {active && (
+                      <span className="mt-2 block text-sm leading-[1.6] text-white">
+                        {item.homeDescription}
+                      </span>
+                    )}
+                  </span>
+                  <span
+                    className={
+                      active
+                        ? "pt-0.5 text-xl text-white"
+                        : "pt-0.5 text-xl text-white"
+                    }
+                    aria-hidden="true"
+                  >
+                    +
+                  </span>
+                </button>
+              );
+            })}
+
+            <button
+              type="button"
+              onClick={() => setSelectedService(service)}
+              className="mt-6 rounded-lg bg-primary px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-accent"
+            >
+              Conhecer esta solução
+            </button>
+          </div>
+
+          <div className="relative min-h-[420px]">
+            <div
+              className="ethos-product-blob ethos-product-blob--vivid -right-5 -top-8 h-52 w-72"
+              aria-hidden="true"
+            />
+            <div
+              className="ethos-product-blob ethos-product-blob--deep -bottom-8 -left-6 h-48 w-64"
+              aria-hidden="true"
+            />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.25 }}
+                className="ethos-product-card relative overflow-hidden border border-border bg-card"
+              >
+                <div className="border-b border-border px-6 py-5">
+                  <p className="text-xs font-medium text-primary">
+                    {service.tagline}
+                  </p>
+                  <h3 className="mt-2 text-2xl font-semibold text-foreground">
+                    {featuredProject.title}
+                  </h3>
+                </div>
+                <div className="aspect-[4/3] bg-secondary p-4">
+                  <LazyImage
+                    src={featuredProject.image}
+                    alt={`Projeto ${featuredProject.title} relacionado a ${service.label}`}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="h-full w-full overflow-hidden rounded-xl border border-border bg-white"
+                    imgClassName="h-full w-full object-cover object-top"
                   />
                 </div>
-
-                <h3 className="text-xl font-bold text-foreground mb-3 tracking-tight group-hover:text-primary transition-colors">
-                  {service.label}
-                </h3>
-
-                <p className="text-muted-foreground leading-snug text-sm">
-                  {service.homeDescription}
-                </p>
-              </div>
-
-              <div className="mt-6 text-sm font-semibold text-[#8E2DBA]">
-                Saiba mais
-              </div>
-            </GradientCard>
-          </motion.div>
-        ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
+
       <AnimatePresence>
         {selectedService && (
           <>
@@ -88,50 +147,38 @@ export default function ServicesHome() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedService(null)}
-              className="fixed inset-0 bg-[#33213A]/80 z-[9998]"
+              className="fixed inset-0 z-[9998] bg-black/70"
             />
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-4xl bg-card rounded-lg border border-border z-[9999] overflow-hidden flex flex-col md:flex-row max-h-[85vh] md:h-[600px]"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 12 }}
+              className="ethos-panel fixed left-1/2 top-1/2 z-[9999] flex max-h-[85vh] w-[92%] max-w-3xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden border border-border bg-card md:flex-row"
             >
-              <div className="md:w-5/12 bg-[#F7F5F8] relative overflow-hidden flex items-center justify-center h-[120px] sm:h-[180px] md:h-full shrink-0">
-                <ModalIllustration Icon={selectedService.icon} />
+              <div className="flex h-36 shrink-0 items-center justify-center bg-primary md:h-auto md:w-4/12">
+                <selectedService.icon
+                  className="h-16 w-16 text-white"
+                  strokeWidth={1.5}
+                />
               </div>
-              <div className="p-5 sm:p-6 md:p-10 md:w-7/12 flex flex-col relative flex-1 overflow-y-auto bg-card">
+              <div className="relative flex flex-1 flex-col overflow-y-auto p-6 md:w-8/12 md:p-10">
                 <button
                   type="button"
                   onClick={() => setSelectedService(null)}
-                  className="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 w-8 h-8 flex items-center justify-center rounded-sm bg-secondary hover:bg-[#8E2DBA]/10 hover:text-[#8E2DBA] transition-colors z-10"
+                  className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white transition-colors hover:bg-accent"
+                  aria-label="Fechar detalhes"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="h-4 w-4" />
                 </button>
-
-                <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6 mt-1 sm:mt-0">
-                  <div
-                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-md bg-[#FBFAFC] border border-[#E0D7E2] flex items-center justify-center"
-                  >
-                    <selectedService.icon
-                      className={`w-5 h-5 sm:w-6 sm:h-6 ${selectedService.color}`}
-                      strokeWidth={1.5}
-                    />
-                  </div>
-                  <span className="px-2 py-1 sm:px-3 sm:py-1 bg-[#8E2DBA]/10 text-[#8E2DBA] font-semibold text-[10px] sm:text-xs rounded-sm uppercase tracking-wider">
-                    Solução Ethos
-                  </span>
-                </div>
-
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-foreground mb-2 sm:mb-4 pr-8">
+                <span className="text-xs font-medium text-primary">
+                  Solução Ethos
+                </span>
+                <h3 className="mt-4 pr-10 text-[28px] font-semibold leading-[1.4] text-foreground">
                   {selectedService.label}
                 </h3>
-
-                <div className="w-10 sm:w-12 h-px bg-[#8E2DBA] mb-4 sm:mb-6" />
-
-                <p className="text-muted-foreground leading-relaxed text-sm sm:text-base md:text-lg mb-6 sm:mb-8 flex-1">
+                <p className="mt-6 flex-1 text-base leading-[1.7] text-muted-foreground">
                   {selectedService.description}
                 </p>
-
                 <button
                   type="button"
                   onClick={() => {
@@ -143,8 +190,8 @@ export default function ServicesHome() {
                       "_blank",
                     );
                   }}
-                  className="w-full sm:w-auto mt-auto self-start shiny-cta text-sm sm:text-lg"
-                  style={{ padding: "0.85rem 2rem" }}
+                  className="shiny-cta mt-8 w-full justify-center sm:w-auto sm:self-start"
+                  style={{ padding: "0.65rem 1.5rem" }}
                 >
                   <span>Falar com a equipe</span>
                 </button>

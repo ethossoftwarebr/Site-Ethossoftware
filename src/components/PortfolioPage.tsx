@@ -18,38 +18,36 @@ export default function PortfolioPage() {
       : projects.filter((p) => p.category === activeCategory);
 
   return (
-    <main className="min-h-screen relative bg-background selection:bg-[#8E2DBA]/20 selection:text-[#67228A]">
+    <main className="min-h-screen relative bg-background selection:bg-primary selection:text-white">
       {/* Hero */}
-      <section className="pt-32 pb-16 md:pt-40 md:pb-20 relative z-10">
-        <div className="container mx-auto px-4 text-center">
+      <section className="relative z-10 border-b border-border bg-secondary pb-16 pt-32 md:pb-20 md:pt-40">
+        <div className="ethos-container">
           <motion.div
             initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             <a href="/" data-testid="link-voltar-home">
-              <span className="inline-flex items-center gap-2 text-[#8E2DBA] font-semibold mb-8 hover:text-[#67228A] transition-colors cursor-pointer text-sm">
+              <span className="mb-8 inline-flex cursor-pointer items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-accent">
                 Voltar para o início
               </span>
             </a>
           </motion.div>
 
-          <motion.div
+          <motion.p
             initial={false}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-[#8E2DBA]/10 border border-[#8E2DBA]/20 mb-6"
+            className="ethos-eyebrow mb-5"
           >
-            <span className="text-[#8E2DBA] font-bold tracking-widest uppercase text-xs">
-              Portfólio Completo
-            </span>
-          </motion.div>
+            Portfólio completo
+          </motion.p>
 
           <motion.h1
             initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-black text-foreground mb-6 leading-tight"
+            className="max-w-4xl text-[46px] font-bold leading-[1.2] text-foreground md:text-[68px]"
           >
             Projetos e soluções <span className="text-primary">entregues</span>
           </motion.h1>
@@ -58,18 +56,17 @@ export default function PortfolioPage() {
             initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10"
+            className="mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl"
           >
             Uma seleção de sites, sistemas e automações desenvolvidos para
             operações e necessidades diferentes.
           </motion.p>
-
         </div>
       </section>
 
       {/* Filter */}
-      <section className="sticky top-16 md:top-20 z-40 bg-background border-b border-[#8E2DBA]/10 py-4">
-        <div className="container mx-auto px-4">
+      <section className="sticky top-16 z-40 border-b border-border bg-white py-3">
+        <div className="ethos-container">
           <div className="flex items-center gap-3 overflow-x-auto pb-1 scrollbar-hide">
             <div
               className="flex gap-2 flex-nowrap"
@@ -84,10 +81,10 @@ export default function PortfolioPage() {
                   aria-checked={activeCategory === cat}
                   onClick={() => setActiveCategory(cat)}
                   data-testid={`button-filter-${cat.toLowerCase().replace(/\s+/g, "-")}`}
-                  className={`px-4 py-2 rounded-md text-sm font-semibold whitespace-nowrap transition-colors ${
+                  className={`whitespace-nowrap rounded-lg border px-4 py-2 text-sm font-semibold transition-colors ${
                     activeCategory === cat
-                      ? "bg-[#8E2DBA] text-white"
-                      : "bg-card text-muted-foreground border border-[#8E2DBA]/20 hover:border-[#8E2DBA]/50 hover:text-[#8E2DBA]"
+                      ? "border-accent bg-accent text-white"
+                      : "border-primary bg-primary text-white hover:border-accent hover:bg-accent"
                   }`}
                 >
                   {cat}
@@ -99,7 +96,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* Projects Grid */}
-      <section className="container mx-auto px-4 py-12 md:py-16 relative z-10">
+      <section className="ethos-container relative z-10 py-12 md:py-16">
         <motion.p
           key={activeCategory}
           initial={{ opacity: 0 }}
@@ -107,7 +104,7 @@ export default function PortfolioPage() {
           className="text-muted-foreground text-sm mb-8"
         >
           Exibindo{" "}
-          <span className="font-bold text-[#8E2DBA]">{filtered.length}</span>{" "}
+          <span className="font-bold text-primary">{filtered.length}</span>{" "}
           projeto{filtered.length !== 1 ? "s" : ""}
           {activeCategory !== "Todos" && ` em "${activeCategory}"`}
         </motion.p>
@@ -119,7 +116,7 @@ export default function PortfolioPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-[90rem] mx-auto"
+            className="mx-auto grid max-w-6xl grid-cols-1 gap-7 md:grid-cols-2"
           >
             {filtered.map((project, index) => (
               <motion.div
@@ -132,10 +129,10 @@ export default function PortfolioPage() {
                   delay: index * 0.08,
                   ease: "easeOut",
                 }}
-                className="group flex flex-col bg-card rounded-lg border border-[#8E2DBA]/10 hover:border-[#8E2DBA]/40 transition-colors overflow-hidden cursor-pointer relative"
+                className="ethos-product-card group relative flex cursor-pointer flex-col overflow-hidden border border-border bg-card transition-colors hover:border-primary"
                 data-testid={`card-project-full-${index}`}
               >
-                <div className="relative overflow-hidden aspect-[4/3] bg-[#8E2DBA]/5">
+                <div className="relative overflow-hidden aspect-[4/3] bg-secondary">
                   <div className="w-full h-full">
                     <LazyImage
                       src={project.image}
@@ -149,12 +146,12 @@ export default function PortfolioPage() {
 
                 <div className="p-8 flex flex-col flex-1 relative z-10 bg-card">
                   <div className="mb-4">
-                    <span className="text-[#8E2DBA] font-bold text-xs tracking-wider uppercase bg-[#8E2DBA]/10 px-3 py-1 rounded-sm">
+                    <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-primary">
                       {project.category}
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-[#8E2DBA] transition-colors">
+                  <h3 className="text-2xl font-bold text-foreground mb-3 transition-colors group-hover:text-primary">
                     {project.title}
                   </h3>
 
@@ -166,7 +163,7 @@ export default function PortfolioPage() {
                     {project.tags.map((tag, i) => (
                       <span
                         key={i}
-                        className="text-xs font-semibold text-muted-foreground bg-secondary px-2.5 py-1 rounded-sm"
+                        className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground"
                       >
                         {tag}
                       </span>
@@ -180,19 +177,19 @@ export default function PortfolioPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 relative z-10">
-        <div className="container mx-auto px-4">
+      <section className="ethos-section relative z-10">
+        <div className="ethos-container">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="max-w-3xl mx-auto text-center bg-[#67228A] rounded-lg p-12 relative overflow-hidden"
+            className="ethos-panel relative mx-auto max-w-4xl overflow-hidden border border-border bg-secondary p-8 text-center md:p-12"
           >
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-4 relative z-10">
+            <h2 className="relative z-10 mb-4 text-3xl font-bold text-foreground md:text-4xl">
               Converse sobre o seu projeto
             </h2>
-            <p className="text-white/80 text-lg mb-8 relative z-10">
+            <p className="relative z-10 mb-8 text-lg text-muted-foreground">
               Apresente a necessidade da sua empresa para avaliarmos escopo,
               viabilidade e próximos passos.
             </p>
@@ -204,7 +201,7 @@ export default function PortfolioPage() {
                   "_blank",
                 )
               }
-              className="inline-flex items-center gap-3 bg-[#FBFAFC] text-[#67228A] font-bold px-8 py-4 rounded-md text-lg hover:bg-secondary transition-colors relative z-10"
+              className="relative z-10 inline-flex items-center gap-3 rounded-lg bg-primary px-8 py-4 text-lg font-bold text-white transition-colors hover:bg-accent"
               data-testid="button-cta-portfolio"
             >
               Falar com a equipe

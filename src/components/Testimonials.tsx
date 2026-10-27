@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { GradientCard } from "@/components/ui/gradient-card";
 
 const testimonials = [
   {
@@ -29,51 +28,42 @@ export default function Testimonials() {
   return (
     <section
       id="depoimentos"
-      className="py-16 md:py-24 bg-background relative overflow-hidden"
+      className="ethos-section relative overflow-hidden bg-background"
     >
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-          <span className="text-[#8E2DBA] font-bold tracking-widest uppercase text-xs mb-4 block">
-            Feedback de Clientes
-          </span>
-          <h2 className="text-3xl md:text-5xl font-bold text-primary mb-4 md:mb-6">
-            Relatos de clientes
-          </h2>
+      <div className="ethos-container relative z-10">
+        <div className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
+          <span className="ethos-eyebrow mb-4 block">Feedback de Clientes</span>
+          <h2 className="ethos-heading mb-4 md:mb-6">Relatos de clientes</h2>
           <p className="text-muted-foreground text-base md:text-lg">
-            Experiências compartilhadas por clientes atendidos pela Ethos Software.
+            Experiências compartilhadas por clientes atendidos pela Ethos
+            Software.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="border-t border-border">
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.4, delay: index * 0.08 }}
+              className="grid gap-5 border-b border-border py-8 md:grid-cols-[0.65fr_1.35fr] md:gap-12 md:py-10"
             >
-              <GradientCard className="p-8 flex flex-col h-full min-h-[340px] group">
-                <p className="text-muted-foreground leading-relaxed mb-8 italic flex-grow text-sm md:text-[15px]">
-                  "{testimonial.content}"
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">
+                  Cliente {String(index + 1).padStart(2, "0")}
                 </p>
-
-                <div className="flex items-center gap-4 pt-6 mt-auto border-t border-border">
-                  <div
-                    className="w-10 h-10 rounded-full bg-[#8E2DBA]/20 border border-[#8E2DBA]/30 flex items-center justify-center text-[#8E2DBA] font-bold text-sm flex-shrink-0"
-                  >
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  <div className="text-left flex-1 min-w-0">
-                    <h4 className="font-bold text-foreground group-hover:text-primary transition-colors truncate text-sm">
-                      {testimonial.name}
-                    </h4>
-                    <p className="text-muted-foreground truncate text-xs">
-                      {testimonial.role} • {testimonial.company}
-                    </p>
-                  </div>
-                </div>
-              </GradientCard>
+                <h3 className="mt-3 text-lg font-semibold text-foreground">
+                  {testimonial.name}
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {testimonial.role}, {testimonial.company}
+                </p>
+              </div>
+              <blockquote className="text-lg leading-relaxed text-foreground md:text-xl">
+                “{testimonial.content}”
+              </blockquote>
             </motion.div>
           ))}
         </div>

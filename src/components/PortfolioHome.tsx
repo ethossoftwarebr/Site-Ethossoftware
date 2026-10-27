@@ -40,39 +40,37 @@ export default function PortfolioHome() {
   }, [selected]);
 
   const scrollLeft = () =>
-    carouselRef.current?.scrollBy({ left: -360, behavior: "smooth" });
+    carouselRef.current?.scrollBy({ left: -400, behavior: "smooth" });
   const scrollRight = () =>
-    carouselRef.current?.scrollBy({ left: 360, behavior: "smooth" });
+    carouselRef.current?.scrollBy({ left: 400, behavior: "smooth" });
 
   return (
     <section
       id="portfolio"
-      className={`py-16 md:py-20 relative ${selected ? "z-[99999]" : "z-10"}`}
+      className={`ethos-section relative bg-secondary ${selected ? "z-[99999]" : "z-10"}`}
     >
       {/* Header */}
-      <div className="container mx-auto px-4 max-w-[90rem] mb-10 md:mb-12">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+      <div className="ethos-container mb-10 md:mb-12">
+        <div className="mx-auto max-w-3xl text-center">
           <div>
-            <span className="text-[#8E2DBA] font-semibold tracking-wider uppercase text-sm">
-              Nosso Trabalho
-            </span>
-            <h2 className="text-[32px] sm:text-4xl md:text-5xl font-bold text-foreground mt-3 mb-3 leading-tight">
+            <span className="ethos-eyebrow">Nosso Trabalho</span>
+            <h2 className="ethos-heading mb-4 mt-5">
               Projetos desenvolvidos pela Ethos
             </h2>
-            <p className="text-muted-foreground max-w-xl text-base md:text-lg">
+            <p className="ethos-copy mx-auto max-w-2xl">
               Uma seleção de soluções entregues para diferentes segmentos e
               rotinas de trabalho.
             </p>
           </div>
 
           {/* Scroll arrows */}
-          <div className="flex gap-3 flex-shrink-0">
+          <div className="mt-8 flex flex-shrink-0 justify-center gap-3">
             <button
               type="button"
               onClick={scrollLeft}
               disabled={!canScrollLeft}
               data-testid="button-carousel-prev"
-              className="w-11 h-11 rounded-md border border-[#8E2DBA]/30 bg-card flex items-center justify-center text-[#8E2DBA] disabled:opacity-30 hover:bg-[#8E2DBA] hover:text-white hover:border-[#8E2DBA] transition-colors"
+              className="ethos-button-shadow flex h-11 w-11 items-center justify-center rounded-lg border border-primary bg-primary text-white transition-colors hover:border-accent hover:bg-accent disabled:cursor-not-allowed"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
@@ -81,7 +79,7 @@ export default function PortfolioHome() {
               onClick={scrollRight}
               disabled={!canScrollRight}
               data-testid="button-carousel-next"
-              className="w-11 h-11 rounded-md border border-[#8E2DBA]/30 bg-card flex items-center justify-center text-[#8E2DBA] disabled:opacity-30 hover:bg-[#8E2DBA] hover:text-white hover:border-[#8E2DBA] transition-colors"
+              className="ethos-button-shadow flex h-11 w-11 items-center justify-center rounded-lg border border-primary bg-primary text-white transition-colors hover:border-accent hover:bg-accent disabled:cursor-not-allowed"
             >
               <ArrowRight className="w-5 h-5" />
             </button>
@@ -91,14 +89,10 @@ export default function PortfolioHome() {
 
       {/* Carousel */}
       <div className="relative">
-        {/* Fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 md:w-16 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-8 md:w-16 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-
         <div
           ref={carouselRef}
           onScroll={checkScroll}
-          className="flex overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-5 py-6 px-4 md:px-10"
+          className="mx-auto flex max-w-[1200px] gap-6 overflow-x-auto px-5 py-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:px-10"
         >
           {displayProjects.map((project, index) => (
             <motion.div
@@ -108,11 +102,11 @@ export default function PortfolioHome() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: index * 0.08 }}
               onClick={() => setSelected(project)}
-              className="flex-shrink-0 w-[280px] md:w-[320px] rounded-lg overflow-hidden bg-card border border-[#8E2DBA]/10 hover:border-[#8E2DBA]/40 transition-colors cursor-pointer"
+              className="ethos-product-card w-[300px] flex-shrink-0 cursor-pointer overflow-hidden border border-border bg-card transition-colors hover:border-primary md:w-[370px]"
               data-testid={`card-project-${index}`}
             >
               {/* Image */}
-              <div className="relative overflow-hidden aspect-[4/3] bg-[#8E2DBA]/5">
+              <div className="relative overflow-hidden aspect-[4/3] bg-secondary">
                 <LazyImage
                   src={project.image}
                   alt={project.title}
@@ -124,10 +118,10 @@ export default function PortfolioHome() {
 
               {/* Content */}
               <div className="p-6">
-                <span className="text-[#8E2DBA] font-bold text-xs tracking-wider uppercase bg-[#8E2DBA]/10 px-3 py-1 rounded-sm">
+                <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-primary">
                   {project.category}
                 </span>
-                <h3 className="text-lg font-bold text-foreground mt-3 mb-2 leading-tight">
+                <h3 className="mb-2 mt-4 text-2xl font-semibold leading-[1.4] text-foreground">
                   {project.title}
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">
@@ -137,7 +131,7 @@ export default function PortfolioHome() {
                   {project.tags.slice(0, 3).map((tag, i) => (
                     <span
                       key={i}
-                      className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-md"
+                      className="rounded-full bg-secondary px-2.5 py-1 text-xs text-muted-foreground"
                     >
                       {tag}
                     </span>
@@ -161,7 +155,7 @@ export default function PortfolioHome() {
         className="text-center mt-10 md:mt-14"
       >
         <a href="/portfolio" data-testid="link-ver-todos-projetos">
-          <ShinyButton className="text-lg" style={{ padding: "1rem 2.5rem" }}>
+          <ShinyButton style={{ padding: "0.65rem 1.5rem" }}>
             Ver todos os projetos
           </ShinyButton>
         </a>
@@ -177,7 +171,7 @@ export default function PortfolioHome() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelected(null)}
-              className="fixed inset-0 bg-black/75 z-[9998]"
+              className="fixed inset-0 z-[9998] bg-black/70"
             />
             <motion.div
               key="modal"
@@ -185,10 +179,10 @@ export default function PortfolioHome() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92vw] max-w-3xl bg-card rounded-lg border border-border z-[9999] overflow-hidden flex flex-col md:flex-row max-h-[88vh]"
+              className="ethos-panel fixed left-1/2 top-1/2 z-[9999] flex max-h-[88vh] w-[92vw] max-w-3xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden border border-border bg-card md:flex-row"
             >
               {/* Image panel */}
-              <div className="md:w-5/12 flex-shrink-0 overflow-hidden bg-[#8E2DBA]/5">
+              <div className="md:w-5/12 flex-shrink-0 overflow-hidden bg-secondary">
                 <div className="relative h-52 md:h-full">
                   <LazyImage
                     src={selected.image}
@@ -198,7 +192,7 @@ export default function PortfolioHome() {
                     className="w-full h-full"
                     imgClassName="w-full h-full object-cover object-top"
                   />
-                  <span className="absolute bottom-4 left-4 text-white font-bold text-xs tracking-wider uppercase bg-[#8E2DBA] px-3 py-1.5 rounded-sm">
+                  <span className="absolute bottom-4 left-4 rounded-sm bg-primary px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
                     {selected.category}
                   </span>
                 </div>
@@ -210,13 +204,13 @@ export default function PortfolioHome() {
                   type="button"
                   onClick={() => setSelected(null)}
                   data-testid="button-close-modal"
-                  className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-sm bg-secondary hover:bg-[#8E2DBA]/10 hover:text-[#8E2DBA] transition-colors"
+                  className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-sm bg-primary text-white transition-colors hover:bg-accent"
                 >
                   <X className="w-4 h-4" />
                 </button>
 
-                <div className="w-10 h-px bg-[#8E2DBA] mb-4" />
-                <h3 className="text-2xl md:text-3xl font-black text-foreground mb-3 pr-8 leading-tight">
+                <div className="mb-4 h-px w-10 bg-primary" />
+                <h3 className="mb-3 pr-8 text-2xl font-bold leading-tight text-foreground md:text-3xl">
                   {selected.title}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed text-sm md:text-base mb-6 flex-1">
@@ -227,7 +221,7 @@ export default function PortfolioHome() {
                   {selected.tags.map((tag, i) => (
                     <span
                       key={i}
-                      className="text-xs font-semibold text-[#8E2DBA] bg-[#8E2DBA]/10 px-3 py-1.5 rounded-sm"
+                      className="rounded-sm bg-secondary px-3 py-1.5 text-xs font-semibold text-primary"
                     >
                       {tag}
                     </span>

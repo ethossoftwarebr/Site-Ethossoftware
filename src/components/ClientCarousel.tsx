@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { LazyImage } from "@/components/ui/lazy-image";
 import construMais from "@/assets/clients/image_1772062082099.png?w=200;400&format=avif;webp;png&as=picture";
 import advLeite from "@/assets/clients/image_1772062142489.png?w=200;400&format=avif;webp;png&as=picture";
@@ -38,47 +37,32 @@ const clients = [
 
 export default function ClientCarousel() {
   return (
-    <section className="py-8 md:py-12 bg-background border-y border-[#8E2DBA]/10 overflow-hidden relative z-10">
+    <section className="relative z-10 overflow-hidden bg-background py-10 md:py-12">
       <div className="container mx-auto px-4 mb-4 md:mb-8 text-center relative z-10">
-        <p className="text-[10px] md:text-sm font-semibold text-foreground uppercase tracking-widest">
+        <p className="text-[10px] font-medium uppercase text-muted-foreground md:text-sm">
           Empresas atendidas pela Ethos Software
         </p>
       </div>
 
       {/* Container with fade edges */}
-      <div className="relative w-full max-w-[90rem] mx-auto z-10">
-        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none"></div>
-        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none"></div>
-
-        {/* Scrolling track */}
-        <div className="flex overflow-hidden">
-          <motion.div
-            className="flex whitespace-nowrap gap-8 md:gap-12 items-center px-4 md:px-6"
-            animate={{
-              x: ["0%", "-50%"],
-            }}
-            transition={{
-              ease: "linear",
-              duration: 40,
-              repeat: Infinity,
-            }}
-          >
-            {/* Duplicamos os itens para criar o efeito infinito */}
-            {[...clients, ...clients].map((client, index) => (
+      <div className="relative z-10 mx-auto w-full max-w-[1200px]">
+        <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex min-w-max items-center gap-10 px-5 md:gap-12 md:px-10">
+            {clients.map((client) => (
               <div
-                key={index}
-                className="flex-shrink-0 w-20 sm:w-28 md:w-48 h-12 md:h-20 flex items-center justify-center bg-background"
+                key={client.name}
+                className="flex h-12 w-20 flex-shrink-0 items-center justify-center bg-background sm:w-28 md:h-20 md:w-48"
               >
                 <LazyImage
                   src={client.logo}
                   alt={`Logo ${client.name}`}
                   sizes="(max-width: 768px) 80px, 192px"
                   className="max-w-full max-h-full"
-                  imgClassName="max-w-full max-h-full object-contain mix-blend-normal opacity-80 brightness-150 contrast-75"
+                  imgClassName="max-w-full max-h-full object-contain mix-blend-normal opacity-75 grayscale"
                 />
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

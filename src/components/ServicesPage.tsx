@@ -3,10 +3,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { LazyImage } from "@/components/ui/lazy-image";
+import { projects } from "@/data/projects";
 import { services } from "@/data/services";
 
 const WA_URL =
   "https://wa.me/556294667304?text=Olá! Vim pela página de serviços da Ethos Software e quero fazer um orçamento.";
+
+const projectByService = [0, 4, 6, 3, 5, 4];
 
 const processSteps = [
   {
@@ -50,13 +54,13 @@ export default function ServicesPage() {
 
   const service = services[activeService];
   const Icon = service.icon;
+  const featuredProject = projects[projectByService[activeService]];
 
   return (
-    <main className="min-h-screen bg-background relative overflow-x-hidden selection:bg-[#8E2DBA]/20 selection:text-[#67228A]">
+    <main className="min-h-screen bg-background relative overflow-x-hidden selection:bg-primary selection:text-white">
       {/* Hero */}
-      <section className="pt-32 pb-14 md:pt-40 md:pb-16 relative overflow-hidden bg-[#F3EFF5] border-b border-[#DDD3E0]">
-
-        <div className="container mx-auto px-4 max-w-5xl relative z-20">
+      <section className="relative overflow-hidden border-b border-border bg-secondary pb-16 pt-32 md:pb-20 md:pt-40">
+        <div className="ethos-container relative z-20">
           <motion.div
             initial={false}
             animate={{ opacity: 1, y: 0 }}
@@ -70,7 +74,7 @@ export default function ServicesPage() {
                 Início
               </a>
               <span aria-hidden="true">/</span>
-              <span className="text-[#8E2DBA] font-medium">Serviços</span>
+              <span className="font-medium text-primary">Serviços</span>
             </div>
           </motion.div>
           <motion.div
@@ -78,28 +82,22 @@ export default function ServicesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-[#8E2DBA] font-bold uppercase tracking-widest text-sm mb-3">
-              O que fazemos
-            </p>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-foreground tracking-tight leading-[1.1] mb-6">
-              Software sob medida
-              <br />
-              <span className="text-primary">
-                para o seu negócio
-              </span>
+            <p className="ethos-eyebrow mb-4">O que fazemos</p>
+            <h1 className="max-w-4xl text-[46px] font-bold leading-[1.2] text-foreground md:text-[68px]">
+              Software sob medida para o seu negócio
             </h1>
-            <p className="text-muted-foreground text-lg md:text-xl max-w-2xl leading-relaxed">
-              Desenvolvemos sites, sistemas, aplicativos e automações com
-              escopo definido, processo acompanhado e decisões técnicas
-              compatíveis com a necessidade do projeto.
+            <p className="mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
+              Desenvolvemos sites, sistemas, aplicativos e automações com escopo
+              definido, processo acompanhado e decisões técnicas compatíveis com
+              a necessidade do projeto.
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* Services Tabs */}
-      <section className="py-4 relative border-t border-[#8E2DBA]/10 bg-background sticky top-[64px] md:top-[80px] z-40">
-        <div className="container mx-auto px-4 max-w-6xl">
+      <section className="sticky top-16 z-40 border-b border-border bg-white py-3">
+        <div className="ethos-container">
           <div
             className="flex gap-1 overflow-x-auto scrollbar-hide pb-1"
             role="tablist"
@@ -117,10 +115,10 @@ export default function ServicesPage() {
                   aria-controls="service-panel"
                   onClick={() => setActiveService(i)}
                   data-testid={`tab-service-${s.id}`}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold whitespace-nowrap transition-colors flex-shrink-0 ${
+                  className={`flex flex-shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors ${
                     activeService === i
-                      ? "bg-[#8E2DBA] text-white"
-                      : "text-muted-foreground hover:text-[#8E2DBA] hover:bg-[#8E2DBA]/8"
+                      ? "border-accent bg-accent text-white"
+                      : "border-primary bg-primary text-white hover:border-accent hover:bg-accent"
                   }`}
                 >
                   <SIcon className="w-4 h-4" />
@@ -133,8 +131,8 @@ export default function ServicesPage() {
       </section>
 
       {/* Service Detail */}
-      <section className="py-16 md:py-24 relative z-10">
-        <div className="container mx-auto px-4 max-w-6xl">
+      <section className="ethos-section relative z-10">
+        <div className="ethos-container">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeService}
@@ -145,19 +143,19 @@ export default function ServicesPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
               transition={{ duration: 0.35 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+              className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20"
             >
               {/* Left: content */}
               <div>
                 <div
-                  className={`inline-flex items-center justify-center w-16 h-16 rounded-md ${service.image} mb-6`}
+                  className={`mb-6 inline-flex h-16 w-16 items-center justify-center rounded-lg ${service.image}`}
                 >
                   <Icon className="w-8 h-8 text-white" />
                 </div>
-                <p className="text-[#8E2DBA] font-semibold text-sm uppercase tracking-wider mb-2">
+                <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-primary">
                   {service.tagline}
                 </p>
-                <h2 className="text-3xl md:text-4xl font-black text-foreground mb-4 tracking-tight">
+                <h2 className="mb-4 text-[38px] font-bold leading-[1.21] text-foreground">
                   {service.label}
                 </h2>
                 <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-8">
@@ -167,7 +165,10 @@ export default function ServicesPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
                   {service.highlights.map((h, i) => (
                     <div key={i} className="flex items-start gap-2.5">
-                      <span className="mt-2 h-1.5 w-1.5 rounded-md bg-[#8E2DBA] flex-shrink-0" aria-hidden="true" />
+                      <span
+                        className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-md bg-primary"
+                        aria-hidden="true"
+                      />
                       <span className="text-foreground text-sm font-medium">
                         {h}
                       </span>
@@ -179,7 +180,7 @@ export default function ServicesPage() {
                   {service.useCases.map((u, i) => (
                     <span
                       key={i}
-                      className="text-xs font-semibold px-3 py-1.5 rounded-sm bg-[#8E2DBA]/10 text-[#67228A] border border-[#8E2DBA]/20"
+                      className="rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-primary"
                     >
                       {u}
                     </span>
@@ -189,13 +190,13 @@ export default function ServicesPage() {
                 <div className="flex items-center gap-4 flex-wrap">
                   <Button
                     onClick={() => window.open(WA_URL, "_blank")}
-                    className="bg-[#8E2DBA] hover:bg-[#67228A] text-white rounded-md px-8 transition-colors"
+                    className="rounded-lg bg-primary px-8 text-white transition-colors hover:bg-accent"
                     data-testid={`button-orcamento-${service.id}`}
                   >
                     Quero um orçamento
                   </Button>
                   <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                    <span className="font-semibold text-[#8E2DBA]">
+                    <span className="font-semibold text-primary">
                       Estimativa inicial:
                     </span>
                     {service.deliveryTime}
@@ -203,38 +204,33 @@ export default function ServicesPage() {
                 </div>
               </div>
 
-              {/* Right: visual card */}
               <div className="relative">
                 <div
-                  className={`rounded-lg ${service.image} p-8 md:p-10 relative overflow-hidden`}
-                >
-                  <div className="relative z-10">
-                    <Icon className="w-12 h-12 text-white/80 mb-6" />
-                    <h3 className="text-2xl font-black text-white mb-3">
-                      {service.label}
-                    </h3>
-                    <p className="text-white/70 text-sm leading-relaxed mb-6">
-                      {service.tagline}
+                  className="ethos-product-blob ethos-product-blob--vivid -right-7 -top-8 h-56 w-72"
+                  aria-hidden="true"
+                />
+                <div
+                  className="ethos-product-blob ethos-product-blob--deep -bottom-8 -left-8 h-48 w-64"
+                  aria-hidden="true"
+                />
+                <div className="ethos-product-card relative overflow-hidden border border-border bg-card">
+                  <div className="border-b border-border px-6 py-5">
+                    <p className="text-xs font-medium text-primary">
+                      Projeto relacionado
                     </p>
-                    <div className="space-y-2">
-                      {service.highlights.slice(0, 4).map((h, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center gap-2 text-white/80 text-sm"
-                        >
-                          <div className="w-1.5 h-1.5 rounded-md bg-white/60 flex-shrink-0" />
-                          {h}
-                        </div>
-                      ))}
-                    </div>
+                    <h3 className="mt-2 text-[28px] font-semibold leading-[1.4] text-foreground">
+                      {featuredProject.title}
+                    </h3>
                   </div>
-                </div>
-
-                {/* Service number indicator */}
-                <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-card rounded-md flex items-center justify-center border border-[#8E2DBA]/20">
-                  <span className="text-[#8E2DBA] font-black text-xl">
-                    {String(activeService + 1).padStart(2, "0")}
-                  </span>
+                  <div className="aspect-[4/3] bg-secondary p-4">
+                    <LazyImage
+                      src={featuredProject.image}
+                      alt={`Interface do projeto ${featuredProject.title}`}
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="h-full w-full overflow-hidden rounded-xl border border-border bg-white"
+                      imgClassName="h-full w-full object-cover object-top"
+                    />
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -243,29 +239,24 @@ export default function ServicesPage() {
       </section>
 
       {/* Como Funciona */}
-      <section className="py-20 md:py-28 bg-[#F8F6F9] relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-px bg-[#DED5E0]" />
-        <div className="container mx-auto px-4 max-w-6xl relative z-10">
+      <section className="ethos-section relative overflow-hidden border-y border-border bg-secondary">
+        <div className="ethos-container relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="mx-auto mb-14 max-w-3xl text-center"
           >
-            <p className="text-[#8E2DBA] font-bold uppercase tracking-widest text-sm mb-3">
-              Nosso processo
-            </p>
-            <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tight mb-4">
-              Como funciona?
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              Etapas definidas, pontos de validação e comunicação durante todo
-              o projeto.
+            <p className="ethos-eyebrow mb-4">Nosso processo</p>
+            <h2 className="ethos-heading mb-4">Como funciona</h2>
+            <p className="mx-auto max-w-xl text-lg text-muted-foreground">
+              Etapas definidas, pontos de validação e comunicação durante todo o
+              projeto.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid border-t border-border md:grid-cols-2">
             {processSteps.map((step, i) => {
               return (
                 <motion.div
@@ -274,10 +265,10 @@ export default function ServicesPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="relative bg-[#FBFAFC] border border-[#DED5E0] rounded-md p-6 hover:border-[#8E2DBA]/40 transition-colors group"
+                  className="relative border-b border-border py-7 md:px-7 md:odd:border-r"
                 >
                   <div className="flex items-center gap-4 mb-4">
-                    <span className="text-[#8E2DBA]/50 font-black text-2xl leading-none">
+                    <span className="text-xl font-bold leading-none text-primary">
                       {step.step}
                     </span>
                   </div>
@@ -295,32 +286,23 @@ export default function ServicesPage() {
       </section>
 
       {/* Tech Stack */}
-      <section className="py-20 md:py-28 bg-[#F3EFF5] relative overflow-hidden">
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-[#DDD3E0]" />
-        <div className="container mx-auto px-4 max-w-6xl relative z-10">
-          <div className="max-w-3xl mx-auto">
+      <section className="ethos-section relative overflow-hidden bg-background">
+        <div className="ethos-container relative z-10">
+          <div className="mx-auto max-w-3xl text-center">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <p className="text-[#8E2DBA] font-bold uppercase tracking-widest text-sm mb-3">
-                Nossas ferramentas
-              </p>
-              <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tight mb-6">
-                Tecnologias que
-                <br />
-                <span className="text-primary">
-                  utilizamos
-                </span>
-              </h2>
+              <p className="ethos-eyebrow mb-4">Nossas ferramentas</p>
+              <h2 className="ethos-heading mb-6">Tecnologias que utilizamos</h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
                 Trabalhamos com tecnologias modernas, amplamente adotadas e com
                 suporte de longo prazo. A escolha considera manutenção,
                 compatibilidade e requisitos do projeto.
               </p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid border-t border-border sm:grid-cols-2">
                 {[
                   { name: "React & Next.js", desc: "Frontend moderno" },
                   { name: "Node.js & Python", desc: "Backend escalável" },
@@ -331,26 +313,27 @@ export default function ServicesPage() {
                 ].map((tech, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 bg-[#FBFAFC] border border-[#DED5E0] rounded-md p-3 hover:border-[#8E2DBA]/30 transition-colors"
+                    className="flex items-center gap-3 border-b border-border py-4 sm:odd:pr-5 sm:even:pl-5"
                   >
-                    <div className="w-2 h-2 rounded-md bg-[#8E2DBA] flex-shrink-0" />
+                    <div className="h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
                     <div>
                       <div className="text-foreground font-semibold text-sm">
                         {tech.name}
                       </div>
-                      <div className="text-muted-foreground text-xs">{tech.desc}</div>
+                      <div className="text-muted-foreground text-xs">
+                        {tech.desc}
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
             </motion.div>
-
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-20 md:py-28 relative overflow-hidden bg-[#67228A]">
+      <section className="ethos-section relative overflow-hidden bg-primary">
         <div className="absolute top-0 left-0 right-0 h-px bg-white/20" />
         <div className="container mx-auto px-4 max-w-4xl relative z-10 text-center">
           <motion.div
@@ -359,7 +342,7 @@ export default function ServicesPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-5xl font-black text-white mb-4 tracking-tight">
+            <h2 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-5xl">
               Converse sobre o seu projeto
             </h2>
             <p className="text-white/80 text-lg md:text-xl mb-10 max-w-xl mx-auto">
@@ -369,7 +352,7 @@ export default function ServicesPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button
                 onClick={() => window.open(WA_URL, "_blank")}
-                className="bg-[#FBFAFC] text-[#67228A] hover:bg-[#F8F6F9] font-bold rounded-md px-10 h-14 text-lg transition-colors"
+                className="h-14 rounded-lg bg-primary px-10 text-lg font-semibold text-white transition-colors hover:bg-accent"
                 data-testid="button-cta-servicos"
               >
                 Falar com a equipe
@@ -377,7 +360,7 @@ export default function ServicesPage() {
               <a href="/portfolio">
                 <Button
                   variant="outline"
-                  className="border-white/40 text-white hover:bg-white/10 rounded-md px-10 h-14 text-lg"
+                  className="h-14 rounded-lg border-primary bg-primary px-10 text-lg text-white hover:border-accent hover:bg-accent"
                   data-testid="button-ver-portfolio"
                 >
                   Ver portfólio

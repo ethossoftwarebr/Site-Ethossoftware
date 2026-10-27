@@ -27,7 +27,7 @@ interface LazyImageProps
   width?: number;
   /** Height in pixels, used to compute aspect-ratio (CLS=0). Required for `string` src. */
   height?: number;
-  /** Above-the-fold images. `true` => eager + high fetchpriority. */
+  /** Above-the-fold images. `true` enables eager loading and high fetch priority. */
   priority?: boolean;
   /** Standard `sizes` attribute for responsive selection from `srcset`. */
   sizes?: string;
@@ -94,8 +94,7 @@ export const LazyImage = forwardRef<HTMLImageElement, LazyImageProps>(
             height={h}
             loading={loading}
             decoding="async"
-            // @ts-expect-error - fetchpriority is valid HTML5 but not yet in React types
-            fetchpriority={fetchPriority}
+            fetchPriority={fetchPriority}
             className={cn("w-full h-full", imgClassName)}
             {...rest}
           />
@@ -114,8 +113,7 @@ export const LazyImage = forwardRef<HTMLImageElement, LazyImageProps>(
         height={height}
         loading={loading}
         decoding="async"
-        // @ts-expect-error - fetchpriority is valid HTML5 but not yet in React types
-        fetchpriority={fetchPriority}
+        fetchPriority={fetchPriority}
         className={cn(className, imgClassName)}
         style={{ aspectRatio, ...style }}
         data-testid="lazy-image"

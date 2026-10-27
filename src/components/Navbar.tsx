@@ -109,10 +109,10 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-[#FBFAFC]">
-        <div className="h-1 bg-[#8E2DBA]" aria-hidden="true" />
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-white">
+        <div className="h-1 bg-primary" aria-hidden="true" />
 
-        <nav className="mx-auto flex h-[76px] w-full max-w-7xl items-stretch justify-between px-4 md:px-6">
+        <nav className="mx-auto grid h-[60px] w-full max-w-[1200px] grid-cols-[1fr_auto] items-stretch px-5 md:px-10 lg:grid-cols-[1fr_auto_1fr]">
           <a
             href="/"
             data-testid="link-logo-home"
@@ -122,9 +122,9 @@ export default function Navbar() {
             <img
               src={logoEthos.src}
               alt=""
-              className="h-11 w-11 shrink-0 object-contain"
+              className="h-9 w-9 shrink-0 object-contain"
             />
-            <span className="whitespace-nowrap text-xl font-bold leading-none tracking-[-0.02em] text-foreground">
+            <span className="whitespace-nowrap text-lg font-bold leading-none text-foreground">
               Ethos Software
             </span>
           </a>
@@ -143,13 +143,13 @@ export default function Navbar() {
                     "relative flex items-center px-4 text-[14px] font-medium transition-colors",
                     active
                       ? "text-primary"
-                      : "text-foreground/75 hover:text-primary",
+                      : "text-foreground/70 hover:text-primary",
                   )}
                 >
                   {link.label}
                   {active && (
                     <span
-                      className="absolute inset-x-4 bottom-0 h-[3px] bg-[#8E2DBA]"
+                      className="absolute inset-x-4 bottom-0 h-0.5 bg-primary"
                       aria-hidden="true"
                     />
                   )}
@@ -158,21 +158,21 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="hidden items-center lg:flex">
+          <div className="hidden items-center justify-self-end lg:flex">
             <ShinyButton
               onClick={openWhatsApp}
               data-testid="button-falar-especialista-navbar"
-              className="text-[14px]"
-              style={{ padding: "0.75rem 1.25rem" }}
+              className="shiny-cta--dark"
+              style={{ padding: "0.3rem 1rem" }}
             >
               Falar com a equipe
             </ShinyButton>
           </div>
 
-          <div className="flex items-center lg:hidden">
+          <div className="flex items-center justify-self-end lg:hidden">
             <button
               type="button"
-              className="flex h-10 items-center gap-3 rounded-md border border-border px-3 text-sm font-semibold text-foreground hover:border-primary hover:text-primary transition-colors"
+              className="flex h-10 items-center gap-3 rounded-lg border border-primary bg-primary px-3 text-sm font-semibold text-white transition-colors hover:border-accent hover:bg-accent"
               onClick={() => setOpen(true)}
               data-testid="button-mobile-menu-toggle"
               aria-label="Abrir menu"
@@ -191,10 +191,14 @@ export default function Navbar() {
           className="flex w-[88vw] max-w-sm flex-col gap-0 border-l border-border bg-card p-0"
         >
           <SheetTitle className="sr-only">Menu de navegação</SheetTitle>
-          <div className="h-1 bg-[#8E2DBA]" aria-hidden="true" />
+          <div className="h-1 bg-primary" aria-hidden="true" />
 
           <div className="flex items-center gap-3 border-b border-border px-5 py-5">
-            <img src={logoEthos.src} alt="" className="h-10 w-10 object-contain" />
+            <img
+              src={logoEthos.src}
+              alt=""
+              className="h-10 w-10 object-contain"
+            />
             <div className="text-lg font-bold tracking-[-0.02em] text-foreground">
               Ethos Software
             </div>
@@ -232,7 +236,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          <SheetFooter className="flex-col gap-4 border-t border-border bg-[#F3EFF5] p-5 sm:flex-col">
+          <SheetFooter className="flex-col gap-4 border-t border-border bg-secondary p-5 sm:flex-col">
             <p className="text-sm leading-relaxed text-muted-foreground">
               Apresente a necessidade da sua empresa para nossa equipe.
             </p>
@@ -242,7 +246,7 @@ export default function Navbar() {
                 openWhatsApp();
               }}
               data-testid="button-falar-especialista-mobile"
-              className="w-full justify-center text-[15px]"
+              className="shiny-cta--dark w-full justify-center"
             >
               Falar com a equipe
             </ShinyButton>

@@ -8,7 +8,7 @@ export default function NotFoundContent() {
       <Card className="w-full max-w-md mx-4">
         <CardContent className="pt-6">
           <div className="mb-4">
-            <h1 className="text-2xl font-bold text-[#67228A]">
+            <h1 className="text-2xl font-bold text-primary">
               Página não encontrada
             </h1>
           </div>

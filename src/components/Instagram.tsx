@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 
 export default function Instagram() {
   useEffect(() => {
-    const existing = document.querySelector('script[src="https://w.behold.so/widget.js"]');
+    const existing = document.querySelector(
+      'script[src="https://w.behold.so/widget.js"]',
+    );
     if (existing) return;
     const script = document.createElement("script");
     script.type = "module";
@@ -16,20 +18,18 @@ export default function Instagram() {
   }, []);
 
   return (
-    <section className="py-16 md:py-24 bg-background relative z-10">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <section className="ethos-section relative z-10 bg-background">
+      <div className="ethos-container">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="text-center mb-12"
+          className="mx-auto mb-12 max-w-3xl text-center"
         >
-          <div className="inline-flex items-center px-4 py-2 rounded-sm bg-[#8E2DBA]/10 border border-[#8E2DBA]/20 mb-6">
-            <span className="text-[#8E2DBA] font-bold tracking-widest uppercase text-xs">Instagram</span>
-          </div>
+          <span className="ethos-eyebrow mb-6 block">Instagram</span>
 
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mt-2 mb-4">
+          <h2 className="ethos-heading mb-4 mt-2">
             Acompanhe a Ethos no Instagram
           </h2>
           <p className="text-muted-foreground text-lg mb-2">
@@ -39,7 +39,7 @@ export default function Instagram() {
             href="https://www.instagram.com/ethossoftware"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center text-[#8E2DBA] font-semibold hover:text-[#67228A] transition-colors text-base"
+            className="inline-flex items-center text-primary font-semibold hover:text-accent transition-colors text-base"
             data-testid="link-instagram-profile"
           >
             @ethossoftware

@@ -127,7 +127,7 @@ const OrbitingSkill = memo(({ config, angle }: { config: SkillConfig; angle: num
       >
         {Icon && <Icon />}
         {isHovered && (
-          <div className="absolute -bottom-9 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#67228A] rounded-lg text-xs text-white whitespace-nowrap pointer-events-none border border-[#76557F] font-medium">
+          <div className="absolute -bottom-9 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#4B105F] rounded-lg text-xs text-white whitespace-nowrap pointer-events-none border border-[#351043] font-medium">
             {label}
           </div>
         )}
@@ -139,8 +139,8 @@ OrbitingSkill.displayName = "OrbitingSkill";
 
 const GlowingOrbitPath = memo(({ radius, glowColor }: { radius: number; glowColor: GlowColor }) => {
   const colors = glowColor === "purple"
-    ? { border: "rgba(142,45,186,0.35)" }
-    : { border: "rgba(103,34,138,0.35)" };
+    ? { border: "#5C198D" }
+    : { border: "#42105F" };
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md pointer-events-none" style={{ width: `${radius * 2}px`, height: `${radius * 2}px` }}>
@@ -177,7 +177,7 @@ export default function OrbitingSkills() {
         <GlowingOrbitPath radius={110} glowColor="purple" />
         <GlowingOrbitPath radius={195} glowColor="violet" />
 
-        <div className="w-20 h-20 bg-[#67228A] rounded-md flex items-center justify-center z-10 relative border border-[#76557F]">
+        <div className="w-20 h-20 bg-[#4B105F] rounded-md flex items-center justify-center z-10 relative border border-[#351043]">
           <div className="relative z-10">
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FBFAFC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="16 18 22 12 16 6" />

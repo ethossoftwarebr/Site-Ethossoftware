@@ -1,6 +1,6 @@
 ---
 name: site-astro-page-pattern
-description: Convention for authoring Astro route pages in src/pages/*.astro. Use when adding a new page, creating a new route, or wiring a React island into a page. Covers Layout wrapping, title/description/ogImage/canonical props, and client:* hydration directives.
+description: Convention for authoring Astro route pages in src/pages/*.astro and the shared Layout.astro. Use when adding a new page, creating a new route, wiring a React island into a page, picking client:load vs client:visible vs client:idle, adding SEO meta, canonical, OG image or JSON-LD structured data. Even if the user just says "cria uma página nova", "add a route" or "coloca essa seção na home".
 source: scan
 ---
 
@@ -8,42 +8,37 @@ source: scan
 
 # Astro Page Pattern
 
-> Every route wraps a shared Layout, sets SEO consts in frontmatter, and hydrates React via client:\* directives.
+> Every route wraps the shared Layout, sets SEO consts in frontmatter, and hydrates React islands via client:* directives only when they need interactivity.
 
 ## Convention
 
-Each `.astro` route follows one shape (confirmed in all 4 pages read):
+- Folder: `src/pages/` — 4 `.astro` routes (index, servicos, portfolio, 404) + `api/chat.ts` (serverless, see guards).
+- Frontmatter order (4/4): `import Layout from '@/layouts/Layout.astro'` first → islands via `@/components/*` → `ogImageAsset` from `@/assets/brand/image_1772683408265.png` → `const title` + `const description`.
+- `const canonical = 'https://ethossoftware.com.br/...'` in 3/4 pages; `404.astro` omits it.
+- Body: one `<Layout title description ogImage={ogImageAsset.src} canonical>`; `index.astro` also passes `structuredData`.
+- Content pages (servicos, portfolio) share the same shell: `Navbar client:load` → page component `client:visible` → `Footer client:idle` → `WhatsAppButton client:idle` → `EthosIA client:visible`.
+- Homepage uses `NavbarIsland client:load` + `Hero client:load`, then 11 sections `client:visible` inside `<main>`.
 
-Frontmatter (between the `---` fences):
+### Layout props (`src/layouts/Layout.astro`)
 
-1. `import Layout from '@/layouts/Layout.astro';` — always first.
-2. Import the React island component(s) via the `@/components/*` alias.
-3. `import ogImageAsset from '@/assets/brand/image_1772683408265.png';` — same brand OG asset in all 4 pages.
-4. Declare `const title` (string) and `const description` (multi-line string). Present in 4/4 pages.
-5. Declare `const canonical = 'https://ethossoftware.com.br/...'` — present in 3/4 pages (index, servicos, portfolio). 404.astro OMITS canonical intentionally.
+| Prop             | Type                   | Behaviour                                                            |
+| ---------------- | ---------------------- | -------------------------------------------------------------------- |
+| `title`          | string?                | default `'Ethos Software'`                                           |
+| `description`    | string?                | default `'Desenvolvimento de software sob medida'`                   |
+| `ogImage`        | string?                | falls back to the brand asset; always resolved to an absolute URL    |
+| `canonical`      | string?                | falls back to `new URL(Astro.url.pathname, Astro.site)`; always rendered |
+| `structuredData` | object or object[]     | appended after the fixed `Organization` JSON-LD                      |
 
-Body: a single `<Layout>` element receiving props `title`, `description`, `ogImage={ogImageAsset.src}`, and (when present) `canonical`. Children render inside the Layout's default `<slot />`.
+Layout renders `<html lang="pt-BR">` (no theme class), imports `@/styles/global.css`, always emits canonical + OG + Twitter meta, and exposes `<slot name="head" />` (404 injects `robots noindex, nofollow`).
 
-### Layout props (src/layouts/Layout.astro)
+### Hydration directives (counts across 4 pages)
 
-| Prop          | Type    | Default                                                       |
-| ------------- | ------- | ------------------------------------------------------------- |
-| `title`       | string? | `'Ethos Software'`                                            |
-| `description` | string? | `'Desenvolvimento de software sob medida'`                    |
-| `ogImage`     | string? | none (OG/Twitter tags render only when set)                   |
-| `canonical`   | string? | none (`<link rel=canonical>` + `og:url` render only when set) |
-
-Layout renders `<html lang="pt-BR" class="dark">`, imports `@/styles/global.css`, emits OG + Twitter meta only when `ogImage` is truthy, and exposes a named `<slot name="head" />` for per-page head injection. 404.astro uses that slot to inject `<meta name="robots" content="noindex, nofollow" slot="head" />`.
-
-### Island hydration (client:\* directives)
-
-| Directive        | When to use (observed)                                                                                                                                                 |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `client:load`    | Above-the-fold / primary component. The single page-content component on content pages (ServicesPage, PortfolioPage, NotFoundContent) and Navbar/Hero on the homepage. |
-| `client:visible` | Below-the-fold sections — hydrate on scroll into view. Dominant directive on index.astro (10 uses).                                                                    |
-| `client:idle`    | Deferred non-critical widgets (Footer, WhatsAppButton on index.astro).                                                                                                 |
-
-Majority rule: a single-component content page uses `client:load` on its one island. The composed homepage uses `client:load` for the first paint, `client:visible` for the long scroll of sections, and `client:idle` for trailing widgets. Never render a React component without a `client:*` directive if it needs interactivity.
+| Directive        | Count | Used for                                                       |
+| ---------------- | ----- | -------------------------------------------------------------- |
+| `client:load`    | 4     | Navbar / NavbarIsland, Hero (first paint)                      |
+| `client:visible` | 15    | below-the-fold sections, page content components, EthosIA chat |
+| `client:idle`    | 6     | Footer, WhatsAppButton                                         |
+| none             | 1     | `NotFoundContent` in 404 — static HTML, no JS shipped          |
 
 ## Real examples
 

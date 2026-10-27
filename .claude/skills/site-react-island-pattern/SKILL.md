@@ -1,6 +1,6 @@
 ---
 name: site-react-island-pattern
-description: Conventions for top-level React feature islands in src/components/*.tsx (Hero, Testimonials, Footer, WizardSection). Use when adding a new section component, creating a new island, or building a marketing/landing block for the Ethos site.
+description: Conventions for top-level React feature islands in src/components/*.tsx (Hero, Testimonials, Mission, Benefits, FAQ, Footer, WizardSection). Use when adding a new section component, creating a new island, building a marketing/landing block, or restyling a section with the ethos-* design classes and theme tokens. Even if the user just says "cria uma seção nova na home" or "add a block like Testimonials".
 source: scan
 ---
 
@@ -8,33 +8,37 @@ source: scan
 
 # Site React Island Pattern
 
-> How top-level section islands in `src/components/*.tsx` are written (distinct from the shadcn primitives in `src/components/ui/`).
+> How top-level islands in `src/components/*.tsx` are written (distinct from the shadcn primitives in `src/components/ui/`).
 
 ## Convention
 
-Scope: the 23 top-level components in `src/components/` (excludes `src/components/ui/`).
+Scope: 22 top-level files in `src/components/` (excludes `ui/`).
 
-| Aspect       | Convention                                                                                                                                                                     | Evidence                                                                                                                                                    |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Export       | `export default function Name()` — one component per file, named same as file                                                                                                  | 21/23 files. The 2 exceptions (`AuroraBackground.tsx`, `Sparkles.tsx`) are reusable visual primitives exported as named `export function`.                  |
-| Props        | No props — sections are self-contained and read their own data                                                                                                                 | Only 3/23 declare an `interface`/`type ...Props`; the section islands (Hero, Testimonials, Benefits, Footer, WizardSection) take zero args.                 |
-| Data source  | Content arrays declared as module-level `const` above the component, then `.map()`ed in JSX                                                                                    | Seen in Hero (`floatingIcons`), Testimonials (`testimonials`), Benefits (`benefits`), Footer, WizardSection (imports from `@/data/wizard`).                 |
-| Imports      | Path alias `@/` for internal modules                                                                                                                                           | 15/23 files use `@/...`; e.g. `@/components/ui/button`, `@/lib/wizard-message`, `@/data/wizard`.                                                            |
-| Icons        | `lucide-react` named imports, rendered `<Icon className="w-N h-N ..." />`                                                                                                      | 17/23 files import from `lucide-react`.                                                                                                                     |
-| className    | Plain Tailwind string literals; conditional classes via inline template literals (`` `... ${sel ? "a" : "b"}` ``)                                                              | 22/23 use `className=`. `cn()` from `@/lib/utils` is used in only 1/23 (`Navbar.tsx`) — do NOT reach for `cn()` by default; template literals are the norm. |
-| Root element | Section islands render a single top-level `<section>` (Footer uses `<footer>`); decorative absolutely-positioned blur/grid divs first, then a `container mx-auto px-4` wrapper | Hero, Testimonials, Benefits, WizardSection, Footer.                                                                                                        |
-| Brand colors | Hardcoded hex `#A229F2` / `#BA66F2` / `#531B8C` in Tailwind arbitrary values alongside theme tokens (`text-foreground`, `bg-card`, `text-muted-foreground`)                    | 18/23 files hardcode `#A229F2`.                                                                                                                             |
-| Test hooks   | Interactive elements carry `data-testid="..."`                                                                                                                                 | 11/23 files (all the interactive ones: Footer links, WizardSection buttons/inputs).                                                                         |
-| Hydration    | No `'use client'` directive and no default `React` import; islands are hydrated by `client:*` directives in the `.astro` page, not from inside the component                   | 0/23 have `'use client'`; 0/23 `import React`.                                                                                                              |
+| Aspect        | Convention (majority observed)                                                                                                        | Evidence                                                                 |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Export        | `export default function Name()` — file name equals component name                                                                   | 20/22; exceptions `AuroraBackground.tsx`, `Sparkles.tsx` (named export, both unused) |
+| Props         | none — sections are self-contained                                                                                                    | only 2/22 declare a Props type (the two exceptions above)                |
+| Section root  | `<section className="ethos-section …">` then `<div className="ethos-container">`                                                     | `<section>` 13/22, `ethos-container` 13/22, `ethos-section` 11/22        |
+| Header        | `ethos-eyebrow` label + `ethos-heading` h2 (+ `ethos-copy` paragraph)                                                                | eyebrow 12/22, heading 10/22, copy 6/22                                  |
+| Colors        | theme tokens: `text-primary`, `text-foreground`, `text-muted-foreground`, `bg-secondary`, `bg-card`, `border-border`                 | `text-muted-foreground` 17/22, `border-border` 14/22; hex only in `OrbitingSkills.tsx` |
+| Data          | shared content from `@/data/*`; section-local content as module-level `const` arrays, rendered with `.map()`                        | `@/data/*` 9/22; Testimonials, Mission, Benefits, Footer declare local arrays |
+| Product visual| decorative `ethos-product-blob` divs (`aria-hidden`) + `ethos-product-card` holding a `LazyImage` of `projects[n]`                    | `ethos-product-card` 7/22                                                |
+| Imports       | `@/` alias for internal modules; `@/components/ui/*` primitives                                                                      | alias 14/22; ui 11/22                                                    |
+| className     | plain strings / template literals; `cn()` only in `Navbar.tsx`                                                                        | 1/22                                                                     |
+| Test hooks    | interactive elements carry `data-testid`                                                                                              | 10/22                                                                    |
+| Hydration     | no `'use client'`, no `import React`; hydration comes from `client:*` in the `.astro` page                                           | 0/22                                                                     |
+
+`NavbarIsland.tsx` is a 5-line wrapper that renders `Navbar` and is only used by `src/pages/index.astro`.
 
 ## Real examples
 
-- `src/components/Hero.tsx`
 - `src/components/Testimonials.tsx`
-- `src/components/Footer.tsx`
-- `src/components/WizardSection.tsx`
+- `src/components/Mission.tsx`
+- `src/components/Hero.tsx`
 - `src/components/Benefits.tsx`
-- `src/components/Navbar.tsx`
+- `src/components/FAQ.tsx`
+- `src/components/Footer.tsx`
+- `src/components/NavbarIsland.tsx`
 
 ## References
 

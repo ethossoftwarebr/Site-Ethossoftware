@@ -1,6 +1,6 @@
 ---
 name: site-cn-utility-pattern
-description: Convention for merging Tailwind class names via the cn() helper in src/lib/utils.ts. Use when adding a className prop to any component, composing conditional Tailwind classes, or creating a new component that accepts caller-supplied styling. Explains why to use cn() over template strings.
+description: Convention for merging Tailwind class names via the cn() helper in src/lib/utils.ts. Use when adding a className prop to any component, composing conditional Tailwind classes, merging cva variant output with caller classes, or creating a new ui component that accepts caller-supplied styling. Even if the user just says "deixa o className sobrescrever" or "merge these classes".
 source: scan
 ---
 
@@ -8,35 +8,38 @@ source: scan
 
 # cn() Class-Merge Utility
 
-> `cn(...inputs)` in `src/lib/utils.ts` is the single class-name composition helper. It runs `clsx` (conditional/array flattening) then `tailwind-merge` (dedupes conflicting Tailwind utilities so the last wins). Any component accepting a `className` should merge it through `cn()`.
+> `cn(...inputs)` in `src/lib/utils.ts` runs `clsx` (conditionals/arrays) then `tailwind-merge` (last conflicting utility wins). Components that accept `className` merge it through `cn()`.
 
 ## Convention
 
-| Aspect          | Rule                                                                     | Evidence                        |
-| --------------- | ------------------------------------------------------------------------ | ------------------------------- |
-| Definition      | `cn(...inputs: ClassValue[]) => twMerge(clsx(inputs))`                   | `src/lib/utils.ts`              |
-| Import          | `import { cn } from "@/lib/utils"` (path alias, not relative)            | all consumers                   |
-| Caller override | Incoming `className` passed as the LAST argument so it wins conflicts    | `cn("base classes", className)` |
-| With variants   | `cn(xVariants({ ... }), className)` — merge cva output then caller class | `sheet.tsx`, `toast.tsx`        |
-| Scope           | Used by both Radix primitives and plain function components              | 9/12 `ui/*.tsx` files           |
+| Aspect          | Rule                                                                   | Evidence                                    |
+| --------------- | ---------------------------------------------------------------------- | ------------------------------------------- |
+| Definition      | `cn(...inputs: ClassValue[])` returns `twMerge(clsx(inputs))`          | `src/lib/utils.ts`                          |
+| Import          | `import { cn } from "@/lib/utils"` (alias, never relative)             | 9/9 consumers in `src/components/ui/`       |
+| Caller override | caller `className` is the LAST argument                                | card, sheet, gradient-card, shiny-button    |
+| With variants   | `cn(xVariants({ ... }), className)`                                    | sheet, toast                                |
+| Conditionals    | falsy-guarded entries inside `cn(...)`, e.g. `onClick && "cursor-pointer"` | gradient-card                           |
+| Custom CSS      | global CSS class + caller class, e.g. `cn("shiny-cta", className)`     | shiny-button                                |
+| Scope           | 9/12 `ui/*.tsx`; only 1/22 islands (`Navbar.tsx`)                      | grep `cn(`                                  |
 
 ### When to use
 
-Prefer `cn()` over template-literal class strings whenever conflicting Tailwind utilities may collide (e.g. a base `p-6` that a caller wants to override with `p-2`). Template strings (backtick `${className}`) do not dedupe and let both `p-6 p-2` survive — `menu-toggle.tsx` uses a plain template string because it has no override-prone utilities. Default to `cn()`.
+Use `cn()` whenever a caller-supplied `className` may conflict with base utilities. Section islands with fixed styling keep plain string / template-literal classes — `menu-toggle.tsx` concatenates with a template string and therefore does not dedupe conflicts.
 
 ### Do NOT
 
-- Do not re-implement class merging inline or add another clsx/twMerge wrapper — reuse `cn`.
-- Do not put the caller `className` before the base classes; that breaks override precedence.
-- Do not import from a relative path; use the `@/lib/utils` alias.
+- Do not add another clsx/twMerge wrapper — reuse `cn`.
+- Do not put the caller `className` before base classes.
+- Do not import from a relative path.
 
 ## Real examples
 
-- `src/lib/utils.ts` (the definition)
-- `src/components/ui/card.tsx` (`cn("base", className)`)
-- `src/components/ui/sheet.tsx` (`cn(sheetVariants({ side }), className)`)
-- `src/components/ui/gradient-card.tsx` (plain component using `cn`)
-- `src/components/ui/lazy-image.tsx` (`cn(className, imgClassName)`)
+- `src/lib/utils.ts`
+- `src/components/ui/card.tsx`
+- `src/components/ui/sheet.tsx`
+- `src/components/ui/gradient-card.tsx`
+- `src/components/ui/shiny-button.tsx`
+- `src/components/ui/lazy-image.tsx`
 
 ## References
 

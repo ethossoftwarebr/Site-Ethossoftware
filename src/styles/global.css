@@ -1,44 +1,10 @@
+@import "@fontsource-variable/manrope";
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@font-face {
-  font-family: "Outfit";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/Outfit-400.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Outfit";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/fonts/Outfit-500.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Outfit";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/Outfit-600.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Outfit";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/Outfit-700.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Outfit";
-  font-style: normal;
-  font-weight: 900;
-  font-display: swap;
-  src: url("/fonts/Outfit-900.woff2") format("woff2");
-}
-
 @theme inline {
-  --font-sans: "Outfit", sans-serif;
+  --font-sans:
+    "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif;
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -66,39 +32,168 @@
 }
 
 :root {
-  --background: 300 7% 97%;
-  --foreground: 285 8% 16%;
-  --card: 300 8% 99%;
-  --card-foreground: 285 8% 16%;
-  --popover: 300 8% 99%;
-  --popover-foreground: 285 8% 16%;
-  --primary: 283 61% 45%;
-  --primary-foreground: 300 20% 98%;
-  --secondary: 288 18% 92%;
-  --secondary-foreground: 285 10% 20%;
-  --muted: 288 16% 92%;
-  --muted-foreground: 285 5% 40%;
-  --accent: 283 60% 34%;
-  --accent-foreground: 300 20% 98%;
+  --background: 285 25% 98%;
+  --foreground: 282 49% 16%;
+  --card: 0 0% 100%;
+  --card-foreground: 282 39% 14%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 282 39% 14%;
+  --primary: 277 69% 33%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 282 30% 95%;
+  --secondary-foreground: 278 69% 33%;
+  --muted: 282 24% 94%;
+  --muted-foreground: 285 14% 41%;
+  --accent: 281 71% 22%;
+  --accent-foreground: 0 0% 100%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 300 20% 98%;
-  --border: 288 13% 84%;
-  --input: 288 13% 84%;
-  --ring: 283 61% 45%;
-  --radius: 0.75rem;
+  --border: 282 24% 86%;
+  --input: 282 24% 86%;
+  --ring: 277 69% 33%;
+  --radius: 0.5rem;
+
+  --ethos-canvas: #f8f6fa;
+  --ethos-paper: #ffffff;
+  --ethos-ink: #31133f;
+  --ethos-body: #705c79;
+  --ethos-muted: #b5a4be;
+  --ethos-purple: #5c198d;
+  --ethos-purple-deep: #42105f;
+  --ethos-purple-disabled: #685b70;
+  --ethos-purple-soft: #f1eaf5;
+  --ethos-border: #ded3e5;
+  --ethos-decorative-vivid: #71308e;
+  --ethos-decorative-soft: #5c198d;
+
+  --text-caption: 0.75rem;
+  --text-body-sm: 0.875rem;
+  --text-body: 1rem;
+  --text-button: 1.125rem;
+  --text-body-lg: 1.25rem;
+  --text-subheading: 1.75rem;
+  --text-heading-sm: 2.375rem;
+  --text-heading: 3.125rem;
+  --text-heading-lg: 4.25rem;
+  --text-display: 5rem;
+
+  --space-unit: 0.5rem;
+  --page-max-width: 75rem;
+  --radius-card: 1.5rem;
+  --radius-product: 1rem;
+  --radius-control: 0.5rem;
+
+  --shadow-card:
+    rgba(24, 20, 27, 0.05) 0 4px 5px, rgba(24, 20, 27, 0.04) 0 4px 10px,
+    rgba(24, 20, 27, 0.06) 0 10px 20px;
+  --shadow-product:
+    rgba(24, 20, 27, 0.05) 0 4px 5px, rgba(24, 20, 27, 0.04) 0 8px 15px,
+    rgba(24, 20, 27, 0.12) 0 30px 50px;
+  --shadow-button:
+    rgba(24, 20, 27, 0.06) 0 4px 5px, rgba(24, 20, 27, 0.05) 0 8px 15px,
+    rgba(24, 20, 27, 0.12) 0 15px 30px;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 5rem;
+    scroll-padding-top: 4rem;
   }
   * {
     @apply border-border;
   }
   body {
     @apply font-sans antialiased bg-background text-foreground overflow-x-hidden;
+    background-color: var(--ethos-canvas);
   }
+
+}
+
+@layer components {
+  .ethos-container {
+    @apply mx-auto w-full max-w-[1200px] px-5 md:px-10;
+  }
+
+  .ethos-eyebrow {
+    @apply text-xs font-semibold uppercase text-primary;
+  }
+
+  .ethos-heading {
+    @apply text-[38px] font-bold leading-[1.21] text-foreground md:text-[50px];
+  }
+
+  .ethos-copy {
+    @apply text-base leading-[1.7] text-muted-foreground md:text-xl md:leading-[1.4];
+  }
+
+  .ethos-section {
+    @apply py-16;
+  }
+
+  .ethos-panel {
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .ethos-product-card {
+    border-radius: var(--radius-product);
+    box-shadow: var(--shadow-product);
+  }
+
+  .ethos-button-shadow {
+    box-shadow: var(--shadow-button);
+  }
+
+  .ethos-product-blob {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 42% 58% 63% 37% / 47% 39% 61% 53%;
+    background: var(--ethos-decorative-soft);
+    filter: blur(1px);
+  }
+
+  .ethos-product-blob--vivid {
+    background: var(--ethos-decorative-vivid);
+  }
+
+  .ethos-product-blob--deep {
+    background: var(--ethos-decorative-soft);
+  }
+}
+
+button {
+  border-color: var(--ethos-purple) !important;
+  background-color: var(--ethos-purple) !important;
+  color: #ffffff !important;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--ethos-purple-deep) !important;
+  background-color: var(--ethos-purple-deep) !important;
+  color: #ffffff !important;
+}
+
+button[aria-checked="true"],
+button[aria-selected="true"] {
+  border-color: var(--ethos-purple-deep) !important;
+  background-color: var(--ethos-purple-deep) !important;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--ethos-purple-deep);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  border-color: var(--ethos-purple-disabled) !important;
+  background-color: var(--ethos-purple-disabled) !important;
+  color: #ffffff !important;
+  cursor: not-allowed;
+  opacity: 1 !important;
+}
+
+button :where(span, svg) {
+  color: inherit !important;
 }
 
 .gradient-text {
@@ -107,21 +202,45 @@
 
 /* ── ShinyButton ─────────────────────────────────────────── */
 .shiny-cta {
-  --shiny-cta-bg: #67228a;
-  --shiny-cta-fg: #fbfafc;
+  --shiny-cta-bg: var(--ethos-purple);
+  --shiny-cta-fg: #ffffff;
   isolation: isolate;
   position: relative;
   overflow: hidden;
   cursor: pointer;
   outline-offset: 4px;
-  font-size: 1rem;
-  line-height: 1.2;
+  font-size: var(--text-button);
+  line-height: 1.6;
   font-weight: 600;
-  border: 1px solid #67228a;
-  border-radius: 10px;
+  border: 1px solid var(--ethos-purple);
+  border-radius: 8px;
   color: var(--shiny-cta-fg);
   background: var(--shiny-cta-bg);
-  transition: background-color 200ms ease, border-color 200ms ease;
+  box-shadow: var(--shadow-button);
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
+}
+
+.shiny-cta:hover {
+  --shiny-cta-bg: var(--ethos-purple-deep);
+  border-color: var(--ethos-purple-deep);
+}
+
+.shiny-cta.shiny-cta--dark {
+  --shiny-cta-bg: var(--ethos-purple);
+  border-color: var(--ethos-purple);
+}
+
+.shiny-cta.shiny-cta--dark:hover {
+  --shiny-cta-bg: var(--ethos-purple-deep);
+  border-color: var(--ethos-purple-deep);
+}
+
+.shiny-cta:disabled {
+  --shiny-cta-bg: var(--ethos-purple-disabled);
+  border-color: var(--ethos-purple-disabled);
+  cursor: not-allowed;
 }
 
 .shiny-cta:active {

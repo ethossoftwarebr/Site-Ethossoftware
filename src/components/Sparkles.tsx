@@ -29,7 +29,7 @@ interface SparklesProps {
 
 export function Sparkles({
   className = "",
-  color = "#8E2DBA",
+  color = "#5C198D",
   density = 80,
   speed = 0.3,
   maxSize = 2,
@@ -64,11 +64,6 @@ export function Sparkles({
     };
     makeParticles();
 
-    const hex = color;
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (const p of particlesRef.current) {
@@ -84,7 +79,7 @@ export function Sparkles({
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${r},${g},${b},${p.opacity})`;
+        ctx.fillStyle = color;
         ctx.fill();
       }
       rafRef.current = requestAnimationFrame(draw);

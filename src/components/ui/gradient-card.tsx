@@ -6,7 +6,11 @@ interface GradientCardProps {
   onClick?: () => void;
 }
 
-export function GradientCard({ children, className, onClick }: GradientCardProps) {
+export function GradientCard({
+  children,
+  className,
+  onClick,
+}: GradientCardProps) {
   return (
     <div
       onClick={onClick}
@@ -19,7 +23,7 @@ export function GradientCard({ children, className, onClick }: GradientCardProps
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
       className={cn(
-        "relative overflow-hidden rounded-lg border border-[#DED5E0] bg-card",
+        "ethos-panel relative overflow-hidden rounded-3xl border border-border bg-card",
         onClick && "cursor-pointer",
         className,
       )}

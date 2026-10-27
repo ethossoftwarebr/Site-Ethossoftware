@@ -1,113 +1,181 @@
-<!-- mustard:generated -->
+<!-- mustard:generated at:2026-09-22T21:31:20.206Z -->
 
-# Site Motion Section Pattern — Examples
+# Motion Section Pattern — real examples from this codebase
 
-Source: `src/components/Testimonials.tsx` (whileInView reveal + index stagger + whileHover)
+> Excerpts verbatim do working tree (linhas indicadas). Re-extrair se o arquivo mudar.
+
+## List reveal with index stagger
+
+Source: `src/components/Testimonials.tsx`
+
+Lines 43-69
 
 ```tsx
-{
-  testimonials.map((testimonial, index) => (
-    <motion.div
-      key={index}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-    >
-      {/* ... */}
-      <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.6 }}>
-        {testimonial.name.charAt(0)}
-      </motion.div>
-    </motion.div>
-  ));
-}
+        <div className="border-t border-border">
+          {testimonials.map((testimonial, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.08 }}
+              className="grid gap-5 border-b border-border py-8 md:grid-cols-[0.65fr_1.35fr] md:gap-12 md:py-10"
+            >
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">
+                  Cliente {String(index + 1).padStart(2, "0")}
+                </p>
+                <h3 className="mt-3 text-lg font-semibold text-foreground">
+                  {testimonial.name}
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {testimonial.role}, {testimonial.company}
+                </p>
+              </div>
+              <blockquote className="text-lg leading-relaxed text-foreground md:text-xl">
+                “{testimonial.content}”
+              </blockquote>
+            </motion.div>
+          ))}
+        </div>
 ```
 
-Source: `src/components/Footer.tsx` (module-level Variants + staggered children)
+## Header reveal with viewport margin
+
+Source: `src/components/Mission.tsx`
+
+Lines 25-47
 
 ```tsx
-import { motion, type Variants } from "framer-motion";
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto mb-12 max-w-3xl text-center md:mb-16"
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="mb-6"
+          >
+            <span className="ethos-eyebrow">Princípios da Ethos</span>
+          </motion.div>
 
-// Static animation variants — module-level so they're not re-allocated on
-// every render of <Footer>.
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-export default function Footer() {
-  return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
-    >
-      <motion.a
-        whileHover={{ y: -5, scale: 1.1 }}
-        whileTap={{ scale: 0.95 }} /* ... */
-      />
-    </motion.div>
-  );
-}
+          <h2 className="ethos-heading mb-6">O que orienta o nosso trabalho</h2>
+          <p className="ethos-copy">
+            Trabalhamos com clareza sobre escopo, prazo, riscos e
+            responsabilidades para manter relações profissionais e entregas
+            consistentes.
+          </p>
+        </motion.div>
 ```
 
-Source: `src/components/WizardSection.tsx` (AnimatePresence step transitions)
+## Side reveal (x) + stagger list
+
+Source: `src/components/Benefits.tsx`
+
+Lines 49-109
 
 ```tsx
-import { motion, AnimatePresence } from "framer-motion";
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="relative order-2 lg:order-1"
+          >
+            <div
+              className="ethos-product-blob ethos-product-blob--deep -left-8 -top-8 h-56 w-72"
+              aria-hidden="true"
+            />
+            <div
+              className="ethos-product-blob ethos-product-blob--vivid -bottom-8 -right-5 h-48 w-64"
+              aria-hidden="true"
+            />
+            <div className="ethos-product-card relative overflow-hidden border border-border bg-card">
+              <div className="border-b border-border px-6 py-5">
+                <p className="text-xs font-medium text-primary">
+                  Sistema em operação
+                </p>
+                <h3 className="mt-2 text-[28px] font-semibold leading-[1.4] text-foreground">
+                  {featuredProject.title}
+                </h3>
+              </div>
+              <div className="aspect-[4/3] bg-white">
+                <LazyImage
+                  src={featuredProject.image}
+                  alt={`Interface do projeto ${featuredProject.title}`}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="h-full w-full"
+                  imgClassName="h-full w-full object-cover object-top"
+                />
+              </div>
+            </div>
+          </motion.div>
 
-<AnimatePresence mode="wait">
-  {step === 1 && (
-    <motion.div
-      key="s1"
-      initial={{ opacity: 0, x: 30 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -30 }}
-      transition={{ duration: 0.25 }}
-    >
-      {/* step content */}
-    </motion.div>
-  )}
-</AnimatePresence>;
+          <div className="order-1 border-t border-border lg:order-2">
+            {benefits.map((benefit, index) => (
+              <motion.div
+                key={benefit.title}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: index * 0.06 }}
+                className="grid gap-3 border-b border-border py-6 sm:grid-cols-[3rem_1fr]"
+              >
+                <span className="pt-1 text-xs font-semibold text-primary">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 className="text-xl font-semibold leading-[1.4] text-foreground">
+                    {benefit.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-[1.6] text-muted-foreground">
+                    {benefit.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
 ```
 
-Source: `src/components/Hero.tsx` (useScroll + useTransform parallax; animate loop)
+## Single block reveal wrapping a Radix accordion
+
+Source: `src/components/FAQ.tsx`
+
+Lines 24-30
 
 ```tsx
-import { motion, useScroll, useTransform } from "framer-motion";
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="lg:col-span-8"
+        >
+```
 
-const { scrollYProgress } = useScroll({
-  target: containerRef,
-  offset: ["start start", "end start"],
-});
-const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+## Step swap with AnimatePresence mode="wait"
 
-<motion.div
-  style={{ y, opacity }}
-  className="absolute inset-0 pointer-events-none"
->
-  <motion.div
-    animate={{ y: [0, -30, 0], rotate: [0, 15, -15, 0], scale: [1, 1.1, 1] }}
-    transition={{
-      duration: 6,
-      repeat: Infinity,
-      repeatType: "reverse",
-      ease: "easeInOut",
-    }}
-  />
-</motion.div>;
+Source: `src/components/WizardSection.tsx`
+
+Lines 241-253
+
+```tsx
+          {/* Content */}
+          <div className="flex min-h-[360px] flex-col overflow-hidden border-y border-border bg-card p-6 md:p-8">
+            <AnimatePresence mode="wait">
+              {/* Step 1: Profile */}
+              {step === 1 && (
+                <motion.div
+                  key="s1"
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -30 }}
+                  transition={{ duration: 0.25 }}
+                  className="flex flex-col flex-1"
+                >
 ```
